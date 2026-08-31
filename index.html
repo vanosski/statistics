@@ -191,6 +191,70 @@
         .t-c { color: #64748b; }
         .t-d { color: #475569; }
 
+        
+        .search-container { position: relative; width: 100%; }
+        .selected-tags {
+            display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;
+        }
+        .player-tag {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(139, 92, 246, 0.35));
+            border: 1px solid rgba(99, 102, 241, 0.6);
+            color: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .player-tag .remove-btn {
+            cursor: pointer;
+            color: #ef4444;
+            font-weight: 700;
+            font-size: 0.95rem;
+            line-height: 1;
+        }
+        .player-tag .remove-btn:hover { color: #f87171; }
+        .clear-all-btn {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .clear-all-btn:hover { background: rgba(239, 68, 68, 0.3); color: #fff; }
+        .suggestions-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #0f172a;
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 50;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            margin-top: 4px;
+            display: none;
+        }
+        .suggestion-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            font-size: 0.85rem;
+        }
+        .suggestion-item:hover { background: rgba(99, 102, 241, 0.2); }
+        .suggestion-server { font-size: 0.75rem; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; }
+
         /* Mobile Controls */
         .controls-bar {
             display: flex; gap: 10px; width: 100%; max-width: 1400px; margin-bottom: 16px;
@@ -485,8 +549,12 @@
     </div>
 
     <div class="controls-bar">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search player by name...">
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+            <div class="selected-tags" id="selectedTags"></div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search player by name (add multiple to compare, or comma-separated)..." autocomplete="off">
+                <div class="suggestions-dropdown" id="suggestionsDropdown"></div>
+            </div>
         </div>
         <div class="select-box">
             <select id="serverFilter">
@@ -757,14 +825,99 @@
             });
         }
 
+        let selectedPlayerNames = new Set();
+
+        function addPlayerTag(name) {
+            selectedPlayerNames.add(name);
+            renderSelectedTags();
+            document.getElementById('searchInput').value = '';
+            hideSuggestions();
+            applyFilters();
+        }
+
+        function removePlayerTag(name) {
+            selectedPlayerNames.delete(name);
+            renderSelectedTags();
+            applyFilters();
+        }
+
+        function clearAllTags() {
+            selectedPlayerNames.clear();
+            renderSelectedTags();
+            applyFilters();
+        }
+
+        function renderSelectedTags() {
+            const container = document.getElementById('selectedTags');
+            if (!container) return;
+            if (selectedPlayerNames.size === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            let tagsHtml = '';
+            selectedPlayerNames.forEach(name => {
+                const safeName = name.replace(/'/g, "\\'");
+                tagsHtml += '<div class="player-tag"><span>' + name + '</span><span class="remove-btn" onclick="removePlayerTag(\'' + safeName + '\')">×</span></div>';
+            });
+            tagsHtml += '<button class="clear-all-btn" onclick="clearAllTags()">Clear All (' + selectedPlayerNames.size + ')</button>';
+            container.innerHTML = tagsHtml;
+        }
+
+        function showSuggestions(term) {
+            const dropdown = document.getElementById('suggestionsDropdown');
+            if (!term || term.trim().length === 0) {
+                dropdown.style.display = 'none';
+                return;
+            }
+            const cleanTerm = term.trim().toLowerCase();
+            const matches = rawPlayers.filter(p => p.name.toLowerCase().includes(cleanTerm) && !selectedPlayerNames.has(p.name)).slice(0, 10);
+            
+            if (matches.length === 0) {
+                dropdown.style.display = 'none';
+                return;
+            }
+            dropdown.innerHTML = matches.map(p => {
+                const safeName = p.name.replace(/'/g, "\\'");
+                return '<div class="suggestion-item" onclick="addPlayerTag(\'' + safeName + '\')">' +
+                    '<span><strong>' + p.name + '</strong></span>' +
+                    '<span class="suggestion-server">' + p.server + ' | Pwr: ' + p.total_pow.toLocaleString() + '</span>' +
+                '</div>';
+            }).join('');
+            dropdown.style.display = 'block';
+        }
+
+        function hideSuggestions() {
+            const dropdown = document.getElementById('suggestionsDropdown');
+            if (dropdown) dropdown.style.display = 'none';
+        }
+
         function applyFilters() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const inputVal = document.getElementById('searchInput').value.trim();
             const serverVal = document.getElementById('serverFilter').value;
 
+            // Extract comma-separated names if entered in search
+            const queryTokens = inputVal.split(',').map(s => s.trim().toLowerCase()).filter(s => s.length > 0);
+
             currentPlayers = rawPlayers.filter(p => {
-                const matchesSearch = p.name.toLowerCase().includes(searchTerm);
-                const matchesServer = serverVal === 'ALL' || p.server === serverVal;
-                return matchesSearch && matchesServer;
+                const matchesServer = (serverVal === 'ALL' || p.server === serverVal);
+                
+                // If specific player tags are selected, prioritize displaying those players
+                if (selectedPlayerNames.size > 0) {
+                    const isSelected = selectedPlayerNames.has(p.name);
+                    if (queryTokens.length > 0) {
+                        const matchesQuery = queryTokens.some(q => p.name.toLowerCase().includes(q));
+                        return (isSelected || matchesQuery) && matchesServer;
+                    }
+                    return isSelected && matchesServer;
+                }
+
+                // If no tags selected, match standard text or comma-separated tokens
+                if (queryTokens.length > 0) {
+                    const matchesAnyToken = queryTokens.some(q => p.name.toLowerCase().includes(q));
+                    return matchesAnyToken && matchesServer;
+                }
+
+                return matchesServer;
             });
 
             doSort();
@@ -797,7 +950,32 @@
 
         doSort();
 
-        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        const searchInputEl = document.getElementById('searchInput');
+        searchInputEl.addEventListener('input', (e) => {
+            const val = e.target.value;
+            const lastToken = val.split(',').pop().trim();
+            showSuggestions(lastToken);
+            applyFilters();
+        });
+
+        searchInputEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const val = searchInputEl.value.trim();
+                if (val.length > 0) {
+                    const match = rawPlayers.find(p => p.name.toLowerCase() === val.toLowerCase());
+                    if (match) {
+                        addPlayerTag(match.name);
+                    }
+                }
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-container')) {
+                hideSuggestions();
+            }
+        });
+
         document.getElementById('serverFilter').addEventListener('change', applyFilters);
     </script>
 </body>

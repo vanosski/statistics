@@ -295,7 +295,7 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        table { width: 100%; min-width: 3600px; border-collapse: collapse; font-size: 0.82rem; text-align: left; }
+        table { width: 100%; min-width: 3900px; border-collapse: collapse; font-size: 0.82rem; text-align: left; }
         thead { position: sticky; top: 0; background: #0f172a; z-index: 10; }
         th {
             padding: 12px 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;
@@ -605,18 +605,21 @@
                         <th onclick="sortTable('arc_hp')">Archer HP</th>
                         <th onclick="sortTable('arc_def')">Archer DEF</th>
                         <th onclick="sortTable('arc_dmg')">Archer DMG</th>
+                        <th onclick="sortTable('arc_dmgr')">Archer DMG Recv</th>
                         <th onclick="sortTable('arc_atk_bless')">Archer ATK Bless</th>
                         <th onclick="sortTable('arc_prot_bless')">Archer PROT Bless</th>
                         <th onclick="sortTable('cav_atk')">Cav ATK</th>
                         <th onclick="sortTable('cav_hp')">Cav HP</th>
                         <th onclick="sortTable('cav_def')">Cav DEF</th>
                         <th onclick="sortTable('cav_dmg')">Cav DMG</th>
+                        <th onclick="sortTable('cav_dmgr')">Cav DMG Recv</th>
                         <th onclick="sortTable('cav_atk_bless')">Cav ATK Bless</th>
                         <th onclick="sortTable('cav_prot_bless')">Cav PROT Bless</th>
                         <th onclick="sortTable('sg_atk')">Siege ATK</th>
                         <th onclick="sortTable('sg_hp')">Siege HP</th>
                         <th onclick="sortTable('sg_def')">Siege DEF</th>
                         <th onclick="sortTable('sg_dmg')">Siege DMG</th>
+                        <th onclick="sortTable('sg_dmgr')">Siege DMG Recv</th>
                         <th onclick="sortTable('sg_atk_bless')">Siege ATK Bless</th>
                         <th onclick="sortTable('sg_prot_bless')">Siege PROT Bless</th>
                         <th onclick="sortTable('lethal')">Lethal %</th>
@@ -820,18 +823,21 @@
                     '<td>' + p.arc_hp + '%</td>' +
                     '<td>' + p.arc_def + '%</td>' +
                     '<td>' + p.arc_dmg + '%</td>' +
+                    '<td>' + (p.arc_dmgr || 0) + '%</td>' +
                     '<td>' + p.arc_atk_bless + '%</td>' +
                     '<td>' + p.arc_prot_bless + '%</td>' +
                     '<td>' + p.cav_atk + '%</td>' +
                     '<td>' + p.cav_hp + '%</td>' +
                     '<td>' + p.cav_def + '%</td>' +
                     '<td>' + p.cav_dmg + '%</td>' +
+                    '<td>' + (p.cav_dmgr || 0) + '%</td>' +
                     '<td>' + p.cav_atk_bless + '%</td>' +
                     '<td>' + p.cav_prot_bless + '%</td>' +
                     '<td>' + p.sg_atk + '%</td>' +
                     '<td>' + p.sg_hp + '%</td>' +
                     '<td>' + p.sg_def + '%</td>' +
                     '<td>' + p.sg_dmg + '%</td>' +
+                    '<td>' + (p.sg_dmgr || 0) + '%</td>' +
                     '<td>' + p.sg_atk_bless + '%</td>' +
                     '<td>' + p.sg_prot_bless + '%</td>' +
                     '<td>' + p.lethal + '%</td>';

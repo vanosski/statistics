@@ -295,7 +295,7 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        table { width: 100%; min-width: 2900px; border-collapse: collapse; font-size: 0.82rem; text-align: left; }
+        table { width: 100%; min-width: 3600px; border-collapse: collapse; font-size: 0.82rem; text-align: left; }
         thead { position: sticky; top: 0; background: #0f172a; z-index: 10; }
         th {
             padding: 12px 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;
@@ -565,7 +565,7 @@
     </div>
 
     <div style="width: 100%; max-width: 1400px;">
-        <div class="scroll-hint">👈 Swipe left/right to view all 22+ Troop & Unit attributes 👉</div>
+        <div class="scroll-hint">👈 Swipe left/right to view all 35+ Troop & Unit attributes (including General Troop & Unit Infantry) 👉</div>
     </div>
 
     <!-- Full Attribute Table -->
@@ -587,13 +587,20 @@
                         <th>Cav Tier</th>
                         <th onclick="sortTable('siege_pow')">Siege Pwr</th>
                         <th>Sg Tier</th>
-                        <th onclick="sortTable('troop_atk')">Infantry ATK</th>
-                        <th onclick="sortTable('troop_hp')">Infantry HP</th>
-                        <th onclick="sortTable('troop_def')">Infantry DEF</th>
-                        <th onclick="sortTable('troop_dmg')">Infantry DMG</th>
-                        <th onclick="sortTable('troop_dmgr')">Infantry DMG Recv</th>
-                        <th onclick="sortTable('troop_atk_bless')">Infantry ATK Bless</th>
-                        <th onclick="sortTable('troop_prot_bless')">Infantry PROT Bless</th>
+                        <th onclick="sortTable('troop_atk')">Troop ATK</th>
+                        <th onclick="sortTable('troop_hp')">Troop HP</th>
+                        <th onclick="sortTable('troop_def')">Troop DEF</th>
+                        <th onclick="sortTable('troop_dmg')">Troop DMG</th>
+                        <th onclick="sortTable('troop_dmgr')">Troop DMG Recv</th>
+                        <th onclick="sortTable('troop_atk_bless')">Troop ATK Bless</th>
+                        <th onclick="sortTable('troop_prot_bless')">Troop PROT Bless</th>
+                        <th onclick="sortTable('inf_atk')">Infantry ATK</th>
+                        <th onclick="sortTable('inf_hp')">Infantry HP</th>
+                        <th onclick="sortTable('inf_def')">Infantry DEF</th>
+                        <th onclick="sortTable('inf_dmg')">Infantry DMG</th>
+                        <th onclick="sortTable('inf_dmgr')">Infantry DMG Recv</th>
+                        <th onclick="sortTable('inf_atk_bless')">Infantry ATK Bless</th>
+                        <th onclick="sortTable('inf_prot_bless')">Infantry PROT Bless</th>
                         <th onclick="sortTable('arc_atk')">Archer ATK</th>
                         <th onclick="sortTable('arc_hp')">Archer HP</th>
                         <th onclick="sortTable('arc_def')">Archer DEF</th>
@@ -802,6 +809,13 @@
                     '<td>' + p.troop_dmgr + '%</td>' +
                     '<td>' + p.troop_atk_bless + '%</td>' +
                     '<td>' + p.troop_prot_bless + '%</td>' +
+                    '<td>' + (p.inf_atk || 0) + '%</td>' +
+                    '<td>' + (p.inf_hp || 0) + '%</td>' +
+                    '<td>' + (p.inf_def || 0) + '%</td>' +
+                    '<td>' + (p.inf_dmg || 0) + '%</td>' +
+                    '<td>' + (p.inf_dmgr || 0) + '%</td>' +
+                    '<td>' + (p.inf_atk_bless || 0) + '%</td>' +
+                    '<td>' + (p.inf_prot_bless || 0) + '%</td>' +
                     '<td>' + p.arc_atk + '%</td>' +
                     '<td>' + p.arc_hp + '%</td>' +
                     '<td>' + p.arc_def + '%</td>' +

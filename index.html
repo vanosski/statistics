@@ -41,6 +41,7 @@
             font-size: clamp(1.75rem, 5vw, 2.5rem);
             font-weight: 700;
             background: linear-gradient(135deg, #a5b4fc 0%, #6366f1 50%, #ef4444 100%);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 6px;
@@ -1078,7 +1079,7 @@
                         p.siege_pow,                       // Siege Power
                         Math.round(p.total_pow / 3)        // Avg Unit Power (Normalized 1/3)
                     ],
-                    _rawTotal: p.total_pow
+                    _rawTotal: p.total_pow,
                     backgroundColor: color.bg,
                     borderColor: color.border,
                     borderWidth: 2,

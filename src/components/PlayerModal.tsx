@@ -37,8 +37,8 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
           border: '1px solid rgba(99, 102, 241, 0.4)',
           borderRadius: '20px',
           width: '100%',
-          maxWidth: '850px',
-          maxHeight: '90vh',
+          maxWidth: '920px',
+          maxHeight: '92vh',
           display: 'flex',
           flexDirection: 'column',
           boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 30px rgba(99, 102, 241, 0.2)',
@@ -49,21 +49,38 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
         <div
           style={{
             padding: '18px 24px',
-            background: 'rgba(30, 41, 59, 0.8)',
+            background: 'rgba(30, 41, 59, 0.85)',
             borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center'
           }}
         >
-          <h2 style={{ fontSize: '1.35rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            👤 {player.name} <span className="badge">{player.server}</span>{' '}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <h2 style={{ fontSize: '1.35rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              👤 {player.name}
+            </h2>
+            <span className="badge" style={{ fontSize: '0.8rem', padding: '3px 10px' }}>{player.server}</span>
             {player.is_woc_leader && (
-              <span style={{ fontSize: '0.8rem', color: '#10b981', background: 'rgba(16, 185, 129, 0.15)', padding: '2px 8px', borderRadius: '6px' }}>
+              <span style={{ fontSize: '0.8rem', color: '#10b981', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '2px 8px', borderRadius: '6px' }}>
                 🛡️ WOC Leader
               </span>
             )}
-          </h2>
+            <span
+              style={{
+                fontSize: '0.8rem',
+                color: '#f59e0b',
+                background: 'rgba(245, 158, 11, 0.15)',
+                border: '1px solid rgba(245, 158, 11, 0.3)',
+                padding: '2px 8px',
+                borderRadius: '6px',
+                fontWeight: 600
+              }}
+            >
+              🎯 Lethal Hit: {player.lethal}%
+            </span>
+          </div>
+
           <button
             onClick={onClose}
             style={{
@@ -87,7 +104,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
         {/* Body */}
         <div style={{ padding: '24px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Core Powers Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
             <div
               style={{
                 background: 'rgba(15, 23, 42, 0.7)',
@@ -113,7 +130,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
                 textAlign: 'center'
               }}
             >
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Guard Power (🛡️)</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Guard Power (🛡️ WOC)</div>
               <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#f59e0b' }}>{player.dgp.toLocaleString()}</div>
             </div>
 
@@ -177,89 +194,120 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
             </button>
           </div>
 
-          {/* Detailed stats in 4 columns */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px' }}>
-            {/* Infantry */}
+          {/* Detailed stats in distinct separate clean cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '14px' }}>
+            {/* Infantry / Guard */}
             <div
               style={{
-                background: 'rgba(15, 23, 42, 0.8)',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
+                background: 'rgba(15, 23, 42, 0.85)',
+                border: '1px solid rgba(99, 102, 241, 0.25)',
                 borderRadius: '12px',
                 padding: '14px'
               }}
             >
-              <h4 style={{ color: '#a5b4fc', marginBottom: '8px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '4px' }}>
-                🛡️ Infantry / Guard
+              <h4 style={{ color: '#a5b4fc', marginBottom: '10px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '5px' }}>
+                🛡️ Infantry & Guard
               </h4>
               <div style={{ fontSize: '0.78rem', lineHeight: 1.8, color: '#cbd5e1' }}>
                 DEF: <strong style={{ color: '#fff' }}>{player.inf_def}%</strong><br />
                 HP: <strong style={{ color: '#fff' }}>{player.inf_hp}%</strong><br />
                 DMG Recv: <strong style={{ color: '#10b981' }}>{player.inf_dmgr}%</strong><br />
                 Prot Bless: <strong style={{ color: '#fff' }}>{player.inf_prot_bless}%</strong><br />
-                ATK: <strong style={{ color: '#fff' }}>{player.inf_atk}%</strong> | DMG: <strong style={{ color: '#fff' }}>{player.inf_dmg}%</strong>
+                ATK: <strong style={{ color: '#fff' }}>{player.inf_atk}%</strong><br />
+                DMG: <strong style={{ color: '#fff' }}>{player.inf_dmg}%</strong><br />
+                ATK Bless: <strong style={{ color: '#fff' }}>{player.inf_atk_bless}%</strong>
               </div>
             </div>
 
             {/* Archer */}
             <div
               style={{
-                background: 'rgba(15, 23, 42, 0.8)',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
+                background: 'rgba(15, 23, 42, 0.85)',
+                border: '1px solid rgba(16, 185, 129, 0.25)',
                 borderRadius: '12px',
                 padding: '14px'
               }}
             >
-              <h4 style={{ color: '#10b981', marginBottom: '8px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '4px' }}>
+              <h4 style={{ color: '#10b981', marginBottom: '10px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '5px' }}>
                 🏹 Archer
               </h4>
               <div style={{ fontSize: '0.78rem', lineHeight: 1.8, color: '#cbd5e1' }}>
                 ATK: <strong style={{ color: '#fff' }}>{player.arc_atk}%</strong><br />
                 DMG: <strong style={{ color: '#fff' }}>{player.arc_dmg}%</strong><br />
                 ATK Bless: <strong style={{ color: '#fff' }}>{player.arc_atk_bless}%</strong><br />
-                HP: <strong style={{ color: '#fff' }}>{player.arc_hp}%</strong> | DEF: <strong style={{ color: '#fff' }}>{player.arc_def}%</strong><br />
-                DMG Recv: <strong style={{ color: '#fff' }}>{player.arc_dmgr || 0}%</strong>
+                HP: <strong style={{ color: '#fff' }}>{player.arc_hp}%</strong><br />
+                DEF: <strong style={{ color: '#fff' }}>{player.arc_def}%</strong><br />
+                DMG Recv: <strong style={{ color: '#fff' }}>{player.arc_dmgr || 0}%</strong><br />
+                Prot Bless: <strong style={{ color: '#fff' }}>{player.arc_prot_bless || 0}%</strong>
               </div>
             </div>
 
-            {/* Cav */}
+            {/* Cavalry */}
             <div
               style={{
-                background: 'rgba(15, 23, 42, 0.8)',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
+                background: 'rgba(15, 23, 42, 0.85)',
+                border: '1px solid rgba(59, 130, 246, 0.25)',
                 borderRadius: '12px',
                 padding: '14px'
               }}
             >
-              <h4 style={{ color: '#3b82f6', marginBottom: '8px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '4px' }}>
+              <h4 style={{ color: '#3b82f6', marginBottom: '10px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '5px' }}>
                 🐎 Cavalry
               </h4>
               <div style={{ fontSize: '0.78rem', lineHeight: 1.8, color: '#cbd5e1' }}>
                 ATK: <strong style={{ color: '#fff' }}>{player.cav_atk}%</strong><br />
                 DMG: <strong style={{ color: '#fff' }}>{player.cav_dmg}%</strong><br />
                 ATK Bless: <strong style={{ color: '#fff' }}>{player.cav_atk_bless}%</strong><br />
-                HP: <strong style={{ color: '#fff' }}>{player.cav_hp}%</strong> | DEF: <strong style={{ color: '#fff' }}>{player.cav_def}%</strong><br />
-                DMG Recv: <strong style={{ color: '#fff' }}>{player.cav_dmgr || 0}%</strong>
+                HP: <strong style={{ color: '#fff' }}>{player.cav_hp}%</strong><br />
+                DEF: <strong style={{ color: '#fff' }}>{player.cav_def}%</strong><br />
+                DMG Recv: <strong style={{ color: '#fff' }}>{player.cav_dmgr || 0}%</strong><br />
+                Prot Bless: <strong style={{ color: '#fff' }}>{player.cav_prot_bless || 0}%</strong>
               </div>
             </div>
 
             {/* Siege */}
             <div
               style={{
-                background: 'rgba(15, 23, 42, 0.8)',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
+                background: 'rgba(15, 23, 42, 0.85)',
+                border: '1px solid rgba(239, 68, 68, 0.25)',
                 borderRadius: '12px',
                 padding: '14px'
               }}
             >
-              <h4 style={{ color: '#ef4444', marginBottom: '8px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '4px' }}>
-                🪨 Siege & Troop
+              <h4 style={{ color: '#ef4444', marginBottom: '10px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '5px' }}>
+                🪨 Siege
               </h4>
               <div style={{ fontSize: '0.78rem', lineHeight: 1.8, color: '#cbd5e1' }}>
                 Siege ATK: <strong style={{ color: '#fff' }}>{player.sg_atk}%</strong><br />
                 Siege DMG: <strong style={{ color: '#fff' }}>{player.sg_dmg}%</strong><br />
-                Troop ATK: <strong style={{ color: '#fff' }}>{player.troop_atk}%</strong> | DMG: <strong style={{ color: '#fff' }}>{player.troop_dmg}%</strong><br />
-                Troop HP: <strong style={{ color: '#fff' }}>{player.troop_hp}%</strong> | DEF: <strong style={{ color: '#fff' }}>{player.troop_def}%</strong><br />
-                Lethal Hit Rate: <strong style={{ color: '#f59e0b' }}>{player.lethal}%</strong>
+                Siege HP: <strong style={{ color: '#fff' }}>{player.sg_hp}%</strong><br />
+                Siege DEF: <strong style={{ color: '#fff' }}>{player.sg_def}%</strong><br />
+                DMG Recv: <strong style={{ color: '#fff' }}>{player.sg_dmgr || 0}%</strong><br />
+                ATK Bless: <strong style={{ color: '#fff' }}>{player.sg_atk_bless || 0}%</strong><br />
+                Prot Bless: <strong style={{ color: '#fff' }}>{player.sg_prot_bless || 0}%</strong>
+              </div>
+            </div>
+
+            {/* Overall Troop Attributes */}
+            <div
+              style={{
+                background: 'rgba(15, 23, 42, 0.85)',
+                border: '1px solid rgba(245, 158, 11, 0.25)',
+                borderRadius: '12px',
+                padding: '14px'
+              }}
+            >
+              <h4 style={{ color: '#f59e0b', marginBottom: '10px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '5px' }}>
+                ⚔️ Overall Troop
+              </h4>
+              <div style={{ fontSize: '0.78rem', lineHeight: 1.8, color: '#cbd5e1' }}>
+                Troop ATK: <strong style={{ color: '#fff' }}>{player.troop_atk}%</strong><br />
+                Troop DMG: <strong style={{ color: '#fff' }}>{player.troop_dmg}%</strong><br />
+                Troop HP: <strong style={{ color: '#fff' }}>{player.troop_hp}%</strong><br />
+                Troop DEF: <strong style={{ color: '#fff' }}>{player.troop_def}%</strong><br />
+                DMG Recv: <strong style={{ color: '#fff' }}>{player.troop_dmgr || 0}%</strong><br />
+                ATK Bless: <strong style={{ color: '#fff' }}>{player.troop_atk_bless || 0}%</strong><br />
+                Prot Bless: <strong style={{ color: '#fff' }}>{player.troop_prot_bless || 0}%</strong>
               </div>
             </div>
           </div>

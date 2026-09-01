@@ -48,7 +48,7 @@ export function App() {
   const handleFilterTableToKd = (_server: string) => {
     setActiveKdModalServer(null);
     setCurrentView('table');
-    const tableEl = document.getElementById('playerTable');
+    const tableEl = document.getElementById('playerTableSection');
     if (tableEl) {
       tableEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -75,6 +75,7 @@ export function App() {
       {/* 3. Multi-Player Comparison View */}
       {(currentView === 'all' || currentView === 'compare') && (
         <ComparisonSuite
+          allPlayers={players}
           selectedPlayers={
             selectedPlayers.length > 0
               ? selectedPlayers
@@ -82,13 +83,14 @@ export function App() {
               ? [players[0], players[1]] // Default preview if none selected
               : []
           }
+          onAddPlayer={handleAddPlayerTag}
           onRemovePlayer={handleRemovePlayerTag}
           onClearAll={handleClearAllTags}
         />
       )}
 
-      {/* 4. Complete Player Table View */}
-      {(currentView === 'all' || currentView === 'table' || currentView === 'compare') && (
+      {/* 4. Complete Player Table View (Only shown in 'all' or 'table' mode) */}
+      {(currentView === 'all' || currentView === 'table') && (
         <PlayerTable
           players={players}
           selectedPlayerNames={selectedPlayerNames}

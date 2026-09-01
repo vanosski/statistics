@@ -64,7 +64,7 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms }) =>
     labels: servers,
     datasets: [
       {
-        label: 'Total Avg',
+        label: 'Total Atk Avg',
         data: kingdoms.map((k) => k.avg_total),
         backgroundColor: '#a5b4fc',
         borderRadius: 4
@@ -186,7 +186,7 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms }) =>
                   className={`btn-toggle ${activeUnit === unit ? 'active' : ''}`}
                   onClick={() => setActiveUnit(unit)}
                 >
-                  {unit === 'total_pow' ? 'Total' : unit === 'archer_pow' ? 'Archer' : unit === 'cav_pow' ? 'Cav' : 'Siege'}
+                  {unit === 'total_pow' ? 'Total Atk' : unit === 'archer_pow' ? 'Archer' : unit === 'cav_pow' ? 'Cav' : 'Siege'}
                 </button>
               ))}
             </div>

@@ -97,7 +97,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
                 textAlign: 'center'
               }}
             >
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Total Power</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Total Attack Power</div>
               <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#a5b4fc' }}>{player.total_pow.toLocaleString()}</div>
               <span className="tier-pill" style={{ background: player.total_pow_color, marginTop: '4px' }}>
                 Tier {player.total_pow_tier}

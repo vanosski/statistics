@@ -316,9 +316,9 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
                   Kingdom
                 </th>
                 <th style={{ padding: '12px 10px', cursor: 'pointer' }} onClick={() => handleSort('total_pow')}>
-                  Total Pwr ▾
+                  Total Atk Pwr ▾
                 </th>
-                <th style={{ padding: '12px 10px' }}>Total Tier</th>
+                <th style={{ padding: '12px 10px' }}>Total Atk Tier</th>
                 <th style={{ padding: '12px 10px', cursor: 'pointer' }} onClick={() => handleSort('archer_pow')}>
                   Archer Pwr
                 </th>

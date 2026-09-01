@@ -64,9 +64,9 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
     }
   };
 
-  // Radar Data (Normalized 1/3 scale for balanced polygon visualization)
+  // Radar Data (Normalized Avg Unit Power / Total Attack Power)
   const radarData = {
-    labels: ['Guard Pwr (WOC)', 'Archer Pwr', 'Cav Pwr', 'Siege Pwr', 'Avg Unit Pwr (Tot/3)'],
+    labels: ['Guard Pwr (WOC)', 'Archer Pwr', 'Cav Pwr', 'Siege Pwr', 'Avg Unit Pwr (Tot Atk/3)'],
     datasets: selectedPlayers.map((p, idx) => {
       const col = palette[idx % palette.length];
       return {
@@ -100,7 +100,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
           label: (context: any) => {
             if (context.dataIndex === 4) {
               const rawTot = context.dataset._rawTotal;
-              return ` ${context.dataset.label} [Avg Unit Pwr]: ${context.formattedValue} (Total: ${rawTot.toLocaleString()})`;
+              return ` ${context.dataset.label} [Avg Unit Pwr]: ${context.formattedValue} (Total Atk Pwr: ${rawTot.toLocaleString()})`;
             }
             return ` ${context.dataset.label}: ${context.formattedValue} Pwr`;
           }
@@ -120,7 +120,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
   // Bar Data
   let barLabels: string[] = [];
   if (metric === 'powers') {
-    barLabels = ['Guard Pwr', 'Archer Pwr', 'Cav Pwr', 'Siege Pwr', 'Total Pwr'];
+    barLabels = ['Guard Pwr', 'Archer Pwr', 'Cav Pwr', 'Siege Pwr', 'Total Atk Pwr'];
   } else if (metric === 'guard_pool') {
     barLabels = ['Inf DEF %', 'Inf HP %', 'Troop DEF %', 'Troop HP %', 'Inf Prot Bless %', 'Inf DMG Recv %'];
   } else {
@@ -181,8 +181,8 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
       rows: [
         { label: 'Kingdom Server', key: 'server' as keyof Player, isNum: false },
         { label: 'Guard Power (🛡️ WOC)', key: 'dgp' as keyof Player, isNum: true },
-        { label: 'Total Power', key: 'total_pow' as keyof Player, isNum: true },
-        { label: 'Total Tier', key: 'total_pow_tier' as keyof Player, isNum: false },
+        { label: 'Total Attack Power', key: 'total_pow' as keyof Player, isNum: true },
+        { label: 'Total Atk Tier', key: 'total_pow_tier' as keyof Player, isNum: false },
         { label: 'Archer Power', key: 'archer_pow' as keyof Player, isNum: true },
         { label: 'Cav Power', key: 'cav_pow' as keyof Player, isNum: true },
         { label: 'Siege Power', key: 'siege_pow' as keyof Player, isNum: true },
@@ -496,7 +496,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
 
                           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <span style={{ fontSize: '0.78rem', color: '#a5b4fc', fontWeight: 600 }}>
-                              {p.total_pow.toLocaleString()} Pwr
+                              {p.total_pow.toLocaleString()} Atk Pwr
                             </span>
                             <span className="badge" style={{ fontSize: '0.7rem' }}>
                               {p.server}

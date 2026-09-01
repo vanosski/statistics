@@ -97,7 +97,7 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
               </div>
 
               <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '10px', lineHeight: 1.45 }}>
-                Players: <strong style={{ color: '#fff' }}>{kd.count}</strong> | Avg Pwr:{' '}
+                Players: <strong style={{ color: '#fff' }}>{kd.count}</strong> | Avg Atk Pwr:{' '}
                 <strong style={{ color: '#a5b4fc' }}>{kd.avg_total.toLocaleString()}</strong>
                 <br />
                 WOC Guard:{' '}
@@ -140,7 +140,7 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
                       background: activeUnit === unit ? 'var(--accent-primary)' : 'transparent'
                     }}
                   >
-                    {unit === 'total_pow' ? 'Total' : unit === 'archer_pow' ? 'Archer' : unit === 'cav_pow' ? 'Cav' : 'Siege'}
+                    {unit === 'total_pow' ? 'Total Atk' : unit === 'archer_pow' ? 'Archer' : unit === 'cav_pow' ? 'Cav' : 'Siege'}
                   </div>
                 ))}
               </div>

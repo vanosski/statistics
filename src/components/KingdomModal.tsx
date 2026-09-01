@@ -124,7 +124,7 @@ export const KingdomModal: React.FC<KingdomModalProps> = ({
                 textAlign: 'center'
               }}
             >
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Average Total Power</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Average Total Attack Power</div>
               <div style={{ fontSize: '1.15rem', fontWeight: 700, color: '#10b981' }}>{kd.avg_total.toLocaleString()}</div>
             </div>
             <div
@@ -207,13 +207,13 @@ export const KingdomModal: React.FC<KingdomModalProps> = ({
                 }}
               >
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>
-                  #1 Total Power Attacker
+                  #1 Attack Power Leader
                 </span>
                 <strong
                   style={{ color: '#fff', fontSize: '0.95rem', cursor: 'pointer' }}
                   onClick={() => onOpenPlayerProfile(topLeader.name)}
                 >
-                  {topLeader.name} ({topLeader.total_pow.toLocaleString()} Pwr) 🔍
+                  {topLeader.name} ({topLeader.total_pow.toLocaleString()} Atk Pwr) 🔍
                 </strong>
               </div>
             </div>
@@ -244,7 +244,7 @@ export const KingdomModal: React.FC<KingdomModalProps> = ({
               <thead>
                 <tr style={{ background: 'rgba(30, 41, 59, 0.9)' }}>
                   <th style={{ padding: '8px 12px' }}>Player</th>
-                  <th style={{ padding: '8px 12px' }}>Total Pwr</th>
+                  <th style={{ padding: '8px 12px' }}>Total Atk Pwr</th>
                   <th style={{ padding: '8px 12px' }}>Guard Pwr</th>
                   <th style={{ padding: '8px 12px' }}>Archer</th>
                   <th style={{ padding: '8px 12px' }}>Cav</th>

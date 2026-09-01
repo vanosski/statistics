@@ -48,17 +48,18 @@ export const KingdomModal: React.FC<KingdomModalProps> = ({
         justifyContent: 'center',
         padding: '16px'
       }}
-      className="animate-fade-in"
+      className="animate-fade-in modal-container"
     >
       <div
         onClick={(e) => e.stopPropagation()}
+        className="modal-sheet"
         style={{
           background: '#0f172a',
           border: '1px solid rgba(99, 102, 241, 0.4)',
           borderRadius: '20px',
           width: '100%',
           maxWidth: '900px',
-          maxHeight: '90vh',
+          maxHeight: '92vh',
           display: 'flex',
           flexDirection: 'column',
           boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 30px rgba(99, 102, 241, 0.2)',
@@ -67,9 +68,10 @@ export const KingdomModal: React.FC<KingdomModalProps> = ({
       >
         {/* Header */}
         <div
+          className="modal-header"
           style={{
             padding: '18px 24px',
-            background: 'rgba(30, 41, 59, 0.8)',
+            background: 'rgba(30, 41, 59, 0.85)',
             borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
             display: 'flex',
             justifyContent: 'space-between',

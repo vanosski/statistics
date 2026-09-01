@@ -18,12 +18,17 @@
   padding: 0;
 }
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 body {
   background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #090d16 60%);
   color: var(--text-main);
   font-family: 'Outfit', sans-serif;
   min-height: 100vh;
-  padding: 24px 16px;
+  padding: 16px 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,23 +49,26 @@ h1, h2, h3, h4 {
 }
 
 .section-title {
-  font-size: clamp(1.15rem, 4vw, 1.45rem);
+  font-size: clamp(1.05rem, 3.5vw, 1.35rem);
   font-weight: 700;
   width: 100%;
   margin-bottom: 14px;
   color: #e2e8f0;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
 }
 
 /* Badges & Tier Pills */
 .badge-tier {
   padding: 4px 8px;
   border-radius: 6px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 .bg-crimson { background: #ef4444; color: #fff; box-shadow: 0 0 8px rgba(239,68,68,0.5); }
 .bg-gold { background: #f59e0b; color: #000; }
@@ -72,27 +80,29 @@ h1, h2, h3, h4 {
   background: rgba(99, 102, 241, 0.15);
   border: 1px solid rgba(99, 102, 241, 0.35);
   color: #a5b4fc;
-  padding: 3px 8px;
+  padding: 2px 7px;
   border-radius: 6px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .tier-pill {
   padding: 2px 6px;
   border-radius: 4px;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: #fff;
   display: inline-block;
-  min-width: 28px;
+  min-width: 26px;
   text-align: center;
+  white-space: nowrap;
 }
 
 /* Button Toggles */
 .btn-group {
   display: flex;
-  gap: 4px;
+  gap: 3px;
   background: rgba(15, 23, 42, 0.7);
   padding: 3px;
   border-radius: 8px;
@@ -103,7 +113,7 @@ h1, h2, h3, h4 {
 .btn-toggle {
   flex: 1;
   padding: 6px 4px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
   border-radius: 6px;
   border: none;
@@ -113,6 +123,7 @@ h1, h2, h3, h4 {
   text-align: center;
   transition: all 0.2s;
   font-family: inherit;
+  white-space: nowrap;
 }
 
 .btn-toggle:hover {
@@ -135,10 +146,50 @@ h1, h2, h3, h4 {
   animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Responsive Mobile Navigation, Tables & Modals */
+@media (max-width: 768px) {
+  body {
+    padding: 10px 8px 30px 8px;
+  }
+
+  .section-title {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-tabs-container {
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+
+  .nav-tab-btn {
+    padding: 7px 11px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .modal-container {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+
+  .modal-sheet {
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 94vh !important;
+  }
+
+  .modal-header {
+    padding: 14px 16px !important;
+  }
+
+  .modal-body {
+    padding: 16px 14px !important;
+  }
+}
+
 /* Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.3);

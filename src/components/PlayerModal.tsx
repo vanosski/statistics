@@ -28,10 +28,11 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
         justifyContent: 'center',
         padding: '16px'
       }}
-      className="animate-fade-in"
+      className="animate-fade-in modal-container"
     >
       <div
         onClick={(e) => e.stopPropagation()}
+        className="modal-sheet"
         style={{
           background: '#0f172a',
           border: '1px solid rgba(99, 102, 241, 0.4)',
@@ -47,6 +48,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
       >
         {/* Header */}
         <div
+          className="modal-header"
           style={{
             padding: '18px 24px',
             background: 'rgba(30, 41, 59, 0.85)',

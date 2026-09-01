@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ViewMode } from '../types/stats';
-import { Sparkles, BarChart2, Crown, Swords, Table } from 'lucide-react';
+import { BarChart2, Crown, Swords, Table } from 'lucide-react';
 
 interface TopNavProps {
   currentView: ViewMode;
@@ -9,7 +9,6 @@ interface TopNavProps {
 
 export const TopNav: React.FC<TopNavProps> = ({ currentView, onSelectView }) => {
   const tabs: { id: ViewMode; label: string; icon: React.ReactNode }[] = [
-    { id: 'all', label: 'All Views', icon: <Sparkles size={16} /> },
     { id: 'graphs', label: 'KD Benchmarks', icon: <BarChart2 size={16} /> },
     { id: 'kingdoms', label: 'Kingdom Cards', icon: <Crown size={16} /> },
     { id: 'compare', label: 'Player Compare', icon: <Swords size={16} /> },

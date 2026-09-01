@@ -16,8 +16,8 @@ export function App() {
   const players = rawPlayersData as Player[];
   const kingdoms = kingdomsData as KingdomSummary[];
 
-  // Start with empty or user-chosen players
-  const [currentView, setCurrentView] = useState<ViewMode>('all');
+  // Start on Benchmarks view
+  const [currentView, setCurrentView] = useState<ViewMode>('graphs');
   const [selectedPlayerNames, setSelectedPlayerNames] = useState<Set<string>>(new Set());
   const [activeKdModalServer, setActiveKdModalServer] = useState<string | null>(null);
   const [activePlayerModalName, setActivePlayerModalName] = useState<string | null>(null);
@@ -64,17 +64,17 @@ export function App() {
       <TopNav currentView={currentView} onSelectView={setCurrentView} />
 
       {/* 1. Graphs View */}
-      {(currentView === 'all' || currentView === 'graphs') && (
+      {currentView === 'graphs' && (
         <KdChartsSection kingdoms={kingdoms} />
       )}
 
       {/* 2. Kingdom Cards View */}
-      {(currentView === 'all' || currentView === 'kingdoms') && (
+      {currentView === 'kingdoms' && (
         <KingdomGrid kingdoms={kingdoms} players={players} onOpenKdModal={setActiveKdModalServer} />
       )}
 
       {/* 3. Multi-Player Comparison View */}
-      {(currentView === 'all' || currentView === 'compare') && (
+      {currentView === 'compare' && (
         <ComparisonSuite
           allPlayers={players}
           selectedPlayers={selectedPlayers}
@@ -84,8 +84,8 @@ export function App() {
         />
       )}
 
-      {/* 4. Complete Player Table View (Only shown in 'all' or 'table' mode) */}
-      {(currentView === 'all' || currentView === 'table') && (
+      {/* 4. Complete Player Table View */}
+      {currentView === 'table' && (
         <PlayerTable
           players={players}
           selectedPlayerNames={selectedPlayerNames}

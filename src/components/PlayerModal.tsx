@@ -194,7 +194,8 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
             </button>
           </div>
 
-          {/* Detailed stats in distinct separate clean cards */}
+          {/* Detailed stats in distinct separate clean cards with strict uniform order:
+              Attack, Health, Defense, Damage, Damage Recv, Attack Blessing, Protection Blessing */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '14px' }}>
             {/* Infantry / Guard */}
             <div
@@ -208,14 +209,14 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
               <h4 style={{ color: '#a5b4fc', marginBottom: '10px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '5px' }}>
                 🛡️ Infantry & Guard
               </h4>
-              <div style={{ fontSize: '0.78rem', lineHeight: 1.8, color: '#cbd5e1' }}>
-                DEF: <strong style={{ color: '#fff' }}>{player.inf_def}%</strong><br />
-                HP: <strong style={{ color: '#fff' }}>{player.inf_hp}%</strong><br />
-                DMG Recv: <strong style={{ color: '#10b981' }}>{player.inf_dmgr}%</strong><br />
-                Prot Bless: <strong style={{ color: '#fff' }}>{player.inf_prot_bless}%</strong><br />
+              <div style={{ fontSize: '0.78rem', lineHeight: 1.85, color: '#cbd5e1' }}>
                 ATK: <strong style={{ color: '#fff' }}>{player.inf_atk}%</strong><br />
+                HP: <strong style={{ color: '#fff' }}>{player.inf_hp}%</strong><br />
+                DEF: <strong style={{ color: '#fff' }}>{player.inf_def}%</strong><br />
                 DMG: <strong style={{ color: '#fff' }}>{player.inf_dmg}%</strong><br />
-                ATK Bless: <strong style={{ color: '#fff' }}>{player.inf_atk_bless}%</strong>
+                DMG Recv: <strong style={{ color: '#10b981' }}>{player.inf_dmgr}%</strong><br />
+                ATK Bless: <strong style={{ color: '#fff' }}>{player.inf_atk_bless}%</strong><br />
+                Prot Bless: <strong style={{ color: '#fff' }}>{player.inf_prot_bless}%</strong>
               </div>
             </div>
 
@@ -231,13 +232,13 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
               <h4 style={{ color: '#10b981', marginBottom: '10px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '5px' }}>
                 🏹 Archer
               </h4>
-              <div style={{ fontSize: '0.78rem', lineHeight: 1.8, color: '#cbd5e1' }}>
+              <div style={{ fontSize: '0.78rem', lineHeight: 1.85, color: '#cbd5e1' }}>
                 ATK: <strong style={{ color: '#fff' }}>{player.arc_atk}%</strong><br />
-                DMG: <strong style={{ color: '#fff' }}>{player.arc_dmg}%</strong><br />
-                ATK Bless: <strong style={{ color: '#fff' }}>{player.arc_atk_bless}%</strong><br />
                 HP: <strong style={{ color: '#fff' }}>{player.arc_hp}%</strong><br />
                 DEF: <strong style={{ color: '#fff' }}>{player.arc_def}%</strong><br />
+                DMG: <strong style={{ color: '#fff' }}>{player.arc_dmg}%</strong><br />
                 DMG Recv: <strong style={{ color: '#fff' }}>{player.arc_dmgr || 0}%</strong><br />
+                ATK Bless: <strong style={{ color: '#fff' }}>{player.arc_atk_bless}%</strong><br />
                 Prot Bless: <strong style={{ color: '#fff' }}>{player.arc_prot_bless || 0}%</strong>
               </div>
             </div>
@@ -254,13 +255,13 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
               <h4 style={{ color: '#3b82f6', marginBottom: '10px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '5px' }}>
                 🐎 Cavalry
               </h4>
-              <div style={{ fontSize: '0.78rem', lineHeight: 1.8, color: '#cbd5e1' }}>
+              <div style={{ fontSize: '0.78rem', lineHeight: 1.85, color: '#cbd5e1' }}>
                 ATK: <strong style={{ color: '#fff' }}>{player.cav_atk}%</strong><br />
-                DMG: <strong style={{ color: '#fff' }}>{player.cav_dmg}%</strong><br />
-                ATK Bless: <strong style={{ color: '#fff' }}>{player.cav_atk_bless}%</strong><br />
                 HP: <strong style={{ color: '#fff' }}>{player.cav_hp}%</strong><br />
                 DEF: <strong style={{ color: '#fff' }}>{player.cav_def}%</strong><br />
+                DMG: <strong style={{ color: '#fff' }}>{player.cav_dmg}%</strong><br />
                 DMG Recv: <strong style={{ color: '#fff' }}>{player.cav_dmgr || 0}%</strong><br />
+                ATK Bless: <strong style={{ color: '#fff' }}>{player.cav_atk_bless}%</strong><br />
                 Prot Bless: <strong style={{ color: '#fff' }}>{player.cav_prot_bless || 0}%</strong>
               </div>
             </div>
@@ -277,11 +278,11 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
               <h4 style={{ color: '#ef4444', marginBottom: '10px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '5px' }}>
                 🪨 Siege
               </h4>
-              <div style={{ fontSize: '0.78rem', lineHeight: 1.8, color: '#cbd5e1' }}>
-                Siege ATK: <strong style={{ color: '#fff' }}>{player.sg_atk}%</strong><br />
-                Siege DMG: <strong style={{ color: '#fff' }}>{player.sg_dmg}%</strong><br />
-                Siege HP: <strong style={{ color: '#fff' }}>{player.sg_hp}%</strong><br />
-                Siege DEF: <strong style={{ color: '#fff' }}>{player.sg_def}%</strong><br />
+              <div style={{ fontSize: '0.78rem', lineHeight: 1.85, color: '#cbd5e1' }}>
+                ATK: <strong style={{ color: '#fff' }}>{player.sg_atk}%</strong><br />
+                HP: <strong style={{ color: '#fff' }}>{player.sg_hp}%</strong><br />
+                DEF: <strong style={{ color: '#fff' }}>{player.sg_def}%</strong><br />
+                DMG: <strong style={{ color: '#fff' }}>{player.sg_dmg}%</strong><br />
                 DMG Recv: <strong style={{ color: '#fff' }}>{player.sg_dmgr || 0}%</strong><br />
                 ATK Bless: <strong style={{ color: '#fff' }}>{player.sg_atk_bless || 0}%</strong><br />
                 Prot Bless: <strong style={{ color: '#fff' }}>{player.sg_prot_bless || 0}%</strong>
@@ -300,11 +301,11 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
               <h4 style={{ color: '#f59e0b', marginBottom: '10px', fontSize: '0.85rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '5px' }}>
                 ⚔️ Overall Troop
               </h4>
-              <div style={{ fontSize: '0.78rem', lineHeight: 1.8, color: '#cbd5e1' }}>
-                Troop ATK: <strong style={{ color: '#fff' }}>{player.troop_atk}%</strong><br />
-                Troop DMG: <strong style={{ color: '#fff' }}>{player.troop_dmg}%</strong><br />
-                Troop HP: <strong style={{ color: '#fff' }}>{player.troop_hp}%</strong><br />
-                Troop DEF: <strong style={{ color: '#fff' }}>{player.troop_def}%</strong><br />
+              <div style={{ fontSize: '0.78rem', lineHeight: 1.85, color: '#cbd5e1' }}>
+                ATK: <strong style={{ color: '#fff' }}>{player.troop_atk}%</strong><br />
+                HP: <strong style={{ color: '#fff' }}>{player.troop_hp}%</strong><br />
+                DEF: <strong style={{ color: '#fff' }}>{player.troop_def}%</strong><br />
+                DMG: <strong style={{ color: '#fff' }}>{player.troop_dmg}%</strong><br />
                 DMG Recv: <strong style={{ color: '#fff' }}>{player.troop_dmgr || 0}%</strong><br />
                 ATK Bless: <strong style={{ color: '#fff' }}>{player.troop_atk_bless || 0}%</strong><br />
                 Prot Bless: <strong style={{ color: '#fff' }}>{player.troop_prot_bless || 0}%</strong>

@@ -202,13 +202,13 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
     {
       title: '🛡️ Guard & Infantry Defensive Attributes',
       rows: [
-        { label: 'Infantry DEF', key: 'inf_def' as keyof Player, isNum: true, suffix: '%' },
-        { label: 'Infantry HP', key: 'inf_hp' as keyof Player, isNum: true, suffix: '%' },
-        { label: 'Infantry DMG Recv (Reduction)', key: 'inf_dmgr' as keyof Player, isNum: true, suffix: '%' },
-        { label: 'Infantry Prot Blessing', key: 'inf_prot_bless' as keyof Player, isNum: true, suffix: '%' },
         { label: 'Infantry ATK', key: 'inf_atk' as keyof Player, isNum: true, suffix: '%' },
+        { label: 'Infantry HP', key: 'inf_hp' as keyof Player, isNum: true, suffix: '%' },
+        { label: 'Infantry DEF', key: 'inf_def' as keyof Player, isNum: true, suffix: '%' },
         { label: 'Infantry DMG', key: 'inf_dmg' as keyof Player, isNum: true, suffix: '%' },
-        { label: 'Infantry ATK Blessing', key: 'inf_atk_bless' as keyof Player, isNum: true, suffix: '%' }
+        { label: 'Infantry DMG Recv (Reduction)', key: 'inf_dmgr' as keyof Player, isNum: true, suffix: '%' },
+        { label: 'Infantry ATK Blessing', key: 'inf_atk_bless' as keyof Player, isNum: true, suffix: '%' },
+        { label: 'Infantry Prot Blessing', key: 'inf_prot_bless' as keyof Player, isNum: true, suffix: '%' }
       ]
     },
     {

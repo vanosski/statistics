@@ -10,21 +10,16 @@ interface KingdomGridProps {
 export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onOpenKdModal }) => {
   const [selectedUnits, setSelectedUnits] = useState<Record<string, UnitPowType>>({});
 
-  // Kingdom red skill data & tier ranking badges
-  const kdConfig: Record<string, { redSkills: number; tierBadge: string; badgeClass: string }> = {
-    K54: { redSkills: 5, tierBadge: 'Tier S++', badgeClass: 'bg-crimson' },
-    K197: { redSkills: 5, tierBadge: 'Tier S+', badgeClass: 'bg-gold' },
-    K116: { redSkills: 5, tierBadge: 'Tier S+', badgeClass: 'bg-gold' },
-    K60: { redSkills: 1, tierBadge: 'Tier S', badgeClass: 'bg-emerald' },
-    K176: { redSkills: 1, tierBadge: 'Tier S', badgeClass: 'bg-emerald' },
-    K91: { redSkills: 3, tierBadge: 'Tier A', badgeClass: 'bg-blue' },
-    K170: { redSkills: 1, tierBadge: 'Tier A', badgeClass: 'bg-blue' },
-    K138: { redSkills: 1, tierBadge: 'Tier B', badgeClass: 'bg-purple' }
+  const redSkillsMap: Record<string, { redSkills: number; tierBadge: string; badgeClass: string }> = {
+    'K54': { redSkills: 5, tierBadge: 'TIER S++', badgeClass: 's-plus' },
+    'K197': { redSkills: 5, tierBadge: 'TIER S+', badgeClass: 's-plus' },
+    'K116': { redSkills: 5, tierBadge: 'TIER S+', badgeClass: 's-plus' },
+    'K60': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 's-tier' },
+    'K176': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 's-tier' },
+    'K91': { redSkills: 3, tierBadge: 'TIER A', badgeClass: 'a-tier' },
+    'K170': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'a-tier' },
+    'K138': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'b-tier' }
   };
-
-  // Sort kingdoms by ranking order
-  const order = ['K54', 'K197', 'K116', 'K60', 'K176', 'K91', 'K170', 'K138'];
-  const sortedKingdoms = [...kingdoms].sort((a, b) => order.indexOf(a.server) - order.indexOf(b.server));
 
   const tierColors: Record<string, string> = {
     'S++': '#ef4444',
@@ -36,108 +31,187 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
     'D': '#475569'
   };
 
+  const getRedSkillMultiplier = (skills: number) => {
+    if (skills >= 5) return 0.13;
+    if (skills >= 3) return 0.09;
+    if (skills >= 1) return 0.05;
+    return 0.0;
+  };
+
+  const sortedKingdoms = [...kingdoms].sort((a, b) => {
+    const cfgA = redSkillsMap[a.server] || { redSkills: 0 };
+    const cfgB = redSkillsMap[b.server] || { redSkills: 0 };
+
+    const wocA = players.find((p) => p.server === a.server && p.is_woc_leader)?.dgp || 0;
+    const wocB = players.find((p) => p.server === b.server && p.is_woc_leader)?.dgp || 0;
+
+    const finalA = (a.avg_total + wocA) * (1 + getRedSkillMultiplier(cfgA.redSkills));
+    const finalB = (b.avg_total + wocB) * (1 + getRedSkillMultiplier(cfgB.redSkills));
+
+    return finalB - finalA;
+  });
+
   return (
-    <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '32px' }}>
+    <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '32px' }} className="animate-fade-in">
       <div className="section-title">
-        <span>👑 Kingdom Strength & Tier Breakdown (Pure Stats)</span>
-        <span style={{ fontSize: '0.75rem', color: '#818cf8', fontWeight: 600 }}>✨ Click any card for detailed drilldown</span>
+        <span>👑 Kingdom Strength & Tier Breakdown</span>
+        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>
+          ✨ Click any card for comprehensive roster & key leader drilldown
+        </span>
       </div>
 
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
-          gap: '16px'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))',
+          gap: '18px'
         }}
       >
-        {sortedKingdoms.map((kd) => {
-          const cfg = kdConfig[kd.server] || { redSkills: 1, tierBadge: 'Tier A', badgeClass: 'bg-blue' };
-          const kdPlayers = players.filter((p) => p.server === kd.server);
-          const wocLeader = kdPlayers.find((p) => p.is_woc_leader) || kdPlayers[0];
+        {sortedKingdoms.map((kd, rankIdx) => {
+          const cfg = redSkillsMap[kd.server] || { redSkills: 0, tierBadge: 'TIER C', badgeClass: 'c-tier' };
+          const redBonus = getRedSkillMultiplier(cfg.redSkills);
+          const wocLeader = players.find((p) => p.server === kd.server && p.is_woc_leader);
           const guardPwr = wocLeader ? wocLeader.dgp : 0;
-          
-          // Pure stats kingdom calculation
-          const redBonus = cfg.redSkills === 5 ? 0.13 : cfg.redSkills === 3 ? 0.09 : 0.05;
           const finalKdPwr = Math.round((kd.avg_total + guardPwr) * (1 + redBonus));
           const activeUnit = selectedUnits[kd.server] || 'total_pow';
 
           return (
             <div
               key={kd.server}
+              className="kingdom-card"
               onClick={() => onOpenKdModal(kd.server)}
               style={{
-                background: 'var(--panel-bg)',
-                border: '1px solid var(--panel-border)',
-                backdropFilter: 'blur(14px)',
-                borderRadius: '14px',
-                padding: '16px',
+                background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%)',
+                border: '1px solid rgba(99, 102, 241, 0.25)',
+                backdropFilter: 'blur(16px)',
+                borderRadius: '16px',
+                padding: '16px 18px',
                 cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                boxShadow: '0 8px 20px -5px rgba(0, 0, 0, 0.4)'
+                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                boxShadow: '0 10px 25px -8px rgba(0, 0, 0, 0.5)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-4px)';
                 e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.6)';
-                e.currentTarget.style.boxShadow = '0 12px 30px -8px rgba(99, 102, 241, 0.3)';
+                e.currentTarget.style.boxShadow = '0 16px 35px -10px rgba(99, 102, 241, 0.35)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.borderColor = 'var(--panel-border)';
-                e.currentTarget.style.boxShadow = '0 8px 20px -5px rgba(0, 0, 0, 0.4)';
+                e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.25)';
+                e.currentTarget.style.boxShadow = '0 10px 25px -8px rgba(0, 0, 0, 0.5)';
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                <div style={{ fontFamily: 'Space Grotesk', fontSize: '1.35rem', fontWeight: 700, color: '#fff' }}>
-                  {kd.server}{' '}
-                  <span style={{ fontSize: '0.8rem', color: '#ef4444', marginLeft: '8px' }}>
-                    🦁 {cfg.redSkills} Red Skills
+              {/* Header: Rank + Kingdom Name + Red Skills + Tier Badge */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-muted)' }}>#{rankIdx + 1}</span>
+                  <span style={{ fontFamily: 'Space Grotesk', fontSize: '1.35rem', fontWeight: 800, color: '#fff' }}>
+                    {kd.server}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      color: '#f87171',
+                      background: 'rgba(239, 68, 68, 0.15)',
+                      border: '1px solid rgba(239, 68, 68, 0.3)',
+                      padding: '2px 7px',
+                      borderRadius: '12px'
+                    }}
+                  >
+                    🦁 {cfg.redSkills} Red
                   </span>
                 </div>
-                <span className={`badge-tier ${cfg.badgeClass}`}>{cfg.tierBadge}</span>
-              </div>
-
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '10px', lineHeight: 1.45 }}>
-                Players: <strong style={{ color: '#fff' }}>{kd.count}</strong> | Avg Atk Pwr:{' '}
-                <strong style={{ color: '#a5b4fc' }}>{kd.avg_total.toLocaleString()}</strong>
-                <br />
-                WOC Guard:{' '}
-                <strong style={{ color: '#10b981' }}>
-                  {wocLeader ? wocLeader.name : 'N/A'} (+{guardPwr.toLocaleString()})
-                </strong>
-                <br />
-                Final KD Pwr:{' '}
-                <strong style={{ color: '#f59e0b', fontSize: '1.05rem' }}>{finalKdPwr.toLocaleString()}</strong>{' '}
-                <span style={{ color: '#ef4444', fontSize: '0.75rem' }}>
-                  (+{Math.round(redBonus * 100)}%)
+                <span className={`badge-tier ${cfg.badgeClass}`} style={{ fontSize: '0.72rem', padding: '3px 9px', borderRadius: '12px' }}>
+                  {cfg.tierBadge}
                 </span>
               </div>
 
+              {/* Clean Highlighted Final Power Hero Box */}
+              <div
+                style={{
+                  background: 'rgba(15, 23, 42, 0.75)',
+                  border: '1px solid rgba(245, 158, 11, 0.3)',
+                  borderRadius: '10px',
+                  padding: '8px 12px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Final Kingdom Power
+                  </div>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#fbbf24', lineHeight: 1.1 }}>
+                    {finalKdPwr.toLocaleString()}
+                  </div>
+                </div>
+                <span
+                  style={{
+                    fontSize: '0.72rem',
+                    color: '#ef4444',
+                    background: 'rgba(239, 68, 68, 0.18)',
+                    padding: '3px 8px',
+                    borderRadius: '6px',
+                    fontWeight: 700
+                  }}
+                >
+                  +{Math.round(redBonus * 100)}% Boost
+                </span>
+              </div>
+
+              {/* Clean Stat List */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', fontSize: '0.8rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#cbd5e1' }}>
+                  <span style={{ color: 'var(--text-muted)' }}>Avg Atk Power:</span>
+                  <strong style={{ color: '#a5b4fc' }}>{kd.avg_total.toLocaleString()}</strong>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#cbd5e1' }}>
+                  <span style={{ color: 'var(--text-muted)' }}>WOC Guard:</span>
+                  <span style={{ textAlign: 'right' }}>
+                    <strong style={{ color: '#fff' }}>{wocLeader ? wocLeader.name : 'N/A'}</strong>{' '}
+                    <span style={{ color: '#10b981', fontWeight: 700 }}>+{guardPwr.toLocaleString()}</span>
+                  </span>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#cbd5e1' }}>
+                  <span style={{ color: 'var(--text-muted)' }}>Active Players:</span>
+                  <strong style={{ color: '#fff' }}>{kd.count} Players</strong>
+                </div>
+              </div>
+
+              {/* Unit Switcher Tabs */}
               <div
                 style={{
                   display: 'flex',
-                  gap: '4px',
-                  marginBottom: '8px',
-                  background: 'rgba(15, 23, 42, 0.6)',
+                  gap: '3px',
+                  background: 'rgba(15, 23, 42, 0.8)',
                   padding: '3px',
-                  borderRadius: '8px'
+                  borderRadius: '8px',
+                  border: '1px solid rgba(255,255,255,0.05)'
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
                 {(['total_pow', 'archer_pow', 'cav_pow', 'siege_pow'] as UnitPowType[]).map((unit) => (
                   <div
                     key={unit}
-                    className={`kd-tab ${activeUnit === unit ? 'active' : ''}`}
                     onClick={() => setSelectedUnits({ ...selectedUnits, [kd.server]: unit })}
                     style={{
                       flex: 1,
                       textAlign: 'center',
-                      padding: '5px 0',
-                      fontSize: '0.72rem',
+                      padding: '4px 0',
+                      fontSize: '0.7rem',
                       fontWeight: 600,
-                      borderRadius: '5px',
+                      borderRadius: '6px',
                       cursor: 'pointer',
-                      color: activeUnit === unit ? '#fff' : 'var(--text-muted)',
-                      background: activeUnit === unit ? 'var(--accent-primary)' : 'transparent'
+                      color: activeUnit === unit ? '#fff' : '#94a3b8',
+                      background: activeUnit === unit ? '#4f46e5' : 'transparent',
+                      transition: 'all 0.15s ease'
                     }}
                   >
                     {unit === 'total_pow' ? 'Total Atk' : unit === 'archer_pow' ? 'Archer' : unit === 'cav_pow' ? 'Cav' : 'Siege'}
@@ -145,6 +219,7 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
                 ))}
               </div>
 
+              {/* Tier Distribution Row */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px', textAlign: 'center' }}>
                 {(['S++', 'S+', 'S', 'A', 'B', 'C', 'D'] as const).map((t) => {
                   const count = kd.tiers[activeUnit]?.[t] || 0;
@@ -152,23 +227,25 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
                     <div
                       key={t}
                       style={{
-                        background: 'rgba(15, 23, 42, 0.5)',
-                        padding: '5px 2px',
+                        background: 'rgba(15, 23, 42, 0.65)',
+                        padding: '4px 2px',
                         borderRadius: '6px',
-                        border: '1px solid rgba(255,255,255,0.05)'
+                        border: count > 0 ? `1px solid rgba(255, 255, 255, 0.1)` : '1px solid rgba(255,255,255,0.03)'
                       }}
                     >
-                      <span style={{ fontSize: '0.68rem', fontWeight: 700, display: 'block', color: tierColors[t] }}>
+                      <span style={{ fontSize: '0.65rem', fontWeight: 800, display: 'block', color: tierColors[t] }}>
                         {t}
                       </span>
-                      <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff' }}>{count}</span>
+                      <span style={{ fontSize: '0.82rem', fontWeight: 700, color: count > 0 ? '#fff' : '#475569' }}>
+                        {count}
+                      </span>
                     </div>
                   );
                 })}
               </div>
 
-              <div style={{ fontSize: '0.72rem', color: '#818cf8', fontWeight: 600, marginTop: '8px', textAlign: 'right' }}>
-                Click for details ➔
+              <div style={{ fontSize: '0.72rem', color: '#818cf8', fontWeight: 600, textAlign: 'right', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '3px' }}>
+                Details & Full Roster ➔
               </div>
             </div>
           );

@@ -5,6 +5,7 @@ import kingdomsData from './data/kingdoms.json';
 
 import { Header } from './components/Header';
 import { TopNav } from './components/TopNav';
+import { HomePage } from './components/HomePage';
 import { KdChartsSection } from './components/KdChartsSection';
 import { KingdomGrid } from './components/KingdomGrid';
 import { ComparisonSuite } from './components/ComparisonSuite';
@@ -16,8 +17,8 @@ export function App() {
   const players = rawPlayersData as Player[];
   const kingdoms = kingdomsData as KingdomSummary[];
 
-  // Start on Benchmarks view
-  const [currentView, setCurrentView] = useState<ViewMode>('graphs');
+  // Start on Command Center (Home)
+  const [currentView, setCurrentView] = useState<ViewMode>('home');
   const [selectedPlayerNames, setSelectedPlayerNames] = useState<Set<string>>(new Set());
   const [activeKdModalServer, setActiveKdModalServer] = useState<string | null>(null);
   const [activePlayerModalName, setActivePlayerModalName] = useState<string | null>(null);
@@ -63,7 +64,18 @@ export function App() {
       <Header />
       <TopNav currentView={currentView} onSelectView={setCurrentView} />
 
-      {/* 1. Graphs View */}
+      {/* 0. Dedicated Cyber Brutalism Command Center Home View */}
+      {currentView === 'home' && (
+        <HomePage
+          kingdoms={kingdoms}
+          players={players}
+          onNavigate={setCurrentView}
+          onOpenPlayer={setActivePlayerModalName}
+          onOpenKingdom={setActiveKdModalServer}
+        />
+      )}
+
+      {/* 1. KD Benchmarks View (Untouched) */}
       {currentView === 'graphs' && (
         <KdChartsSection kingdoms={kingdoms} />
       )}

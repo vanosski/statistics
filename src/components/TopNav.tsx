@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ViewMode } from '../types/stats';
-import { BarChart2, Crown, Swords, Table } from 'lucide-react';
+import { Terminal, BarChart2, Crown, Swords, Table } from 'lucide-react';
 
 interface TopNavProps {
   currentView: ViewMode;
@@ -9,10 +9,11 @@ interface TopNavProps {
 
 export const TopNav: React.FC<TopNavProps> = ({ currentView, onSelectView }) => {
   const tabs: { id: ViewMode; label: string; shortLabel: string; icon: React.ReactNode }[] = [
-    { id: 'graphs', label: 'KD Benchmarks', shortLabel: 'Benchmarks', icon: <BarChart2 size={16} /> },
-    { id: 'kingdoms', label: 'Kingdom Cards', shortLabel: 'Kingdoms', icon: <Crown size={16} /> },
-    { id: 'compare', label: 'Player Compare', shortLabel: 'Compare', icon: <Swords size={16} /> },
-    { id: 'table', label: 'Player Table', shortLabel: 'Table', icon: <Table size={16} /> }
+    { id: 'home', label: 'Command Center', shortLabel: 'Home', icon: <Terminal size={15} /> },
+    { id: 'graphs', label: 'KD Benchmarks', shortLabel: 'Benchmarks', icon: <BarChart2 size={15} /> },
+    { id: 'kingdoms', label: 'Kingdom Cards', shortLabel: 'Kingdoms', icon: <Crown size={15} /> },
+    { id: 'compare', label: 'Player Compare', shortLabel: 'Compare', icon: <Swords size={15} /> },
+    { id: 'table', label: 'Player Table', shortLabel: 'Table', icon: <Table size={15} /> }
   ];
 
   return (
@@ -32,13 +33,13 @@ export const TopNav: React.FC<TopNavProps> = ({ currentView, onSelectView }) => 
         style={{
           display: 'flex',
           gap: '4px',
-          background: 'rgba(15, 23, 42, 0.92)',
+          background: 'rgba(10, 15, 28, 0.92)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
-          border: '1px solid rgba(99, 102, 241, 0.35)',
+          border: '1px solid rgba(99, 102, 241, 0.4)',
           padding: '4px 6px',
           borderRadius: '30px',
-          boxShadow: '0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(99, 102, 241, 0.2)',
+          boxShadow: '0 12px 35px -5px rgba(0, 0, 0, 0.8), 0 0 20px rgba(99, 102, 241, 0.25)',
           overflowX: 'auto',
           maxWidth: '100%',
           WebkitOverflowScrolling: 'touch'
@@ -58,19 +59,19 @@ export const TopNav: React.FC<TopNavProps> = ({ currentView, onSelectView }) => 
                 padding: '8px 14px',
                 borderRadius: '20px',
                 fontSize: '0.82rem',
-                fontWeight: 600,
+                fontWeight: 700,
                 color: isActive ? '#ffffff' : '#94a3b8',
                 background: isActive ? 'linear-gradient(135deg, #6366f1, #4f46e5)' : 'transparent',
-                border: 'none',
+                border: isActive ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 whiteSpace: 'nowrap',
-                fontFamily: 'inherit',
-                boxShadow: isActive ? '0 4px 12px rgba(99, 102, 241, 0.4)' : 'none',
+                fontFamily: 'Space Grotesk, sans-serif',
+                boxShadow: isActive ? '0 4px 15px rgba(99, 102, 241, 0.5)' : 'none',
                 flexShrink: 0
               }}
             >
-              <span>{tab.icon}</span>
+              <span style={{ color: isActive ? '#fff' : '#818cf8' }}>{tab.icon}</span>
               <span>{tab.label}</span>
             </button>
           );

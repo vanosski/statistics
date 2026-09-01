@@ -640,36 +640,62 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
               </span>
             </div>
 
-            <div style={{ width: '100%', overflowX: 'auto', borderRadius: '12px', background: 'rgba(15, 23, 42, 0.6)' }}>
-              <table style={{ width: '100%', minWidth: '600px', borderCollapse: 'collapse', fontSize: '0.84rem' }}>
+            <div
+              style={{
+                width: '100%',
+                overflowX: 'auto',
+                borderRadius: '12px',
+                background: 'rgba(10, 15, 28, 0.85)',
+                border: '1px solid rgba(255, 255, 255, 0.08)'
+              }}
+            >
+              <table style={{ width: '100%', minWidth: '640px', borderCollapse: 'collapse', fontSize: '0.86rem' }}>
                 <thead>
                   <tr>
-                    <th style={{ background: 'rgba(30, 41, 59, 0.8)', padding: '12px 14px' }}>Attribute / Metric</th>
+                    <th
+                      style={{
+                        background: 'rgba(20, 29, 53, 0.95)',
+                        padding: '14px 16px',
+                        textAlign: 'left',
+                        color: '#94a3b8',
+                        fontWeight: 700,
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                        width: '35%'
+                      }}
+                    >
+                      Attribute / Metric
+                    </th>
                     {selectedPlayers.map((p, idx) => {
                       const col = palette[idx % palette.length];
                       return (
                         <th
                           key={p.name}
                           style={{
-                            background: 'rgba(30, 41, 59, 0.8)',
-                            padding: '12px 14px',
+                            background: 'rgba(20, 29, 53, 0.95)',
+                            padding: '14px 16px',
                             borderTop: `3px solid ${col.solid}`,
-                            color: '#fff'
+                            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                            borderLeft: '1px solid rgba(255, 255, 255, 0.06)',
+                            textAlign: 'left'
                           }}
                         >
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
-                              {p.name} <br />
-                              <span style={{ fontSize: '0.7rem', color: col.solid }}>{p.server}</span>
+                              <div style={{ color: '#fff', fontWeight: 800, fontSize: '0.95rem' }}>{p.name}</div>
+                              <span style={{ fontSize: '0.72rem', color: col.solid, fontWeight: 700 }}>Kingdom {p.server}</span>
                             </div>
                             <button
                               onClick={() => onRemovePlayer(p.name)}
+                              title="Remove player"
                               style={{
-                                background: 'transparent',
-                                border: 'none',
+                                background: 'rgba(239, 68, 68, 0.15)',
+                                border: '1px solid rgba(239, 68, 68, 0.3)',
+                                borderRadius: '6px',
                                 color: '#fca5a5',
                                 cursor: 'pointer',
-                                fontSize: '1rem'
+                                padding: '3px 7px',
+                                fontSize: '0.8rem',
+                                transition: 'all 0.15s ease'
                               }}
                             >
                               ✕
@@ -687,18 +713,22 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                         <td
                           colSpan={selectedPlayers.length + 1}
                           style={{
-                            background: 'rgba(15, 23, 42, 0.95)',
-                            color: '#a5b4fc',
-                            fontWeight: 700,
+                            background: 'linear-gradient(90deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.8) 100%)',
+                            color: '#c7d2fe',
+                            fontWeight: 800,
                             fontSize: '0.82rem',
-                            padding: '8px 14px',
-                            borderLeft: '3px solid #6366f1'
+                            padding: '10px 16px',
+                            borderLeft: '4px solid #6366f1',
+                            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                            letterSpacing: '0.02em',
+                            textTransform: 'uppercase'
                           }}
                         >
                           {cat.title}
                         </td>
                       </tr>
-                      {cat.rows.map((row) => {
+                      {cat.rows.map((row, rIdx) => {
                         let maxVal = -Infinity;
                         if (row.isNum && selectedPlayers.length > 1) {
                           selectedPlayers.forEach((p) => {
@@ -707,9 +737,27 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                           });
                         }
 
+                        const isEven = rIdx % 2 === 0;
+
                         return (
-                          <tr key={row.label}>
-                            <td style={{ color: '#94a3b8', padding: '10px 14px' }}>{row.label}</td>
+                          <tr
+                            key={row.label}
+                            style={{
+                              background: isEven ? 'rgba(15, 23, 42, 0.4)' : 'rgba(22, 31, 49, 0.3)',
+                              borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
+                              transition: 'background 0.15s ease'
+                            }}
+                          >
+                            <td
+                              style={{
+                                color: '#cbd5e1',
+                                padding: '9px 16px',
+                                fontWeight: 500,
+                                fontSize: '0.85rem'
+                              }}
+                            >
+                              {row.label}
+                            </td>
                             {selectedPlayers.map((p) => {
                               const rawVal = p[row.key];
                               const isWinner =
@@ -723,21 +771,31 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                                   : String(rawVal);
 
                               return (
-                                <td key={p.name} style={{ padding: '10px 14px' }}>
+                                <td
+                                  key={p.name}
+                                  style={{
+                                    padding: '9px 16px',
+                                    borderLeft: '1px solid rgba(255, 255, 255, 0.04)'
+                                  }}
+                                >
                                   {isWinner ? (
                                     <span
                                       style={{
-                                        color: '#10b981',
-                                        fontWeight: 700,
-                                        background: 'rgba(16, 185, 129, 0.12)',
-                                        borderRadius: '4px',
-                                        padding: '2px 6px'
+                                        color: '#34d399',
+                                        fontWeight: 800,
+                                        background: 'rgba(16, 185, 129, 0.15)',
+                                        border: '1px solid rgba(16, 185, 129, 0.35)',
+                                        borderRadius: '6px',
+                                        padding: '3px 8px',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '4px'
                                       }}
                                     >
-                                      {displayVal} 👑
+                                      {displayVal} <span style={{ fontSize: '0.75rem' }}>👑</span>
                                     </span>
                                   ) : (
-                                    <span style={{ color: '#fff' }}>{displayVal}</span>
+                                    <span style={{ color: '#94a3b8', fontWeight: 600 }}>{displayVal}</span>
                                   )}
                                 </td>
                               );

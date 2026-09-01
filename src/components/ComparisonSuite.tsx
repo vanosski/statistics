@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { Player, CompMetricType } from '../types/stats';
 import { Radar, Bar } from 'react-chartjs-2';
-import { Search, ChevronDown, X, Trash2, CheckSquare, Square } from 'lucide-react';
+import { Search, ChevronDown, X, Trash2, CheckSquare, Square, Eye, EyeOff } from 'lucide-react';
 
 interface ComparisonSuiteProps {
   allPlayers: Player[];
@@ -22,6 +22,8 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [serverFilter, setServerFilter] = useState('ALL');
+  // Mobile focus toggle: focus on one player's polygon or show all
+  const [focusedPlayer, setFocusedPlayer] = useState<string | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -64,21 +66,23 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
     }
   };
 
-  // Radar Data (Normalized Avg Unit Power / Total Attack Power)
+  // Radar Data with Mobile Focus Dimming
   const radarData = {
-    labels: ['Guard Pwr (WOC)', 'Archer Pwr', 'Cav Pwr', 'Siege Pwr', 'Avg Unit Pwr (Tot Atk/3)'],
+    labels: ['Guard (🛡️ WOC)', 'Archer', 'Cavalry', 'Siege', 'Avg Unit Pwr'],
     datasets: selectedPlayers.map((p, idx) => {
       const col = palette[idx % palette.length];
+      const isFocused = !focusedPlayer || focusedPlayer === p.name;
+
       return {
         label: `${p.name} (${p.server})`,
         data: [p.dgp, p.archer_pow, p.cav_pow, p.siege_pow, Math.round(p.total_pow / 3)],
-        backgroundColor: col.bg,
-        borderColor: col.border,
-        borderWidth: 2,
-        pointBackgroundColor: col.solid,
+        backgroundColor: isFocused ? col.bg : 'rgba(255,255,255,0.02)',
+        borderColor: isFocused ? col.border : 'rgba(255,255,255,0.1)',
+        borderWidth: isFocused ? 2.5 : 1,
+        pointBackgroundColor: isFocused ? col.solid : 'rgba(255,255,255,0.2)',
         pointBorderColor: '#fff',
-        pointHoverRadius: 6,
-        pointRadius: 4,
+        pointHoverRadius: 8,
+        pointRadius: isFocused ? 5 : 2,
         _rawTotal: p.total_pow
       };
     })
@@ -89,18 +93,20 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'bottom' as const,
-        labels: { color: '#e2e8f0', font: { size: 11, family: 'Outfit' }, boxWidth: 14 }
+        display: false // We use our custom clean interactive mobile-friendly legend pills
       },
       tooltip: {
-        backgroundColor: '#0f172a',
-        borderColor: '#334155',
+        backgroundColor: '#0a0f1d',
+        borderColor: '#6366f1',
         borderWidth: 1,
+        padding: 12,
+        titleFont: { size: 13, family: 'Space Grotesk', weight: 'bold' as const },
+        bodyFont: { size: 12, family: 'Space Grotesk' },
         callbacks: {
           label: (context: any) => {
             if (context.dataIndex === 4) {
               const rawTot = context.dataset._rawTotal;
-              return ` ${context.dataset.label} [Avg Unit Pwr]: ${context.formattedValue} (Total Atk Pwr: ${rawTot.toLocaleString()})`;
+              return ` ${context.dataset.label}: ${context.formattedValue} (Total Atk: ${rawTot.toLocaleString()})`;
             }
             return ` ${context.dataset.label}: ${context.formattedValue} Pwr`;
           }
@@ -109,10 +115,19 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
     },
     scales: {
       r: {
-        angleLines: { color: 'rgba(255, 255, 255, 0.08)' },
+        angleLines: { color: 'rgba(255, 255, 255, 0.12)' },
         grid: { color: 'rgba(255, 255, 255, 0.08)' },
-        pointLabels: { color: '#a5b4fc', font: { size: 11, weight: 'bold' as const } },
-        ticks: { color: '#64748b', backdropColor: 'transparent', font: { size: 9 } }
+        pointLabels: {
+          color: '#c7d2fe',
+          font: { size: 11, weight: 'bold' as const, family: 'Space Grotesk' },
+          padding: 8
+        },
+        ticks: {
+          color: '#64748b',
+          backdropColor: 'transparent',
+          font: { size: 9 },
+          showLabelBackdrop: false
+        }
       }
     }
   };
@@ -120,7 +135,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
   // Bar Data
   let barLabels: string[] = [];
   if (metric === 'powers') {
-    barLabels = ['Guard Pwr', 'Archer Pwr', 'Cav Pwr', 'Siege Pwr', 'Avg Unit Pwr (Tot/3)'];
+    barLabels = ['Guard Pwr', 'Archer Pwr', 'Cav Pwr', 'Siege Pwr', 'Avg Unit (Tot/3)'];
   } else if (metric === 'guard_pool') {
     barLabels = ['Inf DEF %', 'Inf HP %', 'Troop DEF %', 'Troop HP %', 'Inf Prot Bless %', 'Inf DMG Recv %'];
   } else {
@@ -131,6 +146,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
     labels: barLabels,
     datasets: selectedPlayers.map((p, idx) => {
       const col = palette[idx % palette.length];
+      const isFocused = !focusedPlayer || focusedPlayer === p.name;
       let data: number[] = [];
       if (metric === 'powers') {
         data = [p.dgp, p.archer_pow, p.cav_pow, p.siege_pow, Math.round(p.total_pow / 3)];
@@ -142,8 +158,8 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
       return {
         label: `${p.name} (${p.server})`,
         data,
-        backgroundColor: col.solid,
-        borderRadius: 6,
+        backgroundColor: isFocused ? col.solid : 'rgba(255, 255, 255, 0.1)',
+        borderRadius: 5,
         _rawTotal: p.total_pow
       };
     })
@@ -155,12 +171,13 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
     plugins: {
       legend: {
         position: 'bottom' as const,
-        labels: { color: '#e2e8f0', font: { size: 11 }, boxWidth: 14 }
+        labels: { color: '#e2e8f0', font: { size: 11, family: 'Space Grotesk' }, boxWidth: 12 }
       },
       tooltip: {
-        backgroundColor: '#0f172a',
+        backgroundColor: '#0a0f1d',
         borderColor: '#334155',
         borderWidth: 1,
+        padding: 10,
         callbacks: {
           label: (context: any) => {
             if (metric === 'powers' && context.dataIndex === 4) {
@@ -174,11 +191,11 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
     },
     scales: {
       x: {
-        ticks: { color: '#94a3b8', font: { size: 10, weight: 'bold' as const } },
+        ticks: { color: '#94a3b8', font: { size: 10, weight: 'bold' as const, family: 'Space Grotesk' } },
         grid: { display: false }
       },
       y: {
-        ticks: { color: '#64748b' },
+        ticks: { color: '#64748b', font: { family: 'Space Grotesk' } },
         grid: { color: 'rgba(255, 255, 255, 0.05)' }
       }
     }
@@ -261,288 +278,260 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
     }
   ];
 
-  const servers = ['ALL', 'K116', 'K138', 'K170', 'K176', 'K197', 'K54', 'K60', 'K91'];
+  const servers = ['ALL', ...Array.from(new Set(allPlayers.map((p) => p.server))).sort()];
 
   return (
-    <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '36px' }} className="animate-fade-in">
+    <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '40px' }} className="animate-fade-in">
       <div className="section-title">
         <span>⚔️ Multi-Player Comparison Suite</span>
-        {selectedPlayers.length > 0 && (
-          <button
-            onClick={onClearAll}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: 'rgba(239, 68, 68, 0.15)',
-              border: '1px solid rgba(239, 68, 68, 0.4)',
-              color: '#fca5a5',
-              padding: '5px 14px',
-              borderRadius: '20px',
-              fontSize: '0.78rem',
-              fontWeight: 600,
-              cursor: 'pointer'
-            }}
-          >
-            <Trash2 size={14} /> Clear Selected ({selectedPlayers.length})
-          </button>
-        )}
+        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>
+          Select multiple players to compare radar polygons, unit head-to-head, and full attribute breakdown
+        </span>
       </div>
 
-      {/* Multi-Select Searchable Checkbox Dropdown Picker */}
+      {/* Control Panel: Searchable Checkbox Dropdown Picker */}
       <div
+        className="cyber-panel"
         style={{
-          position: 'relative',
-          zIndex: 100,
-          background: 'rgba(30, 41, 59, 0.85)',
+          padding: '16px 20px',
+          marginBottom: '20px',
           border: '1px solid rgba(99, 102, 241, 0.35)',
-          backdropFilter: 'blur(16px)',
-          borderRadius: '16px',
-          padding: '18px 20px',
-          marginBottom: '22px',
-          boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5)'
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          overflow: 'visible',
+          zIndex: 50
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-            <span style={{ fontSize: '0.92rem', fontWeight: 600, color: '#e2e8f0' }}>
-              Select Players to Compare:
-            </span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '0.78rem', color: '#a5b4fc', fontWeight: 600 }}>
-                {selectedPlayers.length} Player{selectedPlayers.length === 1 ? '' : 's'} Selected
-              </span>
-              {selectedPlayers.length > 0 && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onClearAll();
-                  }}
-                  style={{
-                    background: 'rgba(239, 68, 68, 0.2)',
-                    border: '1px solid rgba(239, 68, 68, 0.5)',
-                    color: '#fca5a5',
-                    padding: '2px 8px',
-                    borderRadius: '6px',
-                    fontSize: '0.72rem',
-                    fontWeight: 600,
-                    cursor: 'pointer'
-                  }}
-                >
-                  Clear All
-                </button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+          <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span>🎯</span> Compare Selected Players ({selectedPlayers.length} Active):
+          </span>
+          {selectedPlayers.length > 0 && (
+            <button
+              onClick={onClearAll}
+              style={{
+                background: 'rgba(239, 68, 68, 0.15)',
+                border: '1px solid rgba(239, 68, 68, 0.4)',
+                color: '#fca5a5',
+                padding: '4px 12px',
+                borderRadius: '8px',
+                fontSize: '0.78rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                transition: 'all 0.2s'
+              }}
+            >
+              <Trash2 size={13} /> Clear All
+            </button>
+          )}
+        </div>
+
+        {/* Dropdown Box Wrapper */}
+        <div ref={dropdownRef} style={{ position: 'relative', width: '100%' }}>
+          <div
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            style={{
+              width: '100%',
+              minHeight: '48px',
+              background: 'rgba(15, 23, 42, 0.9)',
+              border: dropdownOpen ? '1px solid #6366f1' : '1px solid rgba(99, 102, 241, 0.4)',
+              borderRadius: '12px',
+              padding: '8px 14px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '8px',
+              cursor: 'pointer',
+              boxShadow: dropdownOpen ? '0 0 0 3px rgba(99, 102, 241, 0.25)' : 'inset 0 2px 4px rgba(0,0,0,0.3)',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', flex: 1 }}>
+              {selectedPlayers.length === 0 ? (
+                <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem', paddingLeft: '4px' }}>
+                  Click here to search & check players to compare...
+                </span>
+              ) : (
+                selectedPlayers.map((p, idx) => {
+                  const col = palette[idx % palette.length];
+                  return (
+                    <span
+                      key={p.name}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onRemovePlayer(p.name);
+                      }}
+                      style={{
+                        background: col.bg,
+                        border: `1px solid ${col.solid}`,
+                        color: '#fff',
+                        padding: '3px 10px',
+                        borderRadius: '16px',
+                        fontSize: '0.8rem',
+                        fontWeight: 600,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      <span>{p.name}</span>
+                      <span style={{ fontSize: '0.68rem', color: col.solid }}>({p.server})</span>
+                      <X size={12} color="#fca5a5" />
+                    </span>
+                  );
+                })
               )}
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#818cf8', paddingLeft: '8px' }}>
+              <ChevronDown size={18} style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
             </div>
           </div>
 
-          {/* Searchable Checkbox Dropdown Container */}
-          <div ref={dropdownRef} style={{ position: 'relative', width: '100%' }}>
-            {/* Clickable trigger bar with chips */}
+          {/* Dropdown Menu with Search & Checkboxes */}
+          {dropdownOpen && (
             <div
-              onClick={() => setDropdownOpen(!dropdownOpen)}
               style={{
-                minHeight: '48px',
-                background: 'rgba(15, 23, 42, 0.95)',
-                border: dropdownOpen ? '1px solid #818cf8' : '1px solid rgba(99, 102, 241, 0.35)',
-                borderRadius: '12px',
-                padding: '6px 12px',
+                position: 'absolute',
+                top: 'calc(100% + 6px)',
+                left: 0,
+                right: 0,
+                background: '#0a0f1d',
+                border: '1px solid rgba(99, 102, 241, 0.5)',
+                borderRadius: '14px',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.95), 0 0 25px rgba(99, 102, 241, 0.3)',
+                zIndex: 9999,
+                padding: '12px',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '8px',
-                cursor: 'pointer',
-                boxShadow: dropdownOpen ? '0 0 0 3px rgba(99, 102, 241, 0.25)' : 'inset 0 2px 4px rgba(0,0,0,0.3)',
-                transition: 'all 0.2s ease'
+                flexDirection: 'column',
+                gap: '10px'
               }}
             >
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', flex: 1 }}>
-                {selectedPlayers.length === 0 ? (
-                  <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem', paddingLeft: '4px' }}>
-                    Click here to search & check players to compare...
+              {/* Search Bar & Kingdom Filter Inside Dropdown */}
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <div style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center' }}>
+                  <span style={{ position: 'absolute', left: '10px', color: '#818cf8', pointerEvents: 'none' }}>
+                    <Search size={15} />
                   </span>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search player name..."
+                    autoFocus
+                    style={{
+                      width: '100%',
+                      background: 'rgba(30, 41, 59, 0.8)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '8px',
+                      padding: '8px 10px 8px 32px',
+                      color: '#fff',
+                      fontSize: '0.85rem',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
+
+                <select
+                  value={serverFilter}
+                  onChange={(e) => setServerFilter(e.target.value)}
+                  style={{
+                    background: 'rgba(30, 41, 59, 0.8)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '8px',
+                    padding: '8px 10px',
+                    color: '#fff',
+                    fontSize: '0.85rem',
+                    outline: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {servers.map((s) => (
+                    <option key={s} value={s}>
+                      {s === 'ALL' ? 'All Servers' : s}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Scrollable Checkbox List */}
+              <div style={{ maxHeight: '280px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                {filteredPlayers.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                    No players match "{searchQuery}"
+                  </div>
                 ) : (
-                  selectedPlayers.map((p, idx) => {
-                    const col = palette[idx % palette.length];
+                  filteredPlayers.map((p) => {
+                    const isChecked = selectedNames.has(p.name);
                     return (
-                      <span
+                      <div
                         key={p.name}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onRemovePlayer(p.name);
-                        }}
+                        onClick={() => togglePlayerSelection(p.name)}
                         style={{
-                          background: col.bg,
-                          border: `1px solid ${col.solid}`,
-                          color: '#fff',
-                          padding: '3px 10px',
-                          borderRadius: '16px',
-                          fontSize: '0.8rem',
-                          fontWeight: 600,
-                          display: 'inline-flex',
+                          display: 'flex',
+                          justifyContent: 'space-between',
                           alignItems: 'center',
-                          gap: '6px'
+                          padding: '8px 12px',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          background: isChecked ? 'rgba(99, 102, 241, 0.2)' : 'transparent',
+                          transition: 'background 0.15s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isChecked) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isChecked) e.currentTarget.style.background = 'transparent';
                         }}
                       >
-                        <span>{p.name}</span>
-                        <span style={{ fontSize: '0.68rem', color: col.solid }}>({p.server})</span>
-                        <X size={12} color="#fca5a5" />
-                      </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span style={{ color: isChecked ? '#818cf8' : 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
+                            {isChecked ? <CheckSquare size={16} /> : <Square size={16} />}
+                          </span>
+                          <span style={{ fontWeight: 600, color: isChecked ? '#fff' : '#cbd5e1', fontSize: '0.88rem' }}>
+                            {p.name}
+                          </span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span className="badge">{p.server}</span>
+                          <span style={{ fontSize: '0.75rem', color: '#fbbf24', fontWeight: 700 }}>
+                            {p.total_pow.toLocaleString()} Pwr
+                          </span>
+                        </div>
+                      </div>
                     );
                   })
                 )}
               </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#818cf8', paddingLeft: '8px' }}>
-                <ChevronDown size={18} style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
-              </div>
             </div>
-
-            {/* Dropdown Menu with Search & Checkboxes */}
-            {dropdownOpen && (
-              <div
-                style={{
-                  position: 'absolute',
-                  top: 'calc(100% + 6px)',
-                  left: 0,
-                  right: 0,
-                  background: '#0a0f1d',
-                  border: '1px solid rgba(99, 102, 241, 0.5)',
-                  borderRadius: '14px',
-                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.95), 0 0 25px rgba(99, 102, 241, 0.3)',
-                  zIndex: 9999,
-                  padding: '12px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '10px'
-                }}
-              >
-                {/* Search Bar & Kingdom Filter Inside Dropdown */}
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <div style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <span style={{ position: 'absolute', left: '10px', color: '#818cf8', pointerEvents: 'none' }}>
-                      <Search size={15} />
-                    </span>
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search player name..."
-                      autoFocus
-                      style={{
-                        width: '100%',
-                        background: 'rgba(30, 41, 59, 0.8)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        borderRadius: '8px',
-                        padding: '8px 10px 8px 32px',
-                        color: '#fff',
-                        fontSize: '0.85rem',
-                        outline: 'none'
-                      }}
-                    />
-                  </div>
-
-                  <select
-                    value={serverFilter}
-                    onChange={(e) => setServerFilter(e.target.value)}
-                    style={{
-                      background: 'rgba(30, 41, 59, 0.8)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      borderRadius: '8px',
-                      padding: '8px 10px',
-                      color: '#fff',
-                      fontSize: '0.85rem',
-                      outline: 'none',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {servers.map((s) => (
-                      <option key={s} value={s}>
-                        {s === 'ALL' ? 'All Servers' : s}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Scrollable Checkbox List */}
-                <div style={{ maxHeight: '280px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                  {filteredPlayers.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                      No players match "{searchQuery}"
-                    </div>
-                  ) : (
-                    filteredPlayers.map((p) => {
-                      const isChecked = selectedNames.has(p.name);
-                      return (
-                        <div
-                          key={p.name}
-                          onClick={() => togglePlayerSelection(p.name)}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            padding: '8px 12px',
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                            background: isChecked ? 'rgba(99, 102, 241, 0.25)' : 'transparent',
-                            transition: 'background 0.15s'
-                          }}
-                          onMouseEnter={(e) => {
-                            if (!isChecked) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                          }}
-                          onMouseLeave={(e) => {
-                            if (!isChecked) e.currentTarget.style.background = 'transparent';
-                          }}
-                        >
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            {isChecked ? (
-                              <CheckSquare size={16} color="#818cf8" />
-                            ) : (
-                              <Square size={16} color="#64748b" />
-                            )}
-                            <span style={{ fontSize: '0.88rem', fontWeight: isChecked ? 700 : 500, color: isChecked ? '#fff' : '#cbd5e1' }}>
-                              {p.name} {p.is_woc_leader ? '🛡️' : ''}
-                            </span>
-                          </div>
-
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span style={{ fontSize: '0.78rem', color: '#a5b4fc', fontWeight: 600 }}>
-                              {p.total_pow.toLocaleString()} Atk Pwr
-                            </span>
-                            <span className="badge" style={{ fontSize: '0.7rem' }}>
-                              {p.server}
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
 
       {/* When no players selected */}
       {selectedPlayers.length === 0 ? (
         <div
+          className="cyber-panel"
           style={{
             textAlign: 'center',
             padding: '50px 20px',
-            background: 'var(--panel-bg)',
-            border: '1px dashed rgba(99, 102, 241, 0.3)',
+            border: '1px dashed rgba(99, 102, 241, 0.4)',
             borderRadius: '16px',
             color: 'var(--text-muted)'
           }}
         >
-          <div style={{ fontSize: '2rem', marginBottom: '10px' }}>⚔️</div>
-          <h3 style={{ color: '#fff', fontSize: '1.2rem', marginBottom: '6px' }}>No Players Selected</h3>
-          <p style={{ fontSize: '0.9rem', maxWidth: '500px', margin: '0 auto 16px auto' }}>
-            Click the searchable dropdown above and check the players you wish to compare side-by-side.
+          <div style={{ fontSize: '2.4rem', marginBottom: '10px' }}>⚔️</div>
+          <h3 style={{ color: '#fff', fontSize: '1.25rem', marginBottom: '6px', fontWeight: 800 }}>No Players Selected</h3>
+          <p style={{ fontSize: '0.9rem', maxWidth: '500px', margin: '0 auto 16px auto', lineHeight: 1.5 }}>
+            Click the searchable dropdown above and select the players you wish to compare side-by-side.
           </p>
           <button
             className="btn-toggle active"
-            style={{ padding: '8px 20px', borderRadius: '20px', fontSize: '0.85rem' }}
+            style={{ padding: '9px 24px', borderRadius: '10px', fontSize: '0.88rem', fontWeight: 700 }}
             onClick={() => {
               onAddPlayer('•Pain•');
               onAddPlayer('CerialKiller');
@@ -557,40 +546,134 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
               gap: '20px',
               marginBottom: '24px'
             }}
           >
-            {/* Radar */}
+            {/* 1. Radar Breakdown Card with Mobile Focus Toggles */}
             <div
+              className="cyber-panel"
               style={{
-                background: 'var(--panel-bg)',
-                border: '1px solid rgba(99, 102, 241, 0.3)',
-                backdropFilter: 'blur(14px)',
-                borderRadius: '16px',
-                padding: '20px',
-                boxShadow: '0 12px 30px -10px rgba(0,0,0,0.5)'
+                padding: '20px 18px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '14px'
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                <h3 style={{ fontSize: '1.1rem', color: '#fff' }}>🕸️ Unit Power Radar Breakdown</h3>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Guard vs Arch vs Cav vs Siege</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                <div>
+                  <h3 style={{ fontSize: '1.05rem', color: '#fff', fontWeight: 800 }}>🕸️ Unit Power Radar</h3>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Normalized 5-Axis Scale</span>
+                </div>
+
+                {focusedPlayer && (
+                  <button
+                    onClick={() => setFocusedPlayer(null)}
+                    style={{
+                      background: 'rgba(99, 102, 241, 0.2)',
+                      border: '1px solid #818cf8',
+                      color: '#c7d2fe',
+                      padding: '2px 8px',
+                      borderRadius: '6px',
+                      fontSize: '0.72rem',
+                      fontWeight: 600,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Reset Focus (Show All)
+                  </button>
+                )}
               </div>
-              <div style={{ height: '360px', position: 'relative' }}>
+
+              {/* Interactive Player Legend Pills (Click to isolate/focus on Mobile) */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                {selectedPlayers.map((p, idx) => {
+                  const col = palette[idx % palette.length];
+                  const isFocused = focusedPlayer === p.name;
+                  return (
+                    <button
+                      key={p.name}
+                      onClick={() => setFocusedPlayer(isFocused ? null : p.name)}
+                      style={{
+                        background: isFocused ? col.solid : col.bg,
+                        border: `1px solid ${col.solid}`,
+                        color: isFocused ? '#000' : '#fff',
+                        padding: '4px 10px',
+                        borderRadius: '20px',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      {isFocused ? <Eye size={12} /> : <EyeOff size={12} style={{ opacity: 0.6 }} />}
+                      <span>{p.name}</span>
+                      <span style={{ fontSize: '0.68rem', opacity: 0.85 }}>({p.server})</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Radar Chart Container */}
+              <div style={{ height: '340px', width: '100%', position: 'relative' }}>
                 <Radar data={radarData} options={radarOptions} />
+              </div>
+
+              {/* Mobile Quick-Stats Strip (Direct values under radar) */}
+              <div
+                style={{
+                  background: 'rgba(10, 15, 28, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.06)',
+                  borderRadius: '10px',
+                  padding: '10px 12px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '6px'
+                }}
+              >
+                <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Quick Radar Breakdown Numbers:
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.78rem' }}>
+                  {selectedPlayers.map((p, idx) => {
+                    const col = palette[idx % palette.length];
+                    return (
+                      <div
+                        key={p.name}
+                        onClick={() => setFocusedPlayer(focusedPlayer === p.name ? null : p.name)}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          padding: '4px 6px',
+                          borderRadius: '6px',
+                          cursor: 'pointer',
+                          background: focusedPlayer === p.name ? 'rgba(99, 102, 241, 0.2)' : 'transparent'
+                        }}
+                      >
+                        <span style={{ color: col.solid, fontWeight: 700 }}>{p.name}:</span>
+                        <span style={{ color: '#cbd5e1', fontSize: '0.74rem' }}>
+                          🛡️ {p.dgp.toLocaleString()} | 🏹 {p.archer_pow.toLocaleString()} | 🐎 {p.cav_pow.toLocaleString()} | 🪨 {p.siege_pow.toLocaleString()}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
-            {/* Bar */}
+            {/* 2. Head-to-Head Bar Chart */}
             <div
+              className="cyber-panel"
               style={{
-                background: 'var(--panel-bg)',
-                border: '1px solid rgba(99, 102, 241, 0.3)',
-                backdropFilter: 'blur(14px)',
-                borderRadius: '16px',
-                padding: '20px',
-                boxShadow: '0 12px 30px -10px rgba(0,0,0,0.5)'
+                padding: '20px 18px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '14px'
               }}
             >
               <div
@@ -599,19 +682,18 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                   flexWrap: 'wrap',
                   gap: '10px',
                   justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '14px'
+                  alignItems: 'center'
                 }}
               >
-                <h3 style={{ fontSize: '1.1rem', color: '#fff' }}>📊 Head-to-Head Comparison</h3>
-                <div className="btn-group">
+                <h3 style={{ fontSize: '1.05rem', color: '#fff', fontWeight: 800 }}>📊 Head-to-Head Comparison</h3>
+                <div className="btn-group" style={{ maxWidth: '100%' }}>
                   {(['powers', 'guard_pool', 'attack_dmg'] as CompMetricType[]).map((m) => (
                     <button
                       key={m}
                       className={`btn-toggle ${metric === m ? 'active' : ''}`}
                       onClick={() => setMetric(m)}
                     >
-                      {m === 'powers' ? 'Powers' : m === 'guard_pool' ? 'Guard Stats' : 'Offensive DMG'}
+                      {m === 'powers' ? 'Powers' : m === 'guard_pool' ? 'Guard' : 'DMG %'}
                     </button>
                   ))}
                 </div>
@@ -622,21 +704,18 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
             </div>
           </div>
 
-          {/* Side-by-side matrix */}
+          {/* 3. Detailed Side-by-Side Matrix Table */}
           <div
+            className="cyber-panel"
             style={{
-              background: 'var(--panel-bg)',
-              border: '1px solid rgba(99, 102, 241, 0.3)',
-              backdropFilter: 'blur(14px)',
-              borderRadius: '16px',
               padding: '20px',
               boxShadow: '0 12px 30px -10px rgba(0,0,0,0.5)'
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ fontSize: '1.15rem', color: '#fff' }}>📑 Detailed Side-by-Side Attribute Comparison</h3>
-              <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 600 }}>
-                ✨ Green badge = Highest Value in Stat
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
+              <h3 style={{ fontSize: '1.15rem', color: '#fff', fontWeight: 800 }}>📑 Detailed Side-by-Side Attribute Comparison</h3>
+              <span style={{ fontSize: '0.75rem', color: '#34d399', fontWeight: 700 }}>
+                ✨ 👑 Badge = Highest Value in Stat
               </span>
             </div>
 
@@ -649,7 +728,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                 border: '1px solid rgba(255, 255, 255, 0.08)'
               }}
             >
-              <table style={{ width: '100%', minWidth: '640px', borderCollapse: 'collapse', fontSize: '0.86rem' }}>
+              <table style={{ width: '100%', minWidth: '600px', borderCollapse: 'collapse', fontSize: '0.86rem' }}>
                 <thead>
                   <tr>
                     <th

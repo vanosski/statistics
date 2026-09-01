@@ -1,12 +1,17 @@
 import React from 'react';
+import { Calendar } from 'lucide-react';
 
 export const Header: React.FC = () => {
   return (
     <header
       style={{
         textAlign: 'center',
-        marginBottom: '16px',
-        padding: '0 10px'
+        marginBottom: '14px',
+        padding: '0 10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '6px'
       }}
     >
       <h1
@@ -21,8 +26,26 @@ export const Header: React.FC = () => {
           letterSpacing: '-0.02em'
         }}
       >
-        👑 Kingdom Tracker — Statistics Dashboard
+        👑 Last Land Statistics Tracker
       </h1>
+
+      <div
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '6px',
+          background: 'rgba(99, 102, 241, 0.12)',
+          border: '1px solid rgba(99, 102, 241, 0.3)',
+          padding: '2px 10px',
+          borderRadius: '20px',
+          fontSize: '0.74rem',
+          color: '#c7d2fe',
+          fontWeight: 600
+        }}
+      >
+        <Calendar size={12} color="#818cf8" />
+        <span>Last Updated: September 1, 2026</span>
+      </div>
     </header>
   );
 };

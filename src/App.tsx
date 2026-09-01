@@ -12,6 +12,7 @@ import { ComparisonSuite } from './components/ComparisonSuite';
 import { PlayerTable } from './components/PlayerTable';
 import { KingdomModal } from './components/KingdomModal';
 import { PlayerModal } from './components/PlayerModal';
+import { Footer } from './components/Footer';
 
 export function App() {
   const players = rawPlayersData as Player[];
@@ -126,6 +127,8 @@ export function App() {
         onClose={() => setActivePlayerModalName(null)}
         onAddToCompare={handleAddToCompareAndSwitch}
       />
+
+      <Footer />
     </>
   );
 }

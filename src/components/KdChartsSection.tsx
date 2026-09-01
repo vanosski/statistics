@@ -37,10 +37,10 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms }) =>
     'S++': '#ef4444',
     'S+': '#f59e0b',
     'S': '#10b981',
-    'A': '#3b82f6',
+    'A': '#06b6d4',
     'B': '#8b5cf6',
     'C': '#64748b',
-    'D': '#475569'
+    'D': '#334155'
   };
 
   const tierLabels = ['S++', 'S+', 'S', 'A', 'B', 'C', 'D'];
@@ -51,7 +51,7 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms }) =>
     label: tier,
     data: kingdoms.map((k) => k.tiers[activeUnit]?.[tier as keyof typeof k.tiers[typeof activeUnit]] || 0),
     backgroundColor: tierColors[tier],
-    borderRadius: 2
+    borderRadius: 3
   }));
 
   const tierChartData = {
@@ -66,7 +66,7 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms }) =>
       {
         label: 'Total Atk Avg',
         data: kingdoms.map((k) => k.avg_total),
-        backgroundColor: '#a5b4fc',
+        backgroundColor: '#818cf8',
         borderRadius: 4
       },
       {
@@ -78,13 +78,13 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms }) =>
       {
         label: 'Cav Avg',
         data: kingdoms.map((k) => k.avg_cav),
-        backgroundColor: '#3b82f6',
+        backgroundColor: '#06b6d4',
         borderRadius: 4
       },
       {
         label: 'Siege Avg',
         data: kingdoms.map((k) => k.avg_siege),
-        backgroundColor: '#ef4444',
+        backgroundColor: '#f43f5e',
         borderRadius: 4
       }
     ]
@@ -96,24 +96,27 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms }) =>
     plugins: {
       legend: {
         position: 'bottom' as const,
-        labels: { color: '#94a3b8', boxWidth: 12, font: { size: 11 } }
+        labels: { color: '#94a3b8', boxWidth: 12, font: { size: 11, family: 'Space Grotesk' } }
       },
       tooltip: {
-        backgroundColor: '#0f172a',
-        borderColor: '#334155',
-        borderWidth: 1
+        backgroundColor: '#0a0f1d',
+        borderColor: '#6366f1',
+        borderWidth: 1,
+        titleColor: '#fff',
+        bodyColor: '#e2e8f0',
+        padding: 10
       }
     },
     scales: {
       x: {
         stacked: true,
         grid: { display: false },
-        ticks: { color: '#fff', font: { weight: 'bold' as const } }
+        ticks: { color: '#e2e8f0', font: { weight: 'bold' as const, family: 'Space Grotesk' } }
       },
       y: {
         stacked: true,
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
-        ticks: { color: '#64748b' }
+        grid: { color: 'rgba(255, 255, 255, 0.04)' },
+        ticks: { color: '#64748b', font: { family: 'Space Grotesk' } }
       }
     }
   };
@@ -124,30 +127,38 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms }) =>
     plugins: {
       legend: {
         position: 'bottom' as const,
-        labels: { color: '#94a3b8', boxWidth: 12, font: { size: 11 } }
+        labels: { color: '#94a3b8', boxWidth: 12, font: { size: 11, family: 'Space Grotesk' } }
       },
       tooltip: {
-        backgroundColor: '#0f172a',
-        borderColor: '#334155',
-        borderWidth: 1
+        backgroundColor: '#0a0f1d',
+        borderColor: '#06b6d4',
+        borderWidth: 1,
+        titleColor: '#fff',
+        bodyColor: '#e2e8f0',
+        padding: 10
       }
     },
     scales: {
       x: {
         grid: { display: false },
-        ticks: { color: '#fff', font: { weight: 'bold' as const } }
+        ticks: { color: '#e2e8f0', font: { weight: 'bold' as const, family: 'Space Grotesk' } }
       },
       y: {
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
-        ticks: { color: '#64748b' }
+        grid: { color: 'rgba(255, 255, 255, 0.04)' },
+        ticks: { color: '#64748b', font: { family: 'Space Grotesk' } }
       }
     }
   };
 
   return (
-    <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '32px' }}>
+    <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '32px' }} className="animate-fade-in">
       <div className="section-title">
-        <span>📊 KD Benchmarks & Graphs</span>
+        <span className="cyber-title" style={{ fontSize: '1.25rem' }}>
+          ⚡ KD Benchmarks & Combat Graphs
+        </span>
+        <span style={{ fontSize: '0.75rem', color: '#06b6d4', fontWeight: 600, letterSpacing: '0.05em' }}>
+          REALTIME COMPARATIVE TELEMETRY
+        </span>
       </div>
 
       <div
@@ -159,13 +170,10 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms }) =>
       >
         {/* Chart 1 */}
         <div
+          className="cyber-panel"
           style={{
-            background: 'var(--panel-bg)',
-            border: '1px solid var(--panel-border)',
-            backdropFilter: 'blur(14px)',
-            borderRadius: '16px',
-            padding: '18px',
-            boxShadow: '0 8px 20px -5px rgba(0, 0, 0, 0.4)'
+            padding: '20px',
+            boxShadow: '0 16px 40px -12px rgba(0, 0, 0, 0.8), 0 0 20px rgba(99, 102, 241, 0.15)'
           }}
         >
           <div
@@ -175,10 +183,12 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms }) =>
               gap: '10px',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: '14px'
+              marginBottom: '16px'
             }}
           >
-            <h3 style={{ fontSize: '1rem', fontWeight: 600, color: '#fff' }}>KD Player Tier Composition</h3>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ color: '#ec4899' }}>◈</span> Tier Composition
+            </h3>
             <div className="btn-group">
               {(['total_pow', 'archer_pow', 'cav_pow', 'siege_pow'] as UnitPowType[]).map((unit) => (
                 <button
@@ -191,26 +201,28 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms }) =>
               ))}
             </div>
           </div>
-          <div style={{ height: '280px', position: 'relative' }}>
+          <div style={{ height: '300px', position: 'relative' }}>
             <Bar data={tierChartData} options={chartOptions} />
           </div>
         </div>
 
         {/* Chart 2 */}
         <div
+          className="cyber-panel"
           style={{
-            background: 'var(--panel-bg)',
-            border: '1px solid var(--panel-border)',
-            backdropFilter: 'blur(14px)',
-            borderRadius: '16px',
-            padding: '18px',
-            boxShadow: '0 8px 20px -5px rgba(0, 0, 0, 0.4)'
+            padding: '20px',
+            boxShadow: '0 16px 40px -12px rgba(0, 0, 0, 0.8), 0 0 20px rgba(6, 182, 212, 0.15)'
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 600, color: '#fff' }}>KD Unit Strength Comparison (Avg)</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ color: '#06b6d4' }}>◈</span> Unit Strength Averages
+            </h3>
+            <span style={{ fontSize: '0.72rem', color: '#94a3b8', fontFamily: 'Space Grotesk' }}>
+              Pure Base Stats
+            </span>
           </div>
-          <div style={{ height: '280px', position: 'relative' }}>
+          <div style={{ height: '300px', position: 'relative' }}>
             <Bar data={strengthChartData} options={strengthOptions} />
           </div>
         </div>

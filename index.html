@@ -192,6 +192,133 @@
         .t-d { color: #475569; }
 
         
+        
+        /* Player Comparison Suite */
+        .comparison-section {
+            width: 100%;
+            max-width: 1400px;
+            margin-bottom: 30px;
+            display: none; /* Shown dynamically when >= 1 players selected */
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .comp-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        @media (min-width: 1024px) {
+            .comp-grid { grid-template-columns: 1fr 1.25fr; }
+        }
+
+        .comp-card {
+            background: var(--panel-bg);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            backdrop-filter: blur(14px);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .comp-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 10px;
+        }
+
+        .comp-card-header h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .comp-radar-wrapper {
+            height: 380px;
+            position: relative;
+            width: 100%;
+        }
+
+        .comp-bars-wrapper {
+            height: 380px;
+            position: relative;
+            width: 100%;
+        }
+
+        /* Detailed Matrix Table */
+        .matrix-container {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.84rem;
+            text-align: left;
+            min-width: 600px;
+        }
+
+        .matrix-table th {
+            background: rgba(30, 41, 59, 0.8);
+            color: var(--text-muted);
+            padding: 12px 14px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .matrix-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            white-space: nowrap;
+        }
+
+        .matrix-table tr:hover td {
+            background: rgba(99, 102, 241, 0.06);
+        }
+
+        .stat-winner {
+            color: #10b981 !important;
+            font-weight: 700;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 4px;
+            padding: 2px 6px;
+        }
+
+        .stat-category-header {
+            background: rgba(15, 23, 42, 0.9) !important;
+            color: #a5b4fc !important;
+            font-weight: 700 !important;
+            font-size: 0.8rem !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-left: 3px solid #6366f1;
+        }
+
+        .empty-comp-hint {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.3);
+            margin-bottom: 16px;
+        }
+
         /* Controls & Search Styling */
         .controls-bar {
             display: flex; gap: 14px; width: 100%; max-width: 1400px; margin-bottom: 20px;
@@ -589,6 +716,9 @@
         </div>
     </div>
 
+    
+
+
     <!-- Player Table Controls -->
     <div class="section-title">
         <span>📋 Complete All-Attribute Player Table</span>
@@ -608,6 +738,52 @@
                 <option value="ALL">All Kingdoms (167 Players)</option>
 <option value="K116">K116 (20 Players)</option><option value="K138">K138 (27 Players)</option><option value="K170">K170 (23 Players)</option><option value="K176">K176 (22 Players)</option><option value="K197">K197 (19 Players)</option><option value="K54">K54 (11 Players)</option><option value="K60">K60 (25 Players)</option><option value="K91">K91 (20 Players)</option>
             </select>
+        </div>
+    </div>
+
+    <!-- Live Multi-Player Comparison Suite -->
+    <div class="comparison-section" id="comparisonSuite">
+        <div class="section-title">
+            <span>⚔️ Multi-Player Direct Comparison Analysis</span>
+        </div>
+
+        <div class="comp-grid">
+            <!-- Radar Chart: Unit Archetype Balance -->
+            <div class="comp-card">
+                <div class="comp-card-header">
+                    <h3><span>🕸️</span> Unit Power Radar Breakdown</h3>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Guard vs Arch vs Cav vs Siege</span>
+                </div>
+                <div class="comp-radar-wrapper">
+                    <canvas id="playerRadarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Bar Chart: Power & Guard Head-to-Head -->
+            <div class="comp-card">
+                <div class="comp-card-header">
+                    <h3><span>📊</span> Head-to-Head Power Comparison</h3>
+                    <div class="btn-group" style="max-width: 320px;">
+                        <button class="btn-toggle active" onclick="switchCompMetric('powers', this)">Powers</button>
+                        <button class="btn-toggle" onclick="switchCompMetric('guard_pool', this)">Guard Def & HP</button>
+                        <button class="btn-toggle" onclick="switchCompMetric('attack_dmg', this)">Offensive DMG</button>
+                    </div>
+                </div>
+                <div class="comp-bars-wrapper">
+                    <canvas id="playerBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Side-by-Side Stat Matrix -->
+        <div class="comp-card">
+            <div class="comp-card-header">
+                <h3><span>📑</span> Detailed Side-by-Side Attribute Comparison</h3>
+                <span style="font-size: 0.75rem; color: #10b981; font-weight: 600;">✨ Green badge = Highest Value in Stat</span>
+            </div>
+            <div class="matrix-container" id="matrixContainer">
+                <!-- Dynamically generated comparison table -->
+            </div>
         </div>
     </div>
 
@@ -833,6 +1009,317 @@
         let sortCol = 'total_pow';
         let sortAsc = false;
 
+        
+        // Player Comparison Charts Instances
+        let radarChartInstance = null;
+        let barChartInstance = null;
+        let currentCompMetric = 'powers';
+
+        // Vibrant distinct colors for multi-player comparison
+        const playerPalette = [
+            { bg: 'rgba(99, 102, 241, 0.4)', border: '#6366f1', solid: '#818cf8' },
+            { bg: 'rgba(239, 68, 68, 0.4)', border: '#ef4444', solid: '#f87171' },
+            { bg: 'rgba(16, 185, 129, 0.4)', border: '#10b981', solid: '#34d399' },
+            { bg: 'rgba(245, 158, 11, 0.4)', border: '#f59e0b', solid: '#fbbf24' },
+            { bg: 'rgba(59, 130, 246, 0.4)', border: '#3b82f6', solid: '#60a5fa' },
+            { bg: 'rgba(236, 72, 153, 0.4)', border: '#ec4899', solid: '#f472b6' },
+            { bg: 'rgba(139, 92, 246, 0.4)', border: '#8b5cf6', solid: '#a78bfa' },
+            { bg: 'rgba(20, 184, 166, 0.4)', border: '#14b8a6', solid: '#2dd4bf' }
+        ];
+
+        function getSelectedPlayerObjects() {
+            if (selectedPlayerNames.size > 0) {
+                return rawPlayers.filter(p => selectedPlayerNames.has(p.name));
+            }
+            // If user has filtered the table to between 2 and 6 players via search tokens, automatically enable comparison
+            const inputVal = document.getElementById('searchInput').value.trim();
+            if (inputVal.length > 0 && currentPlayers.length >= 2 && currentPlayers.length <= 6) {
+                return currentPlayers;
+            }
+            return [];
+        }
+
+        function switchCompMetric(metric, btn) {
+            currentCompMetric = metric;
+            if (btn) {
+                const group = btn.closest('.btn-group');
+                group.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            updateComparisonSuite();
+        }
+
+        function updateComparisonSuite() {
+            const suiteEl = document.getElementById('comparisonSuite');
+            const players = getSelectedPlayerObjects();
+
+            if (players.length === 0) {
+                suiteEl.style.display = 'none';
+                return;
+            }
+
+            suiteEl.style.display = 'block';
+            renderRadarChart(players);
+            renderBarChart(players);
+            renderMatrixTable(players);
+        }
+
+        function renderRadarChart(players) {
+            const ctx = document.getElementById('playerRadarChart').getContext('2d');
+            
+            const datasets = players.map((p, idx) => {
+                const color = playerPalette[idx % playerPalette.length];
+                return {
+                    label: p.name + ' (' + p.server + ')',
+                    data: [
+                        p.dgp,         // Guard Power
+                        p.archer_pow,    // Archer Power
+                        p.cav_pow,       // Cav Power
+                        p.siege_pow,     // Siege Power
+                        p.total_pow      // Total Power
+                    ],
+                    backgroundColor: color.bg,
+                    borderColor: color.border,
+                    borderWidth: 2,
+                    pointBackgroundColor: color.solid,
+                    pointBorderColor: '#fff',
+                    pointHoverRadius: 6,
+                    pointRadius: 4
+                };
+            });
+
+            if (radarChartInstance) {
+                radarChartInstance.destroy();
+            }
+
+            radarChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Guard Pwr', 'Archer Pwr', 'Cav Pwr', 'Siege Pwr', 'Total Pwr'],
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#e2e8f0', font: { size: 11, family: 'Plus Jakarta Sans' }, boxWidth: 14 }
+                        },
+                        tooltip: {
+                            backgroundColor: '#0f172a',
+                            borderColor: '#334155',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: (context) => ' ' + context.dataset.label + ': ' + context.formattedValue + ' Pwr'
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.08)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.08)' },
+                            pointLabels: {
+                                color: '#a5b4fc',
+                                font: { size: 11, weight: 'bold', family: 'Space Grotesk' }
+                            },
+                            ticks: {
+                                color: '#64748b',
+                                backdropColor: 'transparent',
+                                font: { size: 9 }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderBarChart(players) {
+            const ctx = document.getElementById('playerBarChart').getContext('2d');
+            let labels = [];
+            let datasets = [];
+
+            if (currentCompMetric === 'powers') {
+                labels = ['Guard Pwr', 'Archer Pwr', 'Cav Pwr', 'Siege Pwr', 'Total Pwr'];
+                datasets = players.map((p, idx) => {
+                    const color = playerPalette[idx % playerPalette.length];
+                    return {
+                        label: p.name + ' (' + p.server + ')',
+                        data: [p.dgp, p.archer_pow, p.cav_pow, p.siege_pow, p.total_pow],
+                        backgroundColor: color.solid,
+                        borderRadius: 6
+                    };
+                });
+            } else if (currentCompMetric === 'guard_pool') {
+                labels = ['Inf DEF %', 'Inf HP %', 'Troop DEF %', 'Troop HP %', 'Inf Prot Bless %', 'Inf DMG Recv %'];
+                datasets = players.map((p, idx) => {
+                    const color = playerPalette[idx % playerPalette.length];
+                    return {
+                        label: p.name + ' (' + p.server + ')',
+                        data: [p.inf_def, p.inf_hp, p.troop_def, p.troop_hp, p.inf_prot_bless, p.inf_dmgr],
+                        backgroundColor: color.solid,
+                        borderRadius: 6
+                    };
+                });
+            } else if (currentCompMetric === 'attack_dmg') {
+                labels = ['Arc ATK %', 'Arc DMG %', 'Cav ATK %', 'Cav DMG %', 'Sg ATK %', 'Sg DMG %', 'Troop ATK %'];
+                datasets = players.map((p, idx) => {
+                    const color = playerPalette[idx % playerPalette.length];
+                    return {
+                        label: p.name + ' (' + p.server + ')',
+                        data: [p.arc_atk, p.arc_dmg, p.cav_atk, p.cav_dmg, p.sg_atk, p.sg_dmg, p.troop_atk],
+                        backgroundColor: color.solid,
+                        borderRadius: 6
+                    };
+                });
+            }
+
+            if (barChartInstance) {
+                barChartInstance.destroy();
+            }
+
+            barChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#e2e8f0', font: { size: 11 }, boxWidth: 14 }
+                        },
+                        tooltip: {
+                            backgroundColor: '#0f172a',
+                            borderColor: '#334155',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#94a3b8', font: { size: 10, weight: '600' } },
+                            grid: { display: false }
+                        },
+                        y: {
+                            ticks: { color: '#64748b' },
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderMatrixTable(players) {
+            const container = document.getElementById('matrixContainer');
+            if (!container) return;
+
+            const statRows = [
+                // Category 1: Powers & Tiers
+                { isCat: true, title: '👑 Core Powers & Kingdom' },
+                { label: 'Kingdom Server', key: 'server', format: val => '<span class="badge">' + val + '</span>' },
+                { label: 'Guard Power (🛡️ WOC)', key: 'dgp', isNum: true, higherBetter: true, format: val => val.toLocaleString() },
+                { label: 'Total Power', key: 'total_pow', isNum: true, higherBetter: true, format: val => val.toLocaleString() },
+                { label: 'Total Tier', key: 'total_pow_tier', format: (val, p) => '<span class="tier-pill" style="background:' + p.total_pow_color + '">' + val + '</span>' },
+                { label: 'Archer Power', key: 'archer_pow', isNum: true, higherBetter: true, format: val => val.toLocaleString() },
+                { label: 'Cav Power', key: 'cav_pow', isNum: true, higherBetter: true, format: val => val.toLocaleString() },
+                { label: 'Siege Power', key: 'siege_pow', isNum: true, higherBetter: true, format: val => val.toLocaleString() },
+                { label: 'Lethal Hit Rate', key: 'lethal', isNum: true, higherBetter: true, format: val => val + '%' },
+
+                // Category 2: Guard & Infantry Meat-Shield Stats
+                { isCat: true, title: '🛡️ Guard & Infantry Defensive Attributes' },
+                { label: 'Infantry DEF', key: 'inf_def', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Infantry HP', key: 'inf_hp', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Infantry DMG Recv (Reduction)', key: 'inf_dmgr', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Infantry Prot Blessing', key: 'inf_prot_bless', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Infantry ATK', key: 'inf_atk', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Infantry DMG', key: 'inf_dmg', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Infantry ATK Blessing', key: 'inf_atk_bless', isNum: true, higherBetter: true, format: val => val + '%' },
+
+                // Category 3: General Troop Stats
+                { isCat: true, title: '⚔️ General Troop Attributes' },
+                { label: 'Troop ATK', key: 'troop_atk', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Troop HP', key: 'troop_hp', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Troop DEF', key: 'troop_def', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Troop DMG', key: 'troop_dmg', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Troop DMG Received', key: 'troop_dmgr', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Troop ATK Blessing', key: 'troop_atk_bless', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Troop Prot Blessing', key: 'troop_prot_bless', isNum: true, higherBetter: true, format: val => val + '%' },
+
+                // Category 4: Archer Attributes
+                { isCat: true, title: '🏹 Archer Attributes' },
+                { label: 'Archer ATK', key: 'arc_atk', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Archer HP', key: 'arc_hp', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Archer DEF', key: 'arc_def', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Archer DMG', key: 'arc_dmg', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Archer DMG Recv', key: 'arc_dmgr', isNum: true, higherBetter: true, format: val => (val || 0) + '%' },
+                { label: 'Archer ATK Blessing', key: 'arc_atk_bless', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Archer Prot Blessing', key: 'arc_prot_bless', isNum: true, higherBetter: true, format: val => val + '%' },
+
+                // Category 5: Cavalry Attributes
+                { isCat: true, title: '🐎 Cavalry Attributes' },
+                { label: 'Cavalry ATK', key: 'cav_atk', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Cavalry HP', key: 'cav_hp', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Cavalry DEF', key: 'cav_def', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Cavalry DMG', key: 'cav_dmg', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Cavalry DMG Recv', key: 'cav_dmgr', isNum: true, higherBetter: true, format: val => (val || 0) + '%' },
+                { label: 'Cavalry ATK Blessing', key: 'cav_atk_bless', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Cavalry Prot Blessing', key: 'cav_prot_bless', isNum: true, higherBetter: true, format: val => val + '%' },
+
+                // Category 6: Siege Attributes
+                { isCat: true, title: '🪨 Siege Attributes' },
+                { label: 'Siege ATK', key: 'sg_atk', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Siege HP', key: 'sg_hp', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Siege DEF', key: 'sg_def', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Siege DMG', key: 'sg_dmg', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Siege DMG Recv', key: 'sg_dmgr', isNum: true, higherBetter: true, format: val => (val || 0) + '%' },
+                { label: 'Siege ATK Blessing', key: 'sg_atk_bless', isNum: true, higherBetter: true, format: val => val + '%' },
+                { label: 'Siege Prot Blessing', key: 'sg_prot_bless', isNum: true, higherBetter: true, format: val => val + '%' }
+            ];
+
+            let html = '<table class="matrix-table"><thead><tr><th>Attribute / Metric</th>';
+            players.forEach((p, idx) => {
+                const color = playerPalette[idx % playerPalette.length];
+                html += '<th style="border-top: 3px solid ' + color.solid + '; color: #fff;">' + p.name + '<br><span style="font-size:0.7rem; color:' + color.solid + ';">' + p.server + '</span></th>';
+            });
+            html += '</tr></thead><tbody>';
+
+            statRows.forEach(row => {
+                if (row.isCat) {
+                    html += '<tr><td colspan="' + (players.length + 1) + '" class="stat-category-header">' + row.title + '</td></tr>';
+                    return;
+                }
+
+                // Find highest value if multiple players
+                let maxVal = -Infinity;
+                if (row.isNum && players.length > 1) {
+                    players.forEach(p => {
+                        const v = Number(p[row.key]) || 0;
+                        if (v > maxVal) maxVal = v;
+                    });
+                }
+
+                html += '<tr><td style="color: #94a3b8; font-weight: 500;">' + row.label + '</td>';
+                players.forEach(p => {
+                    const rawVal = p[row.key];
+                    const isWinner = row.isNum && players.length > 1 && (Number(rawVal) === maxVal) && maxVal > 0;
+                    const formatted = row.format ? row.format(rawVal, p) : rawVal;
+                    
+                    if (isWinner) {
+                        html += '<td><span class="stat-winner">' + formatted + ' 👑</span></td>';
+                    } else {
+                        html += '<td style="color: #fff;">' + formatted + '</td>';
+                    }
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
         function renderTable(data) {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
@@ -901,18 +1388,21 @@
             document.getElementById('searchInput').value = '';
             hideSuggestions();
             applyFilters();
+            updateComparisonSuite();
         }
 
         function removePlayerTag(name) {
             selectedPlayerNames.delete(name);
             renderSelectedTags();
             applyFilters();
+            updateComparisonSuite();
         }
 
         function clearAllTags() {
             selectedPlayerNames.clear();
             renderSelectedTags();
             applyFilters();
+            updateComparisonSuite();
         }
 
         function renderSelectedTags() {
@@ -1014,6 +1504,7 @@
                 return 0;
             });
             renderTable(currentPlayers);
+            updateComparisonSuite();
         }
 
         doSort();
@@ -1024,6 +1515,7 @@
             const lastToken = val.split(',').pop().trim();
             showSuggestions(lastToken);
             applyFilters();
+            updateComparisonSuite();
         });
 
         searchInputEl.addEventListener('keydown', (e) => {

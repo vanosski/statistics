@@ -67,7 +67,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <span className="badge" style={{ background: 'rgba(236, 72, 153, 0.15)', border: '1px solid #ec4899', color: '#f472b6' }}>
                 WAR PROTOCOL READY
               </span>
-              <span style={{ fontSize: '0.75rem', color: '#06b6d4', fontFamily: 'Orbitron, sans-serif', letterSpacing: '0.05em' }}>
+              <span style={{ fontSize: '0.75rem', color: '#06b6d4', fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '0.05em' }}>
                 SYS_VERSION // 2.4.0
               </span>
             </div>
@@ -140,7 +140,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             }}
           >
             <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Tracked Players</div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#a5b4fc', fontFamily: 'Orbitron, sans-serif' }}>{totalPlayers}</div>
+            <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#a5b4fc', fontFamily: 'Space Grotesk, sans-serif' }}>{totalPlayers}</div>
           </div>
 
           <div
@@ -153,7 +153,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             }}
           >
             <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Apex S++ Tier</div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#ef4444', fontFamily: 'Orbitron, sans-serif' }}>{sPlusPlusCount}</div>
+            <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#ef4444', fontFamily: 'Space Grotesk, sans-serif' }}>{sPlusPlusCount}</div>
           </div>
 
           <div
@@ -166,7 +166,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             }}
           >
             <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Elite S+ Tier</div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#f59e0b', fontFamily: 'Orbitron, sans-serif' }}>{sPlusCount}</div>
+            <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#f59e0b', fontFamily: 'Space Grotesk, sans-serif' }}>{sPlusCount}</div>
           </div>
 
           <div
@@ -179,7 +179,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             }}
           >
             <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Top Apex KD</div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#10b981', fontFamily: 'Orbitron, sans-serif' }}>{rankedKingdoms[0]?.server || 'K54'}</div>
+            <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#10b981', fontFamily: 'Space Grotesk, sans-serif' }}>{rankedKingdoms[0]?.server || 'K54'}</div>
           </div>
         </div>
       </div>
@@ -225,7 +225,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span
                     style={{
-                      fontFamily: 'Orbitron, sans-serif',
+                      fontFamily: 'Space Grotesk, sans-serif',
                       fontWeight: 800,
                       fontSize: '0.85rem',
                       color: idx === 0 ? '#fbbf24' : idx === 1 ? '#cbd5e1' : idx === 2 ? '#b45309' : '#64748b',
@@ -241,7 +241,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
 
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#a5b4fc', fontFamily: 'Orbitron, sans-serif' }}>
+                  <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#a5b4fc', fontFamily: 'Space Grotesk, sans-serif' }}>
                     {p.total_pow.toLocaleString()}
                   </div>
                   <span className="tier-pill" style={{ background: p.total_pow_color, fontSize: '0.62rem' }}>
@@ -290,7 +290,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span
                     style={{
-                      fontFamily: 'Orbitron, sans-serif',
+                      fontFamily: 'Space Grotesk, sans-serif',
                       fontWeight: 800,
                       fontSize: '0.85rem',
                       color: idx === 0 ? '#fbbf24' : idx === 1 ? '#cbd5e1' : idx === 2 ? '#b45309' : '#64748b',
@@ -308,7 +308,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
 
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#34d399', fontFamily: 'Orbitron, sans-serif' }}>
+                  <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#34d399', fontFamily: 'Space Grotesk, sans-serif' }}>
                     +{p.dgp.toLocaleString()}
                   </div>
                   <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Guard Pwr</span>
@@ -373,7 +373,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               >
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontWeight: 800, fontSize: '0.85rem', color: '#818cf8', fontFamily: 'Orbitron, sans-serif' }}>
+                    <span style={{ fontWeight: 800, fontSize: '0.85rem', color: '#818cf8', fontFamily: 'Space Grotesk, sans-serif' }}>
                       #{rankIdx + 1}
                     </span>
                     <span style={{ fontWeight: 800, fontSize: '1.1rem', color: '#fff', fontFamily: 'Space Grotesk, sans-serif' }}>
@@ -389,7 +389,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
 
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#fbbf24', fontFamily: 'Orbitron, sans-serif' }}>
+                  <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#fbbf24', fontFamily: 'Space Grotesk, sans-serif' }}>
                     {finalKdPwr.toLocaleString()}
                   </div>
                   <div style={{ fontSize: '0.68rem', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '2px' }}>

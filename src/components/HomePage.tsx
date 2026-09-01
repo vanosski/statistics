@@ -63,28 +63,20 @@ export const HomePage: React.FC<HomePageProps> = ({
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <span className="badge" style={{ background: 'rgba(236, 72, 153, 0.15)', border: '1px solid #ec4899', color: '#f472b6' }}>
-                WAR PROTOCOL READY
-              </span>
-              <span style={{ fontSize: '0.75rem', color: '#06b6d4', fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '0.05em' }}>
-                SYS_VERSION // 2.4.0
-              </span>
-            </div>
             <h2
               className="cyber-title"
               style={{
-                fontSize: 'clamp(1.4rem, 3.5vw, 2.1rem)',
-                fontWeight: 900,
+                fontSize: 'clamp(1.3rem, 3.5vw, 1.85rem)',
+                fontWeight: 800,
                 color: '#fff',
                 lineHeight: 1.2,
                 marginBottom: '8px'
               }}
             >
-              KINGDOM WAR TELEMETRY HUB
+              Kingdom Analytics & Overview
             </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '650px', lineHeight: 1.5 }}>
-              Aggregated combat intelligence across {totalKingdoms} warring kingdoms. Pure telemetry of General Troop & Unit Specific Attack, HP, Defense, Damage, and WOC Guard scaling.
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', maxWidth: '650px', lineHeight: 1.5 }}>
+              Aggregated statistics across {totalKingdoms} kingdoms. Track General Troop & Unit Specific Attack, HP, Defense, Damage, and WOC Guard scaling.
             </p>
           </div>
 

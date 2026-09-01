@@ -9,7 +9,7 @@ interface TopNavProps {
 
 export const TopNav: React.FC<TopNavProps> = ({ currentView, onSelectView }) => {
   const tabs: { id: ViewMode; label: string; shortLabel: string; icon: React.ReactNode }[] = [
-    { id: 'home', label: 'Command Center', shortLabel: 'Home', icon: <Terminal size={15} /> },
+    { id: 'home', label: 'Overview', shortLabel: 'Overview', icon: <Terminal size={15} /> },
     { id: 'graphs', label: 'KD Benchmarks', shortLabel: 'Benchmarks', icon: <BarChart2 size={15} /> },
     { id: 'kingdoms', label: 'Kingdom Cards', shortLabel: 'Kingdoms', icon: <Crown size={15} /> },
     { id: 'compare', label: 'Player Compare', shortLabel: 'Compare', icon: <Swords size={15} /> },

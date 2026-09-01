@@ -153,12 +153,7 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms }) =>
   return (
     <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '32px' }} className="animate-fade-in">
       <div className="section-title">
-        <span className="cyber-title" style={{ fontSize: '1.25rem' }}>
-          ⚡ KD Benchmarks & Combat Graphs
-        </span>
-        <span style={{ fontSize: '0.75rem', color: '#06b6d4', fontWeight: 600, letterSpacing: '0.05em' }}>
-          REALTIME COMPARATIVE TELEMETRY
-        </span>
+        <span>📊 KD Benchmarks & Graphs</span>
       </div>
 
       <div

@@ -282,7 +282,9 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
       {/* Multi-Select Searchable Checkbox Dropdown Picker */}
       <div
         style={{
-          background: 'rgba(30, 41, 59, 0.75)',
+          position: 'relative',
+          zIndex: 100,
+          background: 'rgba(30, 41, 59, 0.85)',
           border: '1px solid rgba(99, 102, 241, 0.35)',
           backdropFilter: 'blur(16px)',
           borderRadius: '16px',
@@ -296,9 +298,31 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
             <span style={{ fontSize: '0.92rem', fontWeight: 600, color: '#e2e8f0' }}>
               Select Players to Compare:
             </span>
-            <span style={{ fontSize: '0.78rem', color: '#a5b4fc', fontWeight: 600 }}>
-              {selectedPlayers.length} Player{selectedPlayers.length === 1 ? '' : 's'} Selected
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ fontSize: '0.78rem', color: '#a5b4fc', fontWeight: 600 }}>
+                {selectedPlayers.length} Player{selectedPlayers.length === 1 ? '' : 's'} Selected
+              </span>
+              {selectedPlayers.length > 0 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClearAll();
+                  }}
+                  style={{
+                    background: 'rgba(239, 68, 68, 0.2)',
+                    border: '1px solid rgba(239, 68, 68, 0.5)',
+                    color: '#fca5a5',
+                    padding: '2px 8px',
+                    borderRadius: '6px',
+                    fontSize: '0.72rem',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Clear All
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Searchable Checkbox Dropdown Container */}
@@ -308,7 +332,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
               onClick={() => setDropdownOpen(!dropdownOpen)}
               style={{
                 minHeight: '48px',
-                background: 'rgba(15, 23, 42, 0.85)',
+                background: 'rgba(15, 23, 42, 0.95)',
                 border: dropdownOpen ? '1px solid #818cf8' : '1px solid rgba(99, 102, 241, 0.35)',
                 borderRadius: '12px',
                 padding: '6px 12px',
@@ -371,11 +395,11 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                   top: 'calc(100% + 6px)',
                   left: 0,
                   right: 0,
-                  background: '#0f172a',
-                  border: '1px solid rgba(99, 102, 241, 0.45)',
+                  background: '#0a0f1d',
+                  border: '1px solid rgba(99, 102, 241, 0.5)',
                   borderRadius: '14px',
-                  boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.9), 0 0 20px rgba(99, 102, 241, 0.2)',
-                  zIndex: 300,
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.95), 0 0 25px rgba(99, 102, 241, 0.3)',
+                  zIndex: 9999,
                   padding: '12px',
                   display: 'flex',
                   flexDirection: 'column',

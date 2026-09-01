@@ -16,6 +16,7 @@ export function App() {
   const players = rawPlayersData as Player[];
   const kingdoms = kingdomsData as KingdomSummary[];
 
+  // Start with empty or user-chosen players
   const [currentView, setCurrentView] = useState<ViewMode>('all');
   const [selectedPlayerNames, setSelectedPlayerNames] = useState<Set<string>>(new Set());
   const [activeKdModalServer, setActiveKdModalServer] = useState<string | null>(null);
@@ -76,13 +77,7 @@ export function App() {
       {(currentView === 'all' || currentView === 'compare') && (
         <ComparisonSuite
           allPlayers={players}
-          selectedPlayers={
-            selectedPlayers.length > 0
-              ? selectedPlayers
-              : currentView === 'compare'
-              ? [players[0], players[1]] // Default preview if none selected
-              : []
-          }
+          selectedPlayers={selectedPlayers}
           onAddPlayer={handleAddPlayerTag}
           onRemovePlayer={handleRemovePlayerTag}
           onClearAll={handleClearAllTags}

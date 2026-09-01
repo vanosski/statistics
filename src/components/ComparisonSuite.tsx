@@ -120,7 +120,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
   // Bar Data
   let barLabels: string[] = [];
   if (metric === 'powers') {
-    barLabels = ['Guard Pwr', 'Archer Pwr', 'Cav Pwr', 'Siege Pwr', 'Total Atk Pwr'];
+    barLabels = ['Guard Pwr', 'Archer Pwr', 'Cav Pwr', 'Siege Pwr', 'Avg Unit Pwr (Tot/3)'];
   } else if (metric === 'guard_pool') {
     barLabels = ['Inf DEF %', 'Inf HP %', 'Troop DEF %', 'Troop HP %', 'Inf Prot Bless %', 'Inf DMG Recv %'];
   } else {
@@ -133,7 +133,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
       const col = palette[idx % palette.length];
       let data: number[] = [];
       if (metric === 'powers') {
-        data = [p.dgp, p.archer_pow, p.cav_pow, p.siege_pow, p.total_pow];
+        data = [p.dgp, p.archer_pow, p.cav_pow, p.siege_pow, Math.round(p.total_pow / 3)];
       } else if (metric === 'guard_pool') {
         data = [p.inf_def, p.inf_hp, p.troop_def, p.troop_hp, p.inf_prot_bless, p.inf_dmgr];
       } else {
@@ -143,7 +143,8 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
         label: `${p.name} (${p.server})`,
         data,
         backgroundColor: col.solid,
-        borderRadius: 6
+        borderRadius: 6,
+        _rawTotal: p.total_pow
       };
     })
   };
@@ -159,7 +160,16 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
       tooltip: {
         backgroundColor: '#0f172a',
         borderColor: '#334155',
-        borderWidth: 1
+        borderWidth: 1,
+        callbacks: {
+          label: (context: any) => {
+            if (metric === 'powers' && context.dataIndex === 4) {
+              const rawTot = context.dataset._rawTotal;
+              return ` ${context.dataset.label} [Avg Unit Pwr]: ${context.formattedValue} (Total Atk: ${rawTot.toLocaleString()})`;
+            }
+            return ` ${context.dataset.label}: ${context.formattedValue}`;
+          }
+        }
       }
     },
     scales: {

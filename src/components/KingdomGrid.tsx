@@ -46,8 +46,8 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
     const wocA = players.find((p) => p.server === a.server && p.is_woc_leader)?.dgp || 0;
     const wocB = players.find((p) => p.server === b.server && p.is_woc_leader)?.dgp || 0;
 
-    const finalA = (a.avg_total + wocA) * (1 + getRedSkillMultiplier(cfgA.redSkills));
-    const finalB = (b.avg_total + wocB) * (1 + getRedSkillMultiplier(cfgB.redSkills));
+    const finalA = (a.avg_total + (wocA * 0.5)) * (1 + getRedSkillMultiplier(cfgA.redSkills));
+    const finalB = (b.avg_total + (wocB * 0.5)) * (1 + getRedSkillMultiplier(cfgB.redSkills));
 
     return finalB - finalA;
   });
@@ -73,7 +73,7 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
           const redBonus = getRedSkillMultiplier(cfg.redSkills);
           const wocLeader = players.find((p) => p.server === kd.server && p.is_woc_leader);
           const guardPwr = wocLeader ? wocLeader.dgp : 0;
-          const finalKdPwr = Math.round((kd.avg_total + guardPwr) * (1 + redBonus));
+          const finalKdPwr = Math.round((kd.avg_total + (guardPwr * 0.5)) * (1 + redBonus));
           const activeUnit = selectedUnits[kd.server] || 'total_pow';
 
           return (

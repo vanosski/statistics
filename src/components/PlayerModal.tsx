@@ -88,7 +88,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
         Math.round((player.cav_pow / 4000) * 100),
         Math.round((player.siege_pow / 4000) * 100),
         Math.round((player.dgp / 4000) * 100),
-        Math.round((player.archer_pow / 4000) * 100), // proxy for infantry presence
+        Math.round(((player.total_pow / 3) / 4000) * 100), // proxy for infantry presence
       ],
       backgroundColor: 'rgba(99, 102, 241, 0.15)',
       borderColor: '#6366f1',

@@ -3,7 +3,6 @@ import { supabase } from '../lib/supabase';
 import { Shield, Send, User, LogOut } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { PrivacyPolicy, TermsOfService } from './LegalPages';
-import { GoogleLogin } from '@react-oauth/google';
 
 export const Login: React.FC = () => {
   const { session, signOut } = useAuth();
@@ -39,30 +38,25 @@ export const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [nonce] = useState(() => {
-    const array = new Uint8Array(32);
-    window.crypto.getRandomValues(array);
-    return btoa(String.fromCharCode.apply(null, array as any));
-  });
 
-  const handleGoogleSuccess = async (credential: string | undefined) => {
-    if (!credential) return;
+  const handleGoogleLogin = async () => {
     setLoading(true);
     setError('');
     
     try {
-      const { error } = await supabase.auth.signInWithIdToken({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
-        token: credential,
-        nonce: nonce,
+        options: {
+          redirectTo: window.location.origin,
+        }
       });
 
       if (error) {
         setError(error.message);
+        setLoading(false);
       }
     } catch (err: any) {
       setError('Google login failed: ' + (err.message || String(err)));
-    } finally {
       setLoading(false);
     }
   };
@@ -159,17 +153,29 @@ export const Login: React.FC = () => {
 
               {!session ? (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-                  <GoogleLogin 
-                    nonce={nonce}
-                    onSuccess={(credentialResponse) => handleGoogleSuccess(credentialResponse.credential)}
-                    onError={() => setError('Google login failed')}
-                    useOneTap
-                    theme="filled_black"
-                    shape="pill"
-                    size="large"
-                    text="continue_with"
-                  />
-                  {loading && <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Authenticating...</p>}
+                  <button
+                    onClick={handleGoogleLogin}
+                    disabled={loading}
+                    style={{
+                      width: '100%',
+                      background: '#fff',
+                      color: '#000',
+                      border: 'none',
+                      borderRadius: '12px',
+                      padding: '14px',
+                      fontSize: '1rem',
+                      fontWeight: 700,
+                      cursor: loading ? 'not-allowed' : 'pointer',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: '8px',
+                      boxShadow: '0 4px 10px rgba(255, 255, 255, 0.2)'
+                    }}
+                  >
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '24px', height: '24px' }} />
+                    {loading ? 'Authenticating...' : 'Continue with Google'}
+                  </button>
                 </div>
               ) : (
                 <form onSubmit={handleRequestAccess} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>

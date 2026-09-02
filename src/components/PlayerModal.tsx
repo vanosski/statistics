@@ -287,9 +287,8 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, allPlayers, on
               <div style={{ marginTop: '14px', display: 'flex', justifyContent: 'flex-end' }}>
                 <button
                   className="btn-toggle active"
-                  style={{ padding: '8px 20px', borderRadius: '8px', fontSize: '0.82rem' }}
+                  style={{ padding: '8px 20px', borderRadius: '8px', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '6px' }}
                   onClick={() => onAddToCompare(player.name)}
-                 style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
                 >
                   <Swords size={14} style={{ filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.6))' }} /> Add to Comparison
                 </button>

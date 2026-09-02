@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { Player, CompMetricType } from '../types/stats';
 import { Radar, Bar } from 'react-chartjs-2';
-import { Search, ChevronDown, X, Trash2, CheckSquare, Square, Eye, EyeOff, Shield, Crosshair, Zap, Mountain, Swords, Crown, Flame, Target, Hexagon } from 'lucide-react';
+import { Search, ChevronDown, X, Trash2, CheckSquare, Square, Eye, EyeOff, Shield, Crosshair, Zap, Mountain, Swords, Crown, Target, Hexagon } from 'lucide-react';
 
 interface ComparisonSuiteProps {
   allPlayers: Player[];
@@ -790,8 +790,8 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {statCategories.map((cat) => (
-                    <React.Fragment key={cat.title}>
+                  {statCategories.map((cat, idx) => (
+                    <React.Fragment key={idx}>
                       <tr>
                         <td
                           colSpan={selectedPlayers.length + 1}

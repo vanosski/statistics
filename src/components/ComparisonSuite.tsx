@@ -115,6 +115,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
     },
     scales: {
       r: {
+        min: 0,
         angleLines: { color: 'rgba(255, 255, 255, 0.12)' },
         grid: { color: 'rgba(255, 255, 255, 0.08)' },
         pointLabels: {

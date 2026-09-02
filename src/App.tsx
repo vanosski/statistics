@@ -17,7 +17,7 @@ import { useAuth } from './contexts/AuthContext';
 import { Login } from './components/Login';
 
 export function App() {
-  const { loading, isApproved } = useAuth();
+  const { session, loading, isApproved } = useAuth();
   
   const rawPlayers = rawPlayersData as Player[];
   
@@ -57,6 +57,16 @@ export function App() {
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
+
+  // If user is logged in with Google but NOT approved yet, send them to the approval request screen
+  useEffect(() => {
+    if (!loading && session && !isApproved) {
+      if (currentView !== 'privacy' && currentView !== 'terms') {
+        setCurrentView('login');
+        window.location.hash = 'login';
+      }
+    }
+  }, [loading, session, isApproved, currentView]);
 
   // Auto-redirect out of login screen when approved
   useEffect(() => {

@@ -11,14 +11,14 @@ interface KingdomGridProps {
 export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onOpenKdModal, onDrillDownTier }) => {
   const [selectedUnits, setSelectedUnits] = useState<Record<string, UnitPowType>>({});
 
-  const redSkillsMap: Record<string, { redSkills: number; tierBadge: string; badgeClass: string }> = {
+  const redSkillsMap: Record<string, { redSkills: number; tierBadge: string; badgeClass: string; customBuff?: number }> = {
     'K54': { redSkills: 3, tierBadge: 'TIER S++', badgeClass: 's-plus' },
     'K197': { redSkills: 5, tierBadge: 'TIER S+', badgeClass: 's-plus' },
     'K116': { redSkills: 4, tierBadge: 'TIER S+', badgeClass: 's-plus' },
     'K60': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 's-tier' },
     'K176': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 's-tier' },
     'K91': { redSkills: 3, tierBadge: 'TIER A', badgeClass: 'a-tier' },
-    'K170': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'a-tier' },
+    'K170': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'a-tier', customBuff: 0.03 },
     'K138': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'b-tier' },
     'K88': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'b-tier' },
     'K48': { redSkills: 4, tierBadge: 'TIER B', badgeClass: 'b-tier' }
@@ -34,20 +34,21 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
     'D': '#475569'
   };
 
-  const getRedSkillMultiplier = (skills: number) => {
+  const getRedSkillMultiplier = (skills: number, customBuff?: number) => {
+    if (customBuff !== undefined) return customBuff;
     if (skills <= 0) return 0.0;
     return 0.04 + (skills - 1) * 0.01;
   };
 
   const sortedKingdoms = [...kingdoms].sort((a, b) => {
-    const cfgA = redSkillsMap[a.server] || { redSkills: 0 };
-    const cfgB = redSkillsMap[b.server] || { redSkills: 0 };
+    const cfgA = redSkillsMap[a.server] || { redSkills: 0, customBuff: undefined };
+    const cfgB = redSkillsMap[b.server] || { redSkills: 0, customBuff: undefined };
 
     const wocA = players.find((p) => p.server === a.server && p.is_woc_leader)?.dgp || 0;
     const wocB = players.find((p) => p.server === b.server && p.is_woc_leader)?.dgp || 0;
 
-    const finalA = (a.avg_total + (wocA * 0.75)) * (1 + getRedSkillMultiplier(cfgA.redSkills));
-    const finalB = (b.avg_total + (wocB * 0.75)) * (1 + getRedSkillMultiplier(cfgB.redSkills));
+    const finalA = (a.avg_total + (wocA * 0.85)) * (1 + getRedSkillMultiplier(cfgA.redSkills, cfgA.customBuff));
+    const finalB = (b.avg_total + (wocB * 0.85)) * (1 + getRedSkillMultiplier(cfgB.redSkills, cfgB.customBuff));
 
     return finalB - finalA;
   });
@@ -69,11 +70,11 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
         }}
       >
         {sortedKingdoms.map((kd, rankIdx) => {
-          const cfg = redSkillsMap[kd.server] || { redSkills: 0, tierBadge: 'TIER C', badgeClass: 'c-tier' };
-          const redBonus = getRedSkillMultiplier(cfg.redSkills);
+          const cfg = redSkillsMap[kd.server] || { redSkills: 0, tierBadge: 'TIER C', badgeClass: 'c-tier', customBuff: undefined };
+          const redBonus = getRedSkillMultiplier(cfg.redSkills, cfg.customBuff);
           const wocLeader = players.find((p) => p.server === kd.server && p.is_woc_leader);
           const guardPwr = wocLeader ? wocLeader.dgp : 0;
-          const finalKdPwr = Math.round((kd.avg_total + (guardPwr * 0.75)) * (1 + redBonus));
+          const finalKdPwr = Math.round((kd.avg_total + (guardPwr * 0.85)) * (1 + redBonus));
           const activeUnit = selectedUnits[kd.server] || 'total_pow';
 
           return (

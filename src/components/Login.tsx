@@ -39,6 +39,16 @@ export const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [nonce, setNonce] = useState('');
+
+  React.useEffect(() => {
+    const generateNonce = () => {
+      const array = new Uint8Array(32);
+      window.crypto.getRandomValues(array);
+      return btoa(String.fromCharCode.apply(null, array as any));
+    };
+    setNonce(generateNonce());
+  }, []);
 
   const handleGoogleSuccess = async (credential: string | undefined) => {
     if (!credential) return;
@@ -49,6 +59,7 @@ export const Login: React.FC = () => {
       const { error } = await supabase.auth.signInWithIdToken({
         provider: 'google',
         token: credential,
+        nonce: nonce,
       });
 
       if (error) {
@@ -154,6 +165,7 @@ export const Login: React.FC = () => {
               {!session ? (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
                   <GoogleLogin 
+                    nonce={nonce}
                     onSuccess={(credentialResponse) => handleGoogleSuccess(credentialResponse.credential)}
                     onError={() => setError('Google login failed')}
                     useOneTap

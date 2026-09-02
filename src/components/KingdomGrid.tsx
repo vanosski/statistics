@@ -14,7 +14,7 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
   const redSkillsMap: Record<string, { redSkills: number; tierBadge: string; badgeClass: string }> = {
     'K54': { redSkills: 6, tierBadge: 'TIER S++', badgeClass: 's-plus' },
     'K197': { redSkills: 5, tierBadge: 'TIER S+', badgeClass: 's-plus' },
-    'K116': { redSkills: 5, tierBadge: 'TIER S+', badgeClass: 's-plus' },
+    'K116': { redSkills: 4, tierBadge: 'TIER S+', badgeClass: 's-plus' },
     'K60': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 's-tier' },
     'K176': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 's-tier' },
     'K91': { redSkills: 3, tierBadge: 'TIER A', badgeClass: 'a-tier' },
@@ -125,7 +125,7 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
                       borderRadius: '12px'
                     }}
                   >
-                    🦁 {cfg.redSkills} Red
+                    🦁 {cfg.redSkills} Red (Main WOC)
                   </span>
                 </div>
                 <span className={`badge-tier ${cfg.badgeClass}`} style={{ fontSize: '0.72rem', padding: '3px 9px', borderRadius: '12px' }}>
@@ -153,18 +153,6 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
                     {finalKdPwr.toLocaleString()}
                   </div>
                 </div>
-                <span
-                  style={{
-                    fontSize: '0.72rem',
-                    color: '#ef4444',
-                    background: 'rgba(239, 68, 68, 0.18)',
-                    padding: '3px 8px',
-                    borderRadius: '6px',
-                    fontWeight: 700
-                  }}
-                >
-                  +{Math.round(redBonus * 100)}% Boost
-                </span>
               </div>
 
               {/* Clean Stat List */}

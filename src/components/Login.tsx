@@ -45,13 +45,18 @@ export const Login: React.FC = () => {
     setLoading(true);
     setError('');
     
-    const { error } = await supabase.auth.signInWithIdToken({
-      provider: 'google',
-      token: credential,
-    });
+    try {
+      const { error } = await supabase.auth.signInWithIdToken({
+        provider: 'google',
+        token: credential,
+      });
 
-    if (error) {
-      setError(error.message);
+      if (error) {
+        setError(error.message);
+      }
+    } catch (err: any) {
+      setError('Google login failed: ' + (err.message || String(err)));
+    } finally {
       setLoading(false);
     }
   };

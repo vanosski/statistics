@@ -8,8 +8,20 @@ export const Login: React.FC = () => {
   const { session, signOut } = useAuth();
   const [username, setUsername] = useState('');
   const [reason, setReason] = useState('');
-  const [view, setView] = useState<'login' | 'privacy' | 'terms'>('login');
   
+  const getInitialView = () => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash === 'privacy') return 'privacy';
+    if (hash === 'terms') return 'terms';
+    return 'login';
+  };
+  
+  const [view, setView] = useState<'login' | 'privacy' | 'terms'>(getInitialView());
+
+  React.useEffect(() => {
+    window.location.hash = view === 'login' ? '' : view;
+  }, [view]);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');

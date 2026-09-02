@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { KingdomSummary, Player, UnitPowType } from '../types/stats';
+import { Crown } from 'lucide-react';
 
 interface KingdomGridProps {
   kingdoms: KingdomSummary[];
@@ -56,7 +57,10 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
   return (
     <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '32px' }} className="animate-fade-in">
       <div className="section-title">
-        <span>👑 Kingdom Strength & Tier Breakdown</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Crown size={22} color="#fbbf24" style={{ filter: 'drop-shadow(0 0 6px rgba(251,191,36,0.6))' }} />
+          Kingdom Strength & Tier Breakdown
+        </span>
         <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>
           ✨ Click any card for comprehensive roster & key leader drilldown
         </span>

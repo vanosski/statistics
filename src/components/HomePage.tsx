@@ -305,7 +305,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                 <span className="badge" style={{ background: 'rgba(239, 68, 68, 0.15)', color: '#f87171', border: '1px solid rgba(239, 68, 68, 0.4)' }}>
-                  👑 Highest Total Attack Power
+                  <Crown size={16} color="#fbbf24" style={{ filter: 'drop-shadow(0 0 5px rgba(251,191,36,0.6))' }} /> Highest Total Attack Power
                 </span>
                 <span className="badge">{highestPowerPlayer.server}</span>
               </div>
@@ -344,7 +344,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                 <span className="badge" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', border: '1px solid rgba(16, 185, 129, 0.4)' }}>
-                  🛡️ Strongest WOC Guard
+                  <Shield size={16} color="#10b981" style={{ filter: 'drop-shadow(0 0 5px rgba(16,185,129,0.6))' }} /> Strongest WOC Guard
                 </span>
                 <span className="badge">{highestGuardPlayer.server}</span>
               </div>
@@ -383,7 +383,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                 <span className="badge" style={{ background: 'rgba(236, 72, 153, 0.15)', color: '#f472b6', border: '1px solid rgba(236, 72, 153, 0.4)' }}>
-                  🎯 Highest Lethal Hit Rate
+                  <Crosshair size={16} color="#ef4444" style={{ filter: 'drop-shadow(0 0 5px rgba(239,68,68,0.6))' }} /> Highest Lethal Hit Rate
                 </span>
                 <span className="badge">{highestLethalPlayer.server}</span>
               </div>
@@ -518,7 +518,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   </span>
                   <div>
                     <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.88rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      {p.name} {p.is_woc_leader && <span style={{ fontSize: '0.7rem' }}>🛡️</span>}
+                      {p.name} {p.is_woc_leader && <Shield size={12} color="#10b981" style={{ marginLeft: '6px', marginBottom: '-2px', filter: 'drop-shadow(0 0 4px rgba(16,185,129,0.8))' }} />}
                     </div>
                     <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{p.server}</div>
                   </div>
@@ -665,8 +665,8 @@ export const HomePage: React.FC<HomePageProps> = ({
                       {kd.server}
                     </span>
                     {cfg.redSkills > 0 && (
-                      <span style={{ fontSize: '0.65rem', color: '#ef4444', background: 'rgba(239, 68, 68, 0.15)', padding: '1px 5px', borderRadius: '4px' }}>
-                        🦁 {cfg.redSkills} Red
+                      <span style={{ display: 'flex', alignItems: 'center', fontSize: '0.65rem', color: '#ef4444', background: 'rgba(239, 68, 68, 0.15)', padding: '2px 6px', borderRadius: '4px' }}>
+                        <Flame size={12} color="#ef4444" style={{ marginRight: '4px', filter: 'drop-shadow(0 0 4px rgba(239,68,68,0.8))' }} /> {cfg.redSkills} Red
                       </span>
                     )}
                   </div>
@@ -741,7 +741,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <h4 style={{ color: '#fff', fontSize: '1.05rem', fontWeight: 800 }}>Multi-Player Comparison</h4>
           </div>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', lineHeight: 1.45 }}>
-            5-axis normalized Radar polygon, Head-to-Head bar charts, and 👑 highlighted 35+ stat matrix.
+            5-axis normalized Radar polygon, Head-to-Head bar charts, and <Crown size={14} color="#fbbf24" style={{ display: 'inline', marginBottom: '-2px', filter: 'drop-shadow(0 0 4px rgba(251,191,36,0.6))' }} /> highlighted 35+ stat matrix.
           </p>
         </div>
 

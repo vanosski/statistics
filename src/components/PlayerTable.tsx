@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { Shield, Search, ChevronDown } , Shield, Search } from 'lucide-react';
 import type { Player } from '../types/stats';
-import { Search, Settings } from 'lucide-react';
+import { Shield, Search, Search, Settings } , Shield, Search } from 'lucide-react';
 
 
 interface MultiSelectDropdownProps {
@@ -466,7 +466,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
                 fontWeight: filters.wocOnly ? 600 : 400
               }}
             >
-              🛡️ WOC Only
+              <Shield size={14} style={{ display: 'inline', marginBottom: '-2px', marginRight: '4px', filter: 'drop-shadow(0 0 4px rgba(16,185,129,0.8))' }} /> WOC Only
             </button>
           </div>
         </div>
@@ -658,11 +658,11 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
                       onMouseEnter={(e) => (e.currentTarget.style.color = '#c7d2fe')}
                       onMouseLeave={(e) => (e.currentTarget.style.color = '#818cf8')}
                     >
-                      {p.name} 🔍
+                      {p.name} <Search size={14} style={{ display: 'inline', marginLeft: '6px', marginBottom: '-2px' }} />
                     </span>
                   </td>
                   <td style={{ padding: '10px 10px' }}>
-                    {p.is_woc_leader ? <span title="Will of Caesar Leader">🛡️</span> : ''}
+                    {p.is_woc_leader ? <span title="Will of Caesar Leader"><Shield size={14} color="#10b981" style={{ display: 'inline', marginBottom: '-2px', filter: 'drop-shadow(0 0 4px rgba(16,185,129,0.8))' }} /></span> : null}
                   </td>
                   <td style={{ color: '#f59e0b', fontWeight: 700, padding: '10px 10px' }}>
                     {p.dgp.toLocaleString()}

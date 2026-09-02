@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { Player } from '../types/stats';
 import { Radar } from 'react-chartjs-2';
+import { Shield, Crosshair, Zap, Mountain, Swords, X } from 'lucide-react';
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -65,12 +66,12 @@ const StatBar = ({
 
 type TabKey = 'infantry' | 'archer' | 'cavalry' | 'siege' | 'overall';
 
-const TABS: { key: TabKey; label: string; icon: string; color: string }[] = [
-  { key: 'infantry', label: 'Infantry', icon: '🛡️', color: '#a5b4fc' },
-  { key: 'archer',   label: 'Archer',   icon: '🏹', color: '#10b981' },
-  { key: 'cavalry',  label: 'Cavalry',  icon: '🐎', color: '#3b82f6' },
-  { key: 'siege',    label: 'Siege',    icon: '🪨', color: '#ef4444' },
-  { key: 'overall',  label: 'Overall',  icon: '⚔️', color: '#f59e0b' },
+const TABS: { key: TabKey; label: string; icon: React.ReactNode; color: string }[] = [
+  { key: 'infantry', label: 'Infantry', icon: <Shield size={14} style={{ filter: 'drop-shadow(0 0 4px rgba(165,180,252,0.8))' }} />, color: '#a5b4fc' },
+  { key: 'archer',   label: 'Archer',   icon: <Crosshair size={14} style={{ filter: 'drop-shadow(0 0 4px rgba(16,185,129,0.8))' }} />, color: '#10b981' },
+  { key: 'cavalry',  label: 'Cavalry',  icon: <Zap size={14} style={{ filter: 'drop-shadow(0 0 4px rgba(59,130,246,0.8))' }} />, color: '#3b82f6' },
+  { key: 'siege',    label: 'Siege',    icon: <Mountain size={14} style={{ filter: 'drop-shadow(0 0 4px rgba(239,68,68,0.8))' }} />, color: '#ef4444' },
+  { key: 'overall',  label: 'Overall',  icon: <Swords size={14} style={{ filter: 'drop-shadow(0 0 4px rgba(245,158,11,0.8))' }} />, color: '#f59e0b' },
 ];
 
 export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAddToCompare }) => {
@@ -208,12 +209,19 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
                 <span style={{
                   fontSize: '0.75rem', color: '#34d399',
                   background: 'rgba(52,211,153,0.1)', border: '1px solid rgba(52,211,153,0.3)',
-                  padding: '2px 9px', borderRadius: '6px', fontWeight: 700
-                }}>🛡️ WOC Leader</span>
+                  padding: '2px 9px', borderRadius: '6px', fontWeight: 700,
+                  display: 'flex', alignItems: 'center', gap: '4px'
+                }}>
+                  <Shield size={12} color="#34d399" style={{ filter: 'drop-shadow(0 0 4px rgba(52,211,153,0.8))' }} />
+                  WOC Leader
+                </span>
               )}
             </div>
             <div style={{ fontSize: '0.82rem', color: '#64748b', display: 'flex', flexWrap: 'wrap', gap: '6px 14px' }}>
-              <span>🎯 Lethal Hit <span style={{ color: '#f59e0b', fontWeight: 700 }}>{player.lethal}%</span></span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Crosshair size={14} color="#ef4444" style={{ filter: 'drop-shadow(0 0 4px rgba(239,68,68,0.8))' }} /> 
+                Lethal Hit <span style={{ color: '#f59e0b', fontWeight: 700 }}>{player.lethal}%</span>
+              </span>
             </div>
           </div>
           <button
@@ -224,7 +232,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
               borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', flexShrink: 0
             }}
-          >✕</button>
+          ><X size={18} /></button>
         </div>
 
         {/* ── Scrollable Body ── */}
@@ -279,7 +287,10 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
                   className="btn-toggle active"
                   style={{ padding: '8px 20px', borderRadius: '8px', fontSize: '0.82rem' }}
                   onClick={() => onAddToCompare(player.name)}
-                >⚔️ Add to Comparison</button>
+                 style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <Swords size={14} style={{ filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.6))' }} /> Add to Comparison
+                </button>
               </div>
             </div>
 

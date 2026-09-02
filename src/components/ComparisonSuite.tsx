@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { Player, CompMetricType } from '../types/stats';
 import { Radar, Bar } from 'react-chartjs-2';
-import { Search, ChevronDown, X, Trash2, CheckSquare, Square, Eye, EyeOff } from 'lucide-react';
+import { Search, ChevronDown, X, Trash2, CheckSquare, Square, Eye, EyeOff, Shield, Crosshair, Zap, Mountain, Swords, Crown, Flame, Target, Hexagon } from 'lucide-react';
 
 interface ComparisonSuiteProps {
   allPlayers: Player[];
@@ -68,7 +68,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
 
   // Radar Data with Mobile Focus Dimming
   const radarData = {
-    labels: ['Guard (🛡️ WOC)', 'Archer', 'Cavalry', 'Siege', 'Avg Unit Pwr'],
+    labels: ['Guard (WOC)', 'Archer', 'Cavalry', 'Siege', 'Avg Unit Pwr'],
     datasets: selectedPlayers.map((p, idx) => {
       const col = palette[idx % palette.length];
       const isFocused = !focusedPlayer || focusedPlayer === p.name;
@@ -205,10 +205,10 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
   // Matrix categories
   const statCategories = [
     {
-      title: '👑 Core Powers & Kingdom',
+      title: <span style={{display:'flex', alignItems:'center', gap:'6px'}}><Crown size={14} color="#fbbf24" style={{filter:'drop-shadow(0 0 4px rgba(251,191,36,0.8))'}}/> Core Powers & Kingdom</span>,
       rows: [
         { label: 'Kingdom Server', key: 'server' as keyof Player, isNum: false },
-        { label: 'Guard Power (🛡️ WOC)', key: 'dgp' as keyof Player, isNum: true },
+        { label: 'Guard Power (WOC)', key: 'dgp' as keyof Player, isNum: true },
         { label: 'Total Attack Power', key: 'total_pow' as keyof Player, isNum: true },
         { label: 'Total Atk Tier', key: 'total_pow_tier' as keyof Player, isNum: false },
         { label: 'Archer Power', key: 'archer_pow' as keyof Player, isNum: true },
@@ -218,7 +218,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
       ]
     },
     {
-      title: '🛡️ Guard & Infantry Defensive Attributes',
+      title: <span style={{display:'flex', alignItems:'center', gap:'6px'}}><Shield size={14} color="#10b981" style={{filter:'drop-shadow(0 0 4px rgba(16,185,129,0.8))'}}/> Guard & Infantry Defensive Attributes</span>,
       rows: [
         { label: 'Infantry ATK', key: 'inf_atk' as keyof Player, isNum: true, suffix: '%' },
         { label: 'Infantry HP', key: 'inf_hp' as keyof Player, isNum: true, suffix: '%' },
@@ -230,7 +230,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
       ]
     },
     {
-      title: '⚔️ General Troop Attributes',
+      title: <span style={{display:'flex', alignItems:'center', gap:'6px'}}><Swords size={14} color="#c7d2fe" style={{filter:'drop-shadow(0 0 4px rgba(199,210,254,0.8))'}}/> General Troop Attributes</span>,
       rows: [
         { label: 'Troop ATK', key: 'troop_atk' as keyof Player, isNum: true, suffix: '%' },
         { label: 'Troop HP', key: 'troop_hp' as keyof Player, isNum: true, suffix: '%' },
@@ -284,7 +284,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
   return (
     <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '40px' }} className="animate-fade-in">
       <div className="section-title">
-        <span>⚔️ Multi-Player Comparison Suite</span>
+        <span style={{display:'flex', alignItems:'center', gap:'8px'}}><Swords size={20} color="#818cf8" style={{filter:'drop-shadow(0 0 5px rgba(129,140,248,0.8))'}}/> Multi-Player Comparison Suite</span>
         <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>
           Select multiple players to compare radar polygons, unit head-to-head, and full attribute breakdown
         </span>
@@ -306,7 +306,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
           <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span>🎯</span> Compare Selected Players ({selectedPlayers.length} Active):
+            <Crosshair size={18} color="#ef4444" style={{filter:'drop-shadow(0 0 5px rgba(239,68,68,0.8))'}}/> Compare Selected Players ({selectedPlayers.length} Active):
           </span>
           {selectedPlayers.length > 0 && (
             <button
@@ -525,7 +525,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
             color: 'var(--text-muted)'
           }}
         >
-          <div style={{ fontSize: '2.4rem', marginBottom: '10px' }}>⚔️</div>
+          <div style={{ marginBottom: '16px' }}><Swords size={48} color="#6366f1" style={{filter:'drop-shadow(0 0 10px rgba(99,102,241,0.6))'}}/></div>
           <h3 style={{ color: '#fff', fontSize: '1.25rem', marginBottom: '6px', fontWeight: 800 }}>No Players Selected</h3>
           <p style={{ fontSize: '0.9rem', maxWidth: '500px', margin: '0 auto 16px auto', lineHeight: 1.5 }}>
             Click the searchable dropdown above and select the players you wish to compare side-by-side.
@@ -567,7 +567,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
                 <div>
-                  <h3 style={{ fontSize: '1.05rem', color: '#fff', fontWeight: 800 }}>🕸️ Unit Power Radar</h3>
+                  <h3 style={{ fontSize: '1.05rem', color: '#fff', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}><Hexagon size={16} color="#10b981" style={{filter:'drop-shadow(0 0 4px rgba(16,185,129,0.8))'}}/> Unit Power Radar</h3>
                   <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Normalized 5-Axis Scale</span>
                 </div>
 
@@ -661,7 +661,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                       >
                         <span style={{ color: col.solid, fontWeight: 700 }}>{p.name}:</span>
                         <span style={{ color: '#cbd5e1', fontSize: '0.74rem' }}>
-                          🛡️ {p.dgp.toLocaleString()} | 🏹 {p.archer_pow.toLocaleString()} | 🐎 {p.cav_pow.toLocaleString()} | 🪨 {p.siege_pow.toLocaleString()}
+                          <Shield size={12} style={{display:'inline', marginBottom:'-2px'}}/> {p.dgp.toLocaleString()} | <Target size={12} style={{display:'inline', marginBottom:'-2px'}}/> {p.archer_pow.toLocaleString()} | <Zap size={12} style={{display:'inline', marginBottom:'-2px'}}/> {p.cav_pow.toLocaleString()} | <Mountain size={12} style={{display:'inline', marginBottom:'-2px'}}/> {p.siege_pow.toLocaleString()}
                         </span>
                       </div>
                     );
@@ -719,7 +719,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
               <h3 style={{ fontSize: '1.15rem', color: '#fff', fontWeight: 800 }}>📑 Detailed Side-by-Side Attribute Comparison</h3>
               <span style={{ fontSize: '0.75rem', color: '#34d399', fontWeight: 700 }}>
-                ✨ 👑 Badge = Highest Value in Stat
+                ✨ <Crown size={12} color="#fbbf24" style={{display:'inline', marginBottom:'-2px', filter:'drop-shadow(0 0 4px rgba(251,191,36,0.8))'}}/> Badge = Highest Value in Stat
               </span>
             </div>
 
@@ -875,7 +875,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                                         gap: '4px'
                                       }}
                                     >
-                                      {displayVal} <span style={{ fontSize: '0.75rem' }}>👑</span>
+                                      {displayVal} <span style={{ marginLeft: '4px' }}><Crown size={14} color="#fbbf24" style={{display:'inline', marginBottom:'-2px', filter:'drop-shadow(0 0 4px rgba(251,191,36,0.8))'}}/></span>
                                     </span>
                                   ) : (
                                     <span style={{ color: '#94a3b8', fontWeight: 600 }}>{displayVal}</span>

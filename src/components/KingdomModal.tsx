@@ -1,5 +1,6 @@
 import React from 'react';
 import type { KingdomSummary, Player } from '../types/stats';
+import { Crown, Shield, Swords, Search } from 'lucide-react';
 
 interface KingdomModalProps {
   server: string | null;
@@ -91,7 +92,7 @@ export const KingdomModal: React.FC<KingdomModalProps> = ({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '4px' }}>
               <span style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f1f5f9', fontFamily: "'Space Grotesk', sans-serif", display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '1.6rem' }}>👑</span> Kingdom {server}
+                <Crown size={24} color="#fbbf24" style={{ marginRight: '8px', filter: 'drop-shadow(0 0 6px rgba(251,191,36,0.6))' }} /> Kingdom {server}
               </span>
               <span className="badge" style={{ padding: '3px 10px', fontSize: '0.8rem' }}>Comprehensive Overview</span>
             </div>
@@ -136,7 +137,9 @@ export const KingdomModal: React.FC<KingdomModalProps> = ({
                 borderRadius: '12px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'
               }}>
                 <div>
-                  <div style={{ fontSize: '0.72rem', color: '#10b981', fontWeight: 600, marginBottom: '6px' }}>🛡️ WILL OF CAESAR GUARD</div>
+                  <div style={{ fontSize: '0.72rem', color: '#10b981', fontWeight: 600, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <Shield size={12} color="#10b981" style={{ filter: 'drop-shadow(0 0 4px rgba(16,185,129,0.8))' }} /> WILL OF CAESAR GUARD
+                  </div>
                   <div style={{ fontSize: '1.1rem', color: '#f1f5f9', fontWeight: 700, marginBottom: '2px' }}>{topGuard.name}</div>
                   <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}><strong style={{ color: '#f59e0b' }}>{topGuard.dgp.toLocaleString()}</strong> Guard Power</div>
                 </div>
@@ -147,7 +150,7 @@ export const KingdomModal: React.FC<KingdomModalProps> = ({
                     color: '#c7d2fe', padding: '8px 16px', borderRadius: '8px', fontSize: '0.82rem', cursor: 'pointer'
                   }}
                 >
-                  🔍 View
+                  <Search size={14} style={{ display: 'inline', marginBottom: '-2px', marginRight: '4px' }} /> View
                 </button>
               </div>
 
@@ -156,7 +159,9 @@ export const KingdomModal: React.FC<KingdomModalProps> = ({
                 borderRadius: '12px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'
               }}>
                 <div>
-                  <div style={{ fontSize: '0.72rem', color: '#818cf8', fontWeight: 600, marginBottom: '6px' }}>⚔️ #1 ATTACK POWER</div>
+                  <div style={{ fontSize: '0.72rem', color: '#818cf8', fontWeight: 600, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <Swords size={12} color="#818cf8" style={{ filter: 'drop-shadow(0 0 4px rgba(129,140,248,0.8))' }} /> #1 ATTACK POWER
+                  </div>
                   <div style={{ fontSize: '1.1rem', color: '#f1f5f9', fontWeight: 700, marginBottom: '2px' }}>{topLeader.name}</div>
                   <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}><strong style={{ color: '#818cf8' }}>{topLeader.total_pow.toLocaleString()}</strong> Attack Power</div>
                 </div>
@@ -167,7 +172,7 @@ export const KingdomModal: React.FC<KingdomModalProps> = ({
                     color: '#c7d2fe', padding: '8px 16px', borderRadius: '8px', fontSize: '0.82rem', cursor: 'pointer'
                   }}
                 >
-                  🔍 View
+                  <Search size={14} style={{ display: 'inline', marginBottom: '-2px', marginRight: '4px' }} /> View
                 </button>
               </div>
 
@@ -210,7 +215,7 @@ export const KingdomModal: React.FC<KingdomModalProps> = ({
                   {sortedByTot.map((p) => (
                     <tr key={p.name} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.03)' }}>
                       <td style={{ padding: '10px 16px', fontWeight: 600, color: '#f8fafc' }}>
-                        {p.name} {p.is_woc_leader && <span title="WOC Leader" style={{ marginLeft: '6px' }}>🛡️</span>}
+                        {p.name} {p.is_woc_leader && <span title="WOC Leader"><Shield size={12} color="#10b981" style={{ marginLeft: '6px', marginBottom: '-2px', filter: 'drop-shadow(0 0 4px rgba(16,185,129,0.8))' }} /></span>}
                       </td>
                       <td style={{ padding: '10px 16px', color: '#a5b4fc', fontWeight: 700, textAlign: 'right', fontFamily: "'Space Grotesk', sans-serif" }}>
                         {p.total_pow.toLocaleString()}

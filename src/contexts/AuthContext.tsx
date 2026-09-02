@@ -6,6 +6,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  isApproved: boolean;
   signOut: () => Promise<void>;
 }
 
@@ -13,6 +14,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   session: null,
   loading: true,
+  isApproved: false,
   signOut: async () => {},
 });
 
@@ -22,19 +24,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isApproved, setIsApproved] = useState(false);
+
+  const checkApproval = async (email: string | undefined) => {
+    if (!email) {
+      setIsApproved(false);
+      return;
+    }
+    const { data } = await supabase
+      .from('access_requests')
+      .select('status')
+      .eq('email', email)
+      .single();
+    
+    setIsApproved(data?.status === 'approved');
+  };
 
   useEffect(() => {
     // Check active session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setLoading(false);
+      if (session?.user?.email) {
+        checkApproval(session.user.email).finally(() => setLoading(false));
+      } else {
+        setLoading(false);
+      }
     });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
+      if (session?.user?.email) {
+        checkApproval(session.user.email);
+      } else {
+        setIsApproved(false);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -45,7 +71,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, isApproved, signOut }}>
       {children}
     </AuthContext.Provider>
   );

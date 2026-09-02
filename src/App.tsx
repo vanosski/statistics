@@ -18,7 +18,7 @@ import { useAuth } from './contexts/AuthContext';
 import { Login } from './components/Login';
 
 export function App() {
-  const { session, loading } = useAuth();
+  const { loading, isApproved } = useAuth();
   
   const rawPlayers = rawPlayersData as Player[];
   
@@ -128,7 +128,7 @@ export function App() {
     return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-dark)' }}>Loading...</div>;
   }
 
-  if (!session) {
+  if (!isApproved) {
     return <Login />;
   }
 

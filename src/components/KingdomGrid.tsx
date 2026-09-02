@@ -13,16 +13,16 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
   const [selectedUnits, setSelectedUnits] = useState<Record<string, UnitPowType>>({});
 
   const redSkillsMap: Record<string, { redSkills: number; tierBadge: string; badgeClass: string; customBuff?: number }> = {
-    'K54': { redSkills: 3, tierBadge: 'TIER S++', badgeClass: 'bg-crimson' },
-    'K197': { redSkills: 5, tierBadge: 'TIER S+', badgeClass: 'bg-gold' },
-    'K116': { redSkills: 4, tierBadge: 'TIER S+', badgeClass: 'bg-gold' },
-    'K60': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 'bg-emerald' },
-    'K176': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 'bg-emerald' },
-    'K91': { redSkills: 3, tierBadge: 'TIER A', badgeClass: 'bg-blue' },
-    'K170': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'bg-blue', customBuff: 0.03 },
-    'K138': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' },
-    'K88': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' },
-    'K48': { redSkills: 4, tierBadge: 'TIER B', badgeClass: 'bg-purple' }
+    'K54': { redSkills: 3, tierBadge: 'TIER S++', badgeClass: 'bg-crimson' }, // Rank 1
+    'K197': { redSkills: 5, tierBadge: 'TIER S+', badgeClass: 'bg-gold' },   // Rank 2
+    'K60': { redSkills: 1, tierBadge: 'TIER S+', badgeClass: 'bg-gold' },    // Rank 3
+    'K176': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 'bg-emerald' }, // Rank 4
+    'K116': { redSkills: 4, tierBadge: 'TIER S', badgeClass: 'bg-emerald' }, // Rank 5
+    'K91': { redSkills: 3, tierBadge: 'TIER A', badgeClass: 'bg-blue' },     // Rank 6
+    'K170': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'bg-blue', customBuff: 0.03 }, // Rank 7
+    'K138': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' },  // Rank 8
+    'K48': { redSkills: 4, tierBadge: 'TIER B', badgeClass: 'bg-purple' },   // Rank 9
+    'K88': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' }    // Rank 10
   };
 
   const tierColors: Record<string, string> = {

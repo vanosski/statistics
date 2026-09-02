@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { Player, CompMetricType } from '../types/stats';
 import { Radar, Bar } from 'react-chartjs-2';
-import { Search, ChevronDown, X, Trash2, CheckSquare, Square, Eye, EyeOff, Shield, Crosshair, Zap, Mountain, Swords, Crown, Target, Hexagon } from 'lucide-react';
+import { Search, ChevronDown, X, Trash2, CheckSquare, Square, Eye, EyeOff, Shield, Crosshair, Zap, Mountain, Swords, Crown, Target, Hexagon, Lock } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 interface ComparisonSuiteProps {
   allPlayers: Player[];
@@ -18,6 +19,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
   onRemovePlayer,
   onClearAll
 }) => {
+  const { isApproved } = useAuth();
   const [metric, setMetric] = useState<CompMetricType>('powers');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -697,41 +699,65 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                       className={`btn-toggle ${metric === m ? 'active' : ''}`}
                       onClick={() => setMetric(m)}
                     >
-                      {m === 'powers' ? 'Powers' : m === 'guard_pool' ? 'Guard' : 'DMG %'}
+                      {m === 'powers' ? 'Powers' : m === 'guard_pool' ? (!isApproved ? '🔒 Guard' : 'Guard') : (!isApproved ? '🔒 DMG %' : 'DMG %')}
                     </button>
                   ))}
                 </div>
               </div>
-              <div style={{ height: '360px', position: 'relative' }}>
-                <Bar data={barData} options={barOptions} />
+              <div style={{ height: '360px', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                {!isApproved && metric !== 'powers' ? (
+                  <div style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
+                    <Lock size={48} color="#f472b6" style={{ margin: '0 auto 12px auto', filter: 'drop-shadow(0 0 8px rgba(244,114,182,0.8))' }} />
+                    <h3 style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px' }}>Advanced Charts Locked</h3>
+                    <p style={{ fontSize: '0.9rem', maxWidth: '300px', margin: '0 auto 16px auto' }}>Login to view in-depth Guard and Damage % statistics.</p>
+                    <button
+                      onClick={() => window.location.hash = 'login'}
+                      style={{
+                        background: 'linear-gradient(135deg, #ec4899 0%, #be185d 100%)',
+                        color: '#fff',
+                        border: 'none',
+                        padding: '8px 20px',
+                        borderRadius: '6px',
+                        fontWeight: 700,
+                        fontSize: '0.85rem',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Login Now
+                    </button>
+                  </div>
+                ) : (
+                  <Bar data={barData} options={barOptions} />
+                )}
               </div>
             </div>
           </div>
 
-          {/* 3. Detailed Side-by-Side Matrix Table */}
-          <div
-            className="cyber-panel"
-            style={{
-              padding: '20px',
-              boxShadow: '0 12px 30px -10px rgba(0,0,0,0.5)'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
-              <h3 style={{ fontSize: '1.15rem', color: '#fff', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}><Target size={18} color="#c7d2fe" style={{filter:'drop-shadow(0 0 4px rgba(199,210,254,0.8))'}}/> Detailed Side-by-Side Attribute Comparison</h3>
-              <span style={{ fontSize: '0.75rem', color: '#34d399', fontWeight: 700 }}>
-                ✨ <Crown size={12} color="#fbbf24" style={{display:'inline', marginBottom:'-2px', filter:'drop-shadow(0 0 4px rgba(251,191,36,0.8))'}}/> Badge = Highest Value in Stat
-              </span>
-            </div>
-
+          {/* 3. Detailed Side-by-Side Matrix Table (Protected) */}
+          {isApproved ? (
             <div
+              className="cyber-panel"
               style={{
-                width: '100%',
-                overflowX: 'auto',
-                borderRadius: '12px',
-                background: 'rgba(10, 15, 28, 0.85)',
-                border: '1px solid rgba(255, 255, 255, 0.08)'
+                padding: '20px',
+                boxShadow: '0 12px 30px -10px rgba(0,0,0,0.5)'
               }}
             >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
+                <h3 style={{ fontSize: '1.15rem', color: '#fff', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}><Target size={18} color="#c7d2fe" style={{filter:'drop-shadow(0 0 4px rgba(199,210,254,0.8))'}}/> Detailed Side-by-Side Attribute Comparison</h3>
+                <span style={{ fontSize: '0.75rem', color: '#34d399', fontWeight: 700 }}>
+                  ✨ <Crown size={12} color="#fbbf24" style={{display:'inline', marginBottom:'-2px', filter:'drop-shadow(0 0 4px rgba(251,191,36,0.8))'}}/> Badge = Highest Value in Stat
+                </span>
+              </div>
+
+              <div
+                style={{
+                  width: '100%',
+                  overflowX: 'auto',
+                  borderRadius: '12px',
+                  background: 'rgba(10, 15, 28, 0.85)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)'
+                }}
+              >
               <table style={{ width: '100%', minWidth: '600px', borderCollapse: 'collapse', fontSize: '0.86rem' }}>
                 <thead>
                   <tr>
@@ -888,10 +914,50 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                       })}
                     </React.Fragment>
                   ))}
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div
+              className="cyber-panel"
+              style={{
+                padding: '40px 20px',
+                textAlign: 'center',
+                boxShadow: '0 12px 30px -10px rgba(0,0,0,0.5)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '12px',
+                border: '1px dashed rgba(236, 72, 153, 0.4)'
+              }}
+            >
+              <div style={{ background: 'rgba(236, 72, 153, 0.1)', padding: '16px', borderRadius: '50%', marginBottom: '8px' }}>
+                <Lock size={32} color="#f472b6" style={{ filter: 'drop-shadow(0 0 8px rgba(244,114,182,0.8))' }} />
+              </div>
+              <h3 style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 800 }}>Detailed Stats Matrix Locked</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '400px' }}>
+                The deep dive comparison matrix (with exact percentages and troop-specific defensive attributes) is exclusively available to verified alliance members.
+              </p>
+              <button
+                onClick={() => window.location.hash = 'login'}
+                style={{
+                  background: 'linear-gradient(135deg, #ec4899 0%, #be185d 100%)',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '10px 24px',
+                  borderRadius: '8px',
+                  fontWeight: 700,
+                  fontSize: '0.9rem',
+                  cursor: 'pointer',
+                  marginTop: '12px',
+                  boxShadow: '0 4px 15px rgba(236, 72, 153, 0.4)'
+                }}
+              >
+                Login to Unlock Detailed Stats
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>

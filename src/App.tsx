@@ -76,7 +76,7 @@ export function App() {
   }, [isApproved, currentView]);
 
   const navigateTo = (view: ViewMode) => {
-    if (!isApproved && ['compare', 'table'].includes(view)) {
+    if (!isApproved && ['table'].includes(view)) {
       window.location.hash = 'login';
       return;
     }

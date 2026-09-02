@@ -70,13 +70,11 @@ export const Login: React.FC = () => {
 
   return (
     <div style={{
-      minHeight: '100vh',
-      width: '100vw',
+      width: '100%',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '20px',
-      background: 'var(--bg-dark)'
+      padding: '20px 0',
     }}>
       <div
         className="animate-fade-in"

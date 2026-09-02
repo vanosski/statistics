@@ -18,7 +18,32 @@ export const Header: React.FC = () => {
         position: 'relative'
       }}
     >
-      {session && (
+      {!isApproved ? (
+        <button
+          onClick={() => window.location.hash = 'login'}
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: '16px',
+            background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+            border: 'none',
+            color: '#fff',
+            padding: '6px 12px',
+            borderRadius: '8px',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            cursor: 'pointer',
+            transition: 'all 0.2s',
+            boxShadow: '0 4px 15px rgba(79, 70, 229, 0.4)'
+          }}
+        >
+          <LogOut size={14} style={{ transform: 'rotate(180deg)' }} />
+          Admin Login
+        </button>
+      ) : session && (
         <button
           onClick={signOut}
           style={{

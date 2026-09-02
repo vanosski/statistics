@@ -44,12 +44,35 @@ export function App() {
   const [activeKdModalServer, setActiveKdModalServer] = useState<string | null>(null);
   const [activePlayerModalName, setActivePlayerModalName] = useState<string | null>(null);
 
+  // Sync hash with currentView
+  React.useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace('#', '') as ViewMode;
+      if (['login', 'privacy', 'terms'].includes(hash)) {
+        setCurrentView(hash);
+      }
+    };
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
   const navigateTo = (view: ViewMode) => {
+    if (!isApproved && ['compare', 'table'].includes(view)) {
+      setHistory([]);
+      setCurrentView('login');
+      return;
+    }
     setHistory([]);
     setCurrentView(view);
   };
 
   const drillDownTo = (view: ViewMode) => {
+    if (!isApproved && ['compare', 'table'].includes(view)) {
+      setHistory(prev => [...prev, currentView]);
+      setCurrentView('login');
+      return;
+    }
     setHistory(prev => [...prev, currentView]);
     setCurrentView(view);
   };
@@ -121,15 +144,27 @@ export function App() {
     }
   };
 
+  const handleOpenKdModal = (server: string | null) => {
+    if (!isApproved && server !== null) {
+      drillDownTo('login');
+      return;
+    }
+    setActiveKdModalServer(server);
+  };
+
+  const handleOpenPlayerModal = (name: string | null) => {
+    if (!isApproved && name !== null) {
+      drillDownTo('login');
+      return;
+    }
+    setActivePlayerModalName(name);
+  };
+
   const selectedPlayers = players.filter((p) => selectedPlayerNames.has(p.name));
   const activePlayer = activePlayerModalName ? players.find((p) => p.name === activePlayerModalName) || null : null;
 
   if (loading) {
     return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-dark)' }}>Loading...</div>;
-  }
-
-  if (!isApproved) {
-    return <Login />;
   }
 
   return (
@@ -154,13 +189,17 @@ export function App() {
       )}
 
       <main style={{ padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '32px', width: '100%' }}>
+      {['login', 'privacy', 'terms'].includes(currentView) && (
+        <Login />
+      )}
+
       {currentView === 'home' && (
         <HomePage
           kingdoms={kingdoms}
           players={players}
           onNavigate={drillDownTo}
-          onOpenPlayer={setActivePlayerModalName}
-          onOpenKingdom={setActiveKdModalServer}
+          onOpenPlayer={handleOpenPlayerModal}
+          onOpenKingdom={handleOpenKdModal}
         />
       )}
 
@@ -171,7 +210,7 @@ export function App() {
 
       {/* 2. Kingdom Cards View */}
       {currentView === 'kingdoms' && (
-        <KingdomGrid kingdoms={kingdoms} players={players} onOpenKdModal={setActiveKdModalServer} onDrillDownTier={handleDrillDownTier} />
+        <KingdomGrid kingdoms={kingdoms} players={players} onOpenKdModal={handleOpenKdModal} onDrillDownTier={handleDrillDownTier} />
       )}
 
       {/* 3. Multi-Player Comparison View */}
@@ -193,7 +232,7 @@ export function App() {
           onAddPlayerTag={handleAddPlayerTag}
           onRemovePlayerTag={handleRemovePlayerTag}
           onClearAllTags={handleClearAllTags}
-          onOpenPlayerModal={setActivePlayerModalName}
+          onOpenPlayerModal={handleOpenPlayerModal}
           filters={tableFilters}
           onFiltersChange={setTableFilters}
         />

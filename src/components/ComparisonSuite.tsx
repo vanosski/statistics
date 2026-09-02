@@ -534,8 +534,11 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
             className="btn-toggle active"
             style={{ padding: '9px 24px', borderRadius: '10px', fontSize: '0.88rem', fontWeight: 700 }}
             onClick={() => {
-              onAddPlayer('•Pain•');
-              onAddPlayer('CerialKiller');
+              const topGuards = [...players]
+                .filter(p => p.is_woc_leader)
+                .sort((a, b) => b.dgp - a.dgp)
+                .slice(0, 2);
+              topGuards.forEach(p => onAddPlayer(p.name));
             }}
           >
             Load Top 2 KD Leaders Preview

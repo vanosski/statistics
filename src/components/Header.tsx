@@ -1,7 +1,10 @@
 import React from 'react';
-import { Calendar } from 'lucide-react';
+import { Calendar, LogOut } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 export const Header: React.FC = () => {
+  const { session, signOut } = useAuth();
+
   return (
     <header
       style={{
@@ -11,9 +14,36 @@ export const Header: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '6px'
+        gap: '6px',
+        position: 'relative'
       }}
     >
+      {session && (
+        <button
+          onClick={signOut}
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: '16px',
+            background: 'rgba(239, 68, 68, 0.15)',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
+            color: '#fca5a5',
+            padding: '6px 12px',
+            borderRadius: '8px',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            cursor: 'pointer',
+            transition: 'all 0.2s'
+          }}
+        >
+          <LogOut size={14} />
+          Sign Out
+        </button>
+      )}
+
       <h1
         style={{
           fontSize: 'clamp(1.5rem, 4vw, 2.3rem)',
@@ -23,7 +53,8 @@ export const Header: React.FC = () => {
           backgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           lineHeight: 1.2,
-          letterSpacing: '-0.02em'
+          letterSpacing: '-0.02em',
+          marginTop: '20px'
         }}
       >
         👑 Last Land Statistics Tracker
@@ -49,3 +80,4 @@ export const Header: React.FC = () => {
     </header>
   );
 };
+

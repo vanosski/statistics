@@ -14,8 +14,12 @@ import { KingdomModal } from './components/KingdomModal';
 import { PlayerModal } from './components/PlayerModal';
 import { Footer } from './components/Footer';
 import { ArrowLeft } from 'lucide-react';
+import { useAuth } from './contexts/AuthContext';
+import { Login } from './components/Login';
 
 export function App() {
+  const { session, loading } = useAuth();
+  
   const rawPlayers = rawPlayersData as Player[];
   
   // Disambiguate duplicate names
@@ -119,6 +123,14 @@ export function App() {
 
   const selectedPlayers = players.filter((p) => selectedPlayerNames.has(p.name));
   const activePlayer = activePlayerModalName ? players.find((p) => p.name === activePlayerModalName) || null : null;
+
+  if (loading) {
+    return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-dark)' }}>Loading...</div>;
+  }
+
+  if (!session) {
+    return <Login />;
+  }
 
   return (
     <>

@@ -68,14 +68,14 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
 
   // Radar Data with Mobile Focus Dimming
   const radarData = {
-    labels: ['Guard (🛡️ WOC)', 'Archer', 'Cavalry', 'Siege', 'Avg Unit Pwr'],
+    labels: ['Guard (🛡️ WOC) x1.5', 'Archer', 'Cavalry', 'Siege', 'Avg Unit Pwr'],
     datasets: selectedPlayers.map((p, idx) => {
       const col = palette[idx % palette.length];
       const isFocused = !focusedPlayer || focusedPlayer === p.name;
 
       return {
         label: `${p.name} (${p.server})`,
-        data: [p.dgp, p.archer_pow, p.cav_pow, p.siege_pow, Math.round(p.total_pow / 3)],
+        data: [Math.round(p.dgp * 1.5), p.archer_pow, p.cav_pow, p.siege_pow, Math.round(p.total_pow / 3)],
         backgroundColor: isFocused ? col.bg : 'rgba(255,255,255,0.02)',
         borderColor: isFocused ? col.border : 'rgba(255,255,255,0.1)',
         borderWidth: isFocused ? 2.5 : 1,
@@ -83,7 +83,8 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
         pointBorderColor: '#fff',
         pointHoverRadius: 8,
         pointRadius: isFocused ? 5 : 2,
-        _rawTotal: p.total_pow
+        _rawTotal: p.total_pow,
+        _rawDgp: p.dgp
       };
     })
   };
@@ -104,6 +105,10 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
         bodyFont: { size: 12, family: 'Space Grotesk' },
         callbacks: {
           label: (context: any) => {
+            if (context.dataIndex === 0) {
+              const rawDgp = context.dataset._rawDgp;
+              return ` ${context.dataset.label}: ${rawDgp.toLocaleString()} Pwr`;
+            }
             if (context.dataIndex === 4) {
               const rawTot = context.dataset._rawTotal;
               return ` ${context.dataset.label}: ${context.formattedValue} (Total Atk: ${rawTot.toLocaleString()})`;

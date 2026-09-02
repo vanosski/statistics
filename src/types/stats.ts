@@ -87,6 +87,7 @@ export interface KingdomSummary {
   avg_archer: number;
   avg_cav: number;
   avg_siege: number;
+  red_skills?: number;
   tiers: {
     total_pow: TierCounts;
     archer_pow: TierCounts;

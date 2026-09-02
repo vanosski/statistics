@@ -13,7 +13,6 @@ import { PlayerTable } from './components/PlayerTable';
 import { KingdomModal } from './components/KingdomModal';
 import { PlayerModal } from './components/PlayerModal';
 import { Footer } from './components/Footer';
-import { ArrowLeft } from 'lucide-react';
 import { useAuth } from './contexts/AuthContext';
 import { Login } from './components/Login';
 
@@ -39,7 +38,6 @@ export function App() {
 
   // Start on Command Center (Home)
   const [currentView, setCurrentView] = useState<ViewMode>('home');
-  const [history, setHistory] = useState<ViewMode[]>([]);
   const [selectedPlayerNames, setSelectedPlayerNames] = useState<Set<string>>(new Set());
   const [activeKdModalServer, setActiveKdModalServer] = useState<string | null>(null);
   const [activePlayerModalName, setActivePlayerModalName] = useState<string | null>(null);
@@ -47,9 +45,12 @@ export function App() {
   // Sync hash with currentView
   useEffect(() => {
     const handleHash = () => {
-      const hash = window.location.hash.replace('#', '') as ViewMode;
-      if (['login', 'privacy', 'terms'].includes(hash)) {
-        setCurrentView(hash);
+      const hash = window.location.hash.replace('#', '');
+      const validViews = ['home', 'graphs', 'kingdoms', 'compare', 'table', 'login', 'privacy', 'terms'];
+      if (validViews.includes(hash)) {
+        setCurrentView(hash as ViewMode);
+      } else if (hash === '') {
+        setCurrentView('home');
       }
     };
     handleHash();
@@ -60,42 +61,20 @@ export function App() {
   // Auto-redirect out of login screen when approved
   useEffect(() => {
     if (isApproved && ['login', 'privacy', 'terms'].includes(currentView)) {
-      window.location.hash = '';
-      if (history.length > 0) {
-        goBack();
-      } else {
-        setCurrentView('home');
-      }
+      window.location.hash = 'home';
     }
-  }, [isApproved, currentView, history]);
+  }, [isApproved, currentView]);
 
   const navigateTo = (view: ViewMode) => {
     if (!isApproved && ['compare', 'table'].includes(view)) {
-      setHistory([]);
-      setCurrentView('login');
+      window.location.hash = 'login';
       return;
     }
-    setHistory([]);
-    setCurrentView(view);
+    window.location.hash = view;
   };
 
   const drillDownTo = (view: ViewMode) => {
-    if (!isApproved && ['compare', 'table'].includes(view)) {
-      setHistory(prev => [...prev, currentView]);
-      setCurrentView('login');
-      return;
-    }
-    setHistory(prev => [...prev, currentView]);
-    setCurrentView(view);
-  };
-
-  const goBack = () => {
-    if (history.length > 0) {
-      const newHistory = [...history];
-      const prevView = newHistory.pop()!;
-      setHistory(newHistory);
-      setCurrentView(prevView);
-    }
+    navigateTo(view);
   };
 
   const initialTableFilters: TableFilters = {
@@ -183,22 +162,6 @@ export function App() {
     <>
       <Header />
       <TopNav currentView={currentView} onSelectView={navigateTo} />
-
-      {history.length > 0 && (
-        <div style={{ width: '100%', maxWidth: '1400px', margin: '0 auto', padding: '0 16px', marginTop: '12px', display: 'flex', justifyContent: 'flex-start' }}>
-          <button
-            onClick={goBack}
-            className="btn-toggle active"
-            style={{ 
-              padding: '8px 16px', borderRadius: '8px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px',
-              background: 'rgba(51, 65, 85, 0.8)', color: '#f8fafc', border: '1px solid rgba(255,255,255,0.1)'
-            }}
-          >
-            <ArrowLeft size={16} />
-            Go Back
-          </button>
-        </div>
-      )}
 
       <main style={{ padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '32px', width: '100%' }}>
       {['login', 'privacy', 'terms'].includes(currentView) && (

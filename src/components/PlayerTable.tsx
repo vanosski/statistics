@@ -488,7 +488,8 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
           border: '1px solid var(--panel-border)',
           backdropFilter: 'blur(12px)',
           borderRadius: '14px',
-          overflow: 'hidden'
+          overflowX: 'auto',
+          overflowY: 'hidden'
         }}
       >
         <div style={{ maxHeight: '1000px', overflowX: 'auto', overflowY: 'auto' }}>

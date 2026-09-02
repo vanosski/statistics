@@ -282,7 +282,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
   const servers = ['ALL', ...Array.from(new Set(allPlayers.map((p) => p.server))).sort()];
 
   return (
-    <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '40px' }} className="animate-fade-in">
+    <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '40px', minWidth: 0, boxSizing: 'border-box' }} className="animate-fade-in">
       <div className="section-title">
         <span style={{display:'flex', alignItems:'center', gap:'8px', flexWrap:'wrap'}}><Swords size={20} color="#818cf8" style={{filter:'drop-shadow(0 0 5px rgba(129,140,248,0.8))'}}/> Multi-Player Comparison Suite</span>
         <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>
@@ -550,7 +550,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
               gap: '20px',
               marginBottom: '24px'
             }}
@@ -717,7 +717,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
-              <h3 style={{ fontSize: '1.15rem', color: '#fff', fontWeight: 800 }}>📑 Detailed Side-by-Side Attribute Comparison</h3>
+              <h3 style={{ fontSize: '1.15rem', color: '#fff', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}><Target size={18} color="#c7d2fe" style={{filter:'drop-shadow(0 0 4px rgba(199,210,254,0.8))'}}/> Detailed Side-by-Side Attribute Comparison</h3>
               <span style={{ fontSize: '0.75rem', color: '#34d399', fontWeight: 700 }}>
                 ✨ <Crown size={12} color="#fbbf24" style={{display:'inline', marginBottom:'-2px', filter:'drop-shadow(0 0 4px rgba(251,191,36,0.8))'}}/> Badge = Highest Value in Stat
               </span>

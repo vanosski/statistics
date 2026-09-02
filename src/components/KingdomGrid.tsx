@@ -12,7 +12,7 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
   const [selectedUnits, setSelectedUnits] = useState<Record<string, UnitPowType>>({});
 
   const redSkillsMap: Record<string, { redSkills: number; tierBadge: string; badgeClass: string }> = {
-    'K54': { redSkills: 6, tierBadge: 'TIER S++', badgeClass: 's-plus' },
+    'K54': { redSkills: 3, tierBadge: 'TIER S++', badgeClass: 's-plus' },
     'K197': { redSkills: 5, tierBadge: 'TIER S+', badgeClass: 's-plus' },
     'K116': { redSkills: 4, tierBadge: 'TIER S+', badgeClass: 's-plus' },
     'K60': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 's-tier' },
@@ -35,10 +35,8 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
   };
 
   const getRedSkillMultiplier = (skills: number) => {
-    if (skills >= 5) return 0.13;
-    if (skills >= 3) return 0.09;
-    if (skills >= 1) return 0.05;
-    return 0.0;
+    if (skills <= 0) return 0.0;
+    return 0.04 + (skills - 1) * 0.01;
   };
 
   const sortedKingdoms = [...kingdoms].sort((a, b) => {

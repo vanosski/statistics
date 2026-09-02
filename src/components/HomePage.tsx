@@ -38,22 +38,32 @@ export const HomePage: React.FC<HomePageProps> = ({
   // Top 5 Archer Specialists
   const topArchers = [...players].sort((a, b) => b.archer_pow - a.archer_pow).slice(0, 5);
 
-  const redSkillsMap: Record<string, number> = {
-    'K197': 5, 'K91': 5, 'K48': 5, 'K54': 5, 'K88': 5, 'K116': 5, 'K170': 5, 'K138': 5, 'K176': 4, 'K60': 3
+  const redSkillsMap: Record<string, { redSkills: number; customBuff?: number }> = {
+    'K54': { redSkills: 3 },
+    'K197': { redSkills: 5 },
+    'K116': { redSkills: 4 },
+    'K60': { redSkills: 1 },
+    'K176': { redSkills: 1 },
+    'K91': { redSkills: 3 },
+    'K170': { redSkills: 1, customBuff: 0.03 },
+    'K138': { redSkills: 1 },
+    'K88': { redSkills: 1 },
+    'K48': { redSkills: 4 }
   };
 
-  const getRedBonus = (skills: number) => {
-    if (skills >= 5) return 0.13;
-    if (skills >= 3) return 0.09;
-    if (skills >= 1) return 0.05;
-    return 0.0;
+  const getRedBonus = (skills: number, customBuff?: number) => {
+    if (customBuff !== undefined) return customBuff;
+    if (skills <= 0) return 0.0;
+    return 0.04 + (skills - 1) * 0.01;
   };
 
   const rankedKingdoms = [...kingdoms].sort((a, b) => {
+    const cfgA = redSkillsMap[a.server] || { redSkills: 0 };
+    const cfgB = redSkillsMap[b.server] || { redSkills: 0 };
     const wocA = players.find((p) => p.server === a.server && p.is_woc_leader)?.dgp || 0;
     const wocB = players.find((p) => p.server === b.server && p.is_woc_leader)?.dgp || 0;
-    const finalA = (a.avg_total + wocA) * (1 + getRedBonus(redSkillsMap[a.server] || 0));
-    const finalB = (b.avg_total + wocB) * (1 + getRedBonus(redSkillsMap[b.server] || 0));
+    const finalA = (a.avg_total + (wocA * 0.85)) * (1 + getRedBonus(cfgA.redSkills, cfgA.customBuff));
+    const finalB = (b.avg_total + (wocB * 0.85)) * (1 + getRedBonus(cfgB.redSkills, cfgB.customBuff));
     return finalB - finalA;
   });
 
@@ -614,10 +624,11 @@ export const HomePage: React.FC<HomePageProps> = ({
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
           {rankedKingdoms.map((kd, rankIdx) => {
-            const skills = redSkillsMap[kd.server] || 0;
+            const cfg = redSkillsMap[kd.server] || { redSkills: 0 };
             const wocLeader = players.find((p) => p.server === kd.server && p.is_woc_leader);
             const guardPwr = wocLeader ? wocLeader.dgp : 0;
-            const finalKdPwr = Math.round((kd.avg_total + guardPwr) * (1 + getRedBonus(skills)));
+            const redBonus = getRedBonus(cfg.redSkills, cfg.customBuff);
+            const finalKdPwr = Math.round((kd.avg_total + (guardPwr * 0.85)) * (1 + redBonus));
 
             return (
               <div
@@ -653,12 +664,14 @@ export const HomePage: React.FC<HomePageProps> = ({
                     <span style={{ fontWeight: 800, fontSize: '1.1rem', color: '#fff', fontFamily: 'Space Grotesk, sans-serif' }}>
                       {kd.server}
                     </span>
-                    <span style={{ fontSize: '0.65rem', color: '#ef4444', background: 'rgba(239, 68, 68, 0.15)', padding: '1px 5px', borderRadius: '4px' }}>
-                      🦁 {skills} Red
-                    </span>
+                    {cfg.redSkills > 0 && (
+                      <span style={{ fontSize: '0.65rem', color: '#ef4444', background: 'rgba(239, 68, 68, 0.15)', padding: '1px 5px', borderRadius: '4px' }}>
+                        🦁 {cfg.redSkills} Red
+                      </span>
+                    )}
                   </div>
                   <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                    {kd.count} Players | +{Math.round(getRedBonus(skills) * 100)}% Boost
+                    {kd.count} Active Players
                   </div>
                 </div>
 

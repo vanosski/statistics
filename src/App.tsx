@@ -141,7 +141,7 @@ export function App() {
         </div>
       )}
 
-      <main style={{ padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '32px' }}>
+      <main style={{ padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '32px', width: '100%' }}>
       {currentView === 'home' && (
         <HomePage
           kingdoms={kingdoms}

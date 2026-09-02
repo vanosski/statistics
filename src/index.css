@@ -40,7 +40,7 @@ body {
   padding: 16px 10px 40px 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -49,7 +49,8 @@ body {
   max-width: 1440px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
+  margin: 0 auto;
 }
 
 /* Typography & Badges */

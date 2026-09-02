@@ -20,8 +20,21 @@ export const Login: React.FC = () => {
   const [view, setView] = useState<'login' | 'privacy' | 'terms'>(getInitialView());
 
   React.useEffect(() => {
-    window.location.hash = view === 'login' ? '' : view;
-  }, [view]);
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'privacy') setView('privacy');
+      else if (hash === 'terms') setView('terms');
+      else setView('login');
+    };
+    
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const changeView = (newView: 'login' | 'privacy' | 'terms') => {
+    window.location.hash = newView === 'login' ? 'login' : newView;
+    setView(newView);
+  };
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -104,8 +117,8 @@ export const Login: React.FC = () => {
         <div style={{ position: 'absolute', bottom: -50, left: -50, width: 150, height: 150, background: 'rgba(236, 72, 153, 0.15)', filter: 'blur(50px)', borderRadius: '50%', zIndex: 0 }} />
         
         <div style={{ position: 'relative', zIndex: 10 }}>
-          {view === 'privacy' && <PrivacyPolicy onBack={() => setView('login')} />}
-          {view === 'terms' && <TermsOfService onBack={() => setView('login')} />}
+          {view === 'privacy' && <PrivacyPolicy onBack={() => changeView('login')} />}
+          {view === 'terms' && <TermsOfService onBack={() => changeView('login')} />}
           
           {view === 'login' && (
             <>
@@ -191,9 +204,9 @@ export const Login: React.FC = () => {
               )}
               
               <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'center', gap: '16px' }}>
-                <button onClick={() => setView('privacy')} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '0.8rem', cursor: 'pointer', textDecoration: 'underline' }}>Privacy Policy</button>
+                <button onClick={() => changeView('privacy')} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '0.8rem', cursor: 'pointer', textDecoration: 'underline' }}>Privacy Policy</button>
                 <span style={{ color: '#334155' }}>|</span>
-                <button onClick={() => setView('terms')} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '0.8rem', cursor: 'pointer', textDecoration: 'underline' }}>Terms of Service</button>
+                <button onClick={() => changeView('terms')} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '0.8rem', cursor: 'pointer', textDecoration: 'underline' }}>Terms of Service</button>
               </div>
             </>
           )}

@@ -59,7 +59,8 @@ export const TopNav: React.FC<TopNavProps> = ({ currentView, onSelectView }) => 
             borderRadius: '30px',
             boxShadow: '0 12px 35px -5px rgba(0, 0, 0, 0.8), 0 0 20px rgba(99, 102, 241, 0.25)',
             overflowX: 'auto',
-            maxWidth: '100%',
+            maxWidth: '100vw',
+            justifyContent: 'flex-start',
             WebkitOverflowScrolling: 'touch',
             scrollbarWidth: 'none'
           }}

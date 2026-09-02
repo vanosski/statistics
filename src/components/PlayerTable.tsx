@@ -214,7 +214,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
   return (
     <div id="playerTableSection" style={{ width: '100%', maxWidth: '1400px', marginBottom: '40px' }}>
       <div className="section-title">
-        <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
           <ClipboardList size={22} color="#fbbf24" style={{ filter: 'drop-shadow(0 0 6px rgba(251,191,36,0.6))' }} /> 
           Complete All-Attribute Player Table ({sortedPlayers.length})
         </span>

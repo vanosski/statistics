@@ -5,9 +5,10 @@ interface KingdomGridProps {
   kingdoms: KingdomSummary[];
   players: Player[];
   onOpenKdModal: (server: string) => void;
+  onDrillDownTier?: (server: string, tier: string, tierType: UnitPowType) => void;
 }
 
-export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onOpenKdModal }) => {
+export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onOpenKdModal, onDrillDownTier }) => {
   const [selectedUnits, setSelectedUnits] = useState<Record<string, UnitPowType>>({});
 
   const redSkillsMap: Record<string, { redSkills: number; tierBadge: string; badgeClass: string }> = {
@@ -228,11 +229,33 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
                   return (
                     <div
                       key={t}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (count > 0 && onDrillDownTier) {
+                          onDrillDownTier(kd.server, t, activeUnit);
+                        }
+                      }}
                       style={{
                         background: 'rgba(15, 23, 42, 0.65)',
                         padding: '4px 2px',
                         borderRadius: '6px',
-                        border: count > 0 ? `1px solid rgba(255, 255, 255, 0.1)` : '1px solid rgba(255,255,255,0.03)'
+                        border: count > 0 ? `1px solid rgba(255, 255, 255, 0.1)` : '1px solid rgba(255,255,255,0.03)',
+                        cursor: count > 0 ? 'pointer' : 'default',
+                        transition: 'all 0.15s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (count > 0) {
+                          e.currentTarget.style.background = 'rgba(99, 102, 241, 0.2)';
+                          e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.5)';
+                          e.currentTarget.style.transform = 'translateY(-1px)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (count > 0) {
+                          e.currentTarget.style.background = 'rgba(15, 23, 42, 0.65)';
+                          e.currentTarget.style.borderColor = `1px solid rgba(255, 255, 255, 0.1)`;
+                          e.currentTarget.style.transform = 'translateY(0)';
+                        }
                       }}
                     >
                       <span style={{ fontSize: '0.65rem', fontWeight: 800, display: 'block', color: tierColors[t] }}>

@@ -98,3 +98,11 @@ export interface KingdomSummary {
 export type ViewMode = 'home' | 'graphs' | 'kingdoms' | 'compare' | 'table';
 export type UnitPowType = 'total_pow' | 'archer_pow' | 'cav_pow' | 'siege_pow';
 export type CompMetricType = 'powers' | 'guard_pool' | 'attack_dmg';
+
+export interface TableFilters {
+  servers: string[];
+  tiers: string[];
+  classes: string[];
+  wocOnly: boolean;
+  tierType: UnitPowType;
+}

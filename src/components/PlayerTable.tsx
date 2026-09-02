@@ -1,6 +1,100 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ChevronDown } from 'lucide-react';
 import type { Player } from '../types/stats';
-import { Search } from 'lucide-react';
+import { Search, Settings } from 'lucide-react';
+
+
+interface MultiSelectDropdownProps {
+  label: string;
+  options: string[];
+  selected: string[];
+  onToggle: (val: string) => void;
+}
+
+const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({ label, options, selected, onToggle }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  return (
+    <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          background: selected.length > 0 ? 'rgba(99, 102, 241, 0.15)' : 'rgba(15, 23, 42, 0.6)',
+          border: selected.length > 0 ? '1px solid #818cf8' : '1px solid rgba(255,255,255,0.1)',
+          color: selected.length > 0 ? '#c7d2fe' : '#94a3b8',
+          padding: '6px 14px',
+          borderRadius: '8px',
+          fontSize: '0.8rem',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          transition: 'all 0.15s ease'
+        }}
+      >
+        {label} {selected.length > 0 && `(${selected.length})`}
+        <ChevronDown size={14} />
+      </button>
+
+      {isOpen && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            marginTop: '8px',
+            background: '#0f172a',
+            border: '1px solid rgba(99, 102, 241, 0.4)',
+            borderRadius: '10px',
+            boxShadow: '0 10px 25px rgba(0,0,0,0.6)',
+            zIndex: 50,
+            minWidth: '180px',
+            maxHeight: '300px',
+            overflowY: 'auto',
+            padding: '8px'
+          }}
+        >
+          {options.map((opt) => (
+            <label
+              key={opt}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '8px 12px',
+                cursor: 'pointer',
+                borderRadius: '6px',
+                fontSize: '0.82rem',
+                color: '#cbd5e1'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(99, 102, 241, 0.15)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+            >
+              <input
+                type="checkbox"
+                checked={selected.includes(opt)}
+                onChange={() => onToggle(opt)}
+                style={{ cursor: 'pointer', accentColor: '#6366f1' }}
+              />
+              {opt}
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 interface PlayerTableProps {
   players: Player[];
@@ -9,6 +103,8 @@ interface PlayerTableProps {
   onRemovePlayerTag: (name: string) => void;
   onClearAllTags: () => void;
   onOpenPlayerModal: (name: string) => void;
+  filters?: import('../types/stats').TableFilters;
+  onFiltersChange?: (filters: import('../types/stats').TableFilters) => void;
 }
 
 export const PlayerTable: React.FC<PlayerTableProps> = ({
@@ -17,10 +113,11 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
   onAddPlayerTag,
   onRemovePlayerTag,
   onClearAllTags,
-  onOpenPlayerModal
+  onOpenPlayerModal,
+  filters = { servers: [], tiers: [], classes: [], wocOnly: false, tierType: 'total_pow' },
+  onFiltersChange
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [serverFilter, setServerFilter] = useState('ALL');
   const [sortCol, setSortCol] = useState<keyof Player>('dgp');
   const [sortAsc, setSortAsc] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -43,6 +140,26 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
     }
   };
 
+  const toggleFilter = (type: keyof typeof filters, value: string) => {
+    if (!onFiltersChange) return;
+    const currentList = filters[type as keyof typeof filters] as string[];
+    const isSelected = currentList.includes(value);
+    
+    let newList;
+    if (isSelected) {
+      newList = currentList.filter(item => item !== value);
+    } else {
+      newList = [...currentList, value];
+    }
+    
+    onFiltersChange({
+      ...filters,
+      [type]: newList
+    });
+  };
+
+
+
   // Filter logic
   const queryTokens = searchTerm
     .split(',')
@@ -50,18 +167,32 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
     .filter((t) => t.length > 0);
 
   const filteredPlayers = players.filter((p) => {
-    const matchesServer = serverFilter === 'ALL' || p.server === serverFilter;
+    // 1. Kingdom Filter
+    const matchesServer = filters.servers.length === 0 || filters.servers.includes(p.server);
+    if (!matchesServer) return false;
 
+
+
+    // 3. Tier Filter
+    if (filters.tiers.length > 0) {
+      const tierField = filters.tierType === 'total_pow' ? p.total_pow_tier : 
+                       filters.tierType === 'archer_pow' ? p.archer_pow_tier :
+                       filters.tierType === 'cav_pow' ? p.cav_pow_tier : p.siege_pow_tier;
+      if (!filters.tiers.includes(tierField)) return false;
+    }
+
+    // 4. WOC Only Filter
+    if (filters.wocOnly && !p.is_woc_leader) return false;
+
+    // 5. Explicit Tags / Search
     if (selectedPlayerNames.size > 0) {
-      return selectedPlayerNames.has(p.name) && matchesServer;
-    }
-
-    if (queryTokens.length > 0) {
+      if (!selectedPlayerNames.has(p.name)) return false;
+    } else if (queryTokens.length > 0) {
       const matchesToken = queryTokens.some((token) => p.name.toLowerCase().includes(token));
-      return matchesToken && matchesServer;
+      if (!matchesToken) return false;
     }
 
-    return matchesServer;
+    return true;
   });
 
   // Sort logic
@@ -82,7 +213,6 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
     return 0;
   });
 
-  const servers = ['ALL', 'K116', 'K138', 'K170', 'K176', 'K197', 'K54', 'K60', 'K91'];
 
   return (
     <div id="playerTableSection" style={{ width: '100%', maxWidth: '1400px', marginBottom: '40px' }}>
@@ -103,7 +233,9 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
           backdropFilter: 'blur(16px)',
           padding: '18px 20px',
           borderRadius: '16px',
-          boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.5)'
+          boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.5)',
+          position: 'relative',
+          zIndex: 20
         }}
       >
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -256,30 +388,87 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
           </div>
         </div>
 
-        {/* Server filter */}
-        <div style={{ minWidth: '220px' }}>
-          <select
-            value={serverFilter}
-            onChange={(e) => setServerFilter(e.target.value)}
-            style={{
-              width: '100%',
-              background: 'rgba(15, 23, 42, 0.8)',
-              border: '1px solid rgba(99, 102, 241, 0.35)',
-              borderRadius: '10px',
-              padding: '12px 16px',
-              color: '#fff',
-              fontFamily: 'inherit',
-              fontSize: '0.9rem',
-              outline: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            {servers.map((s) => (
-              <option key={s} value={s}>
-                {s === 'ALL' ? `All Kingdoms (${players.length} Players)` : `${s}`}
-              </option>
-            ))}
-          </select>
+        {/* Advanced Filters (Dropdown Style) */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '10px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+          <div style={{ fontSize: '0.88rem', color: '#cbd5e1', fontWeight: 700, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Settings size={16} color="#818cf8"/> Filter Roster</span>
+            {(filters.servers.length > 0 || filters.tiers.length > 0 || filters.wocOnly) && (
+              <span 
+                style={{ 
+                  color: '#fca5a5', 
+                  cursor: 'pointer', 
+                  fontSize: '0.72rem', 
+                  fontWeight: 700, 
+                  background: 'rgba(239, 68, 68, 0.15)', 
+                  padding: '4px 10px', 
+                  borderRadius: '12px',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  transition: 'all 0.15s ease'
+                }}
+                onClick={() => onFiltersChange && onFiltersChange({ servers: [], tiers: [], classes: [], wocOnly: false, tierType: 'total_pow' })}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.25)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)'}
+              >
+                ✕ Clear All Filters
+              </span>
+            )}
+          </div>
+          
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <MultiSelectDropdown
+              label="Kingdoms"
+              options={['K54', 'K197', 'K116', 'K60', 'K176', 'K91', 'K170', 'K138', 'K88', 'K48']}
+              selected={filters.servers}
+              onToggle={(s) => toggleFilter('servers', s)}
+            />
+            
+            <MultiSelectDropdown
+              label="Tiers"
+              options={['S++', 'S+', 'S', 'A', 'B', 'C', 'D']}
+              selected={filters.tiers}
+              onToggle={(t) => toggleFilter('tiers', t)}
+            />
+
+            <select
+              value={filters.tierType}
+              onChange={(e) => onFiltersChange && onFiltersChange({ ...filters, tierType: e.target.value as import('../types/stats').UnitPowType })}
+              style={{
+                background: 'rgba(15, 23, 42, 0.6)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '8px',
+                padding: '6px 14px',
+                color: '#94a3b8',
+                fontSize: '0.8rem',
+                outline: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              <option value="total_pow">Total Power Metric</option>
+              <option value="archer_pow">Archer Power Metric</option>
+              <option value="cav_pow">Cav Power Metric</option>
+              <option value="siege_pow">Siege Power Metric</option>
+            </select>
+
+
+            <button
+              onClick={() => onFiltersChange && onFiltersChange({ ...filters, wocOnly: !filters.wocOnly })}
+              style={{
+                background: filters.wocOnly ? 'rgba(245, 158, 11, 0.2)' : 'rgba(15, 23, 42, 0.6)',
+                border: filters.wocOnly ? '1px solid #fbbf24' : '1px solid rgba(255,255,255,0.1)',
+                color: filters.wocOnly ? '#fbbf24' : '#94a3b8',
+                padding: '6px 14px',
+                borderRadius: '8px',
+                fontSize: '0.8rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontWeight: filters.wocOnly ? 600 : 400
+              }}
+            >
+              🛡️ WOC Only
+            </button>
+          </div>
         </div>
       </div>
 

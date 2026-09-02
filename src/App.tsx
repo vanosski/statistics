@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Player, KingdomSummary, ViewMode } from './types/stats';
+import type { Player, KingdomSummary, ViewMode, UnitPowType, TableFilters } from './types/stats';
 import rawPlayersData from './data/players.json';
 import kingdomsData from './data/kingdoms.json';
 
@@ -15,7 +15,21 @@ import { PlayerModal } from './components/PlayerModal';
 import { Footer } from './components/Footer';
 
 export function App() {
-  const players = rawPlayersData as Player[];
+  const rawPlayers = rawPlayersData as Player[];
+  
+  // Disambiguate duplicate names
+  const seenNames = new Set<string>();
+  const duplicateNames = new Set<string>();
+  rawPlayers.forEach(p => {
+    if (seenNames.has(p.name)) duplicateNames.add(p.name);
+    seenNames.add(p.name);
+  });
+  
+  const players = rawPlayers.map(p => ({
+    ...p,
+    name: duplicateNames.has(p.name) ? `${p.name} (${p.server})` : p.name
+  }));
+
   const kingdoms = kingdomsData as KingdomSummary[];
 
   // Start on Command Center (Home)
@@ -23,6 +37,15 @@ export function App() {
   const [selectedPlayerNames, setSelectedPlayerNames] = useState<Set<string>>(new Set());
   const [activeKdModalServer, setActiveKdModalServer] = useState<string | null>(null);
   const [activePlayerModalName, setActivePlayerModalName] = useState<string | null>(null);
+
+  const initialTableFilters: TableFilters = {
+    servers: [],
+    tiers: [],
+    classes: [],
+    wocOnly: false,
+    tierType: 'total_pow'
+  };
+  const [tableFilters, setTableFilters] = useState<TableFilters>(initialTableFilters);
 
   // Player comparison selection handlers
   const handleAddPlayerTag = (name: string) => {
@@ -48,8 +71,24 @@ export function App() {
     setCurrentView('compare');
   };
 
-  const handleFilterTableToKd = (_server: string) => {
+  const handleFilterTableToKd = (server: string) => {
     setActiveKdModalServer(null);
+    setTableFilters({ ...initialTableFilters, servers: [server] });
+    setCurrentView('table');
+    const tableEl = document.getElementById('playerTableSection');
+    if (tableEl) {
+      tableEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handleDrillDownTier = (server: string, tier: string, tierType: UnitPowType) => {
+    setTableFilters({
+      servers: [server],
+      tiers: [tier],
+      classes: [],
+      wocOnly: false,
+      tierType: tierType
+    });
     setCurrentView('table');
     const tableEl = document.getElementById('playerTableSection');
     if (tableEl) {
@@ -83,7 +122,7 @@ export function App() {
 
       {/* 2. Kingdom Cards View */}
       {currentView === 'kingdoms' && (
-        <KingdomGrid kingdoms={kingdoms} players={players} onOpenKdModal={setActiveKdModalServer} />
+        <KingdomGrid kingdoms={kingdoms} players={players} onOpenKdModal={setActiveKdModalServer} onDrillDownTier={handleDrillDownTier} />
       )}
 
       {/* 3. Multi-Player Comparison View */}
@@ -106,6 +145,8 @@ export function App() {
           onRemovePlayerTag={handleRemovePlayerTag}
           onClearAllTags={handleClearAllTags}
           onOpenPlayerModal={setActivePlayerModalName}
+          filters={tableFilters}
+          onFiltersChange={setTableFilters}
         />
       )}
 

@@ -39,7 +39,7 @@ export const Header: React.FC = () => {
             }}
           >
             <LogOut size={14} style={{ transform: 'rotate(180deg)' }} />
-            Admin Login
+            Login
           </button>
         ) : session && (
           <button

@@ -116,7 +116,7 @@ export const KingdomModal: React.FC<KingdomModalProps> = ({
             {/* Row 1 */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
               <KdStatCard label="Tracked Players" value={kdPlayers.length} accent="#f43f5e" />
-              <KdStatCard label="Avg Total Power" value={kd.avg_total} accent="#818cf8" />
+              <KdStatCard label="Avg Atk Power" value={kd.avg_total} accent="#818cf8" />
             </div>
             {/* Row 2 */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>

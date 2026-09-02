@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Player, KingdomSummary, ViewMode, UnitPowType, TableFilters } from './types/stats';
 import rawPlayersData from './data/players.json';
 import kingdomsData from './data/kingdoms.json';
@@ -45,7 +45,7 @@ export function App() {
   const [activePlayerModalName, setActivePlayerModalName] = useState<string | null>(null);
 
   // Sync hash with currentView
-  React.useEffect(() => {
+  useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.replace('#', '') as ViewMode;
       if (['login', 'privacy', 'terms'].includes(hash)) {

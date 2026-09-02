@@ -3,7 +3,7 @@ import { Calendar, LogOut } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 export const Header: React.FC = () => {
-  const { session, signOut } = useAuth();
+  const { session, isApproved, signOut } = useAuth();
 
   return (
     <header

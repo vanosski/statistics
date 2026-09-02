@@ -83,51 +83,38 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
               className="kingdom-card"
               onClick={() => onOpenKdModal(kd.server)}
               style={{
-                background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%)',
-                border: '1px solid rgba(99, 102, 241, 0.25)',
-                backdropFilter: 'blur(16px)',
+                background: 'rgba(15, 23, 42, 0.6)',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
                 borderRadius: '16px',
-                padding: '16px 18px',
+                padding: '16px 20px',
                 cursor: 'pointer',
                 transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                boxShadow: '0 10px 25px -8px rgba(0, 0, 0, 0.5)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '12px'
+                gap: '14px'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.6)';
-                e.currentTarget.style.boxShadow = '0 16px 35px -10px rgba(99, 102, 241, 0.35)';
+                e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.5)';
+                e.currentTarget.style.background = 'rgba(30, 41, 59, 0.8)';
+                e.currentTarget.style.boxShadow = '0 10px 30px -10px rgba(0,0,0,0.8), 0 0 20px rgba(99, 102, 241, 0.15)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.25)';
-                e.currentTarget.style.boxShadow = '0 10px 25px -8px rgba(0, 0, 0, 0.5)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.05)';
+                e.currentTarget.style.background = 'rgba(15, 23, 42, 0.6)';
+                e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              {/* Header: Rank + Kingdom Name + Red Skills + Tier Badge */}
+              {/* Header: Rank + Kingdom Name + Tier Badge */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-muted)' }}>#{rankIdx + 1}</span>
-                  <span style={{ fontFamily: 'Space Grotesk', fontSize: '1.35rem', fontWeight: 800, color: '#fff' }}>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#64748b' }}>#{rankIdx + 1}</span>
+                  <span style={{ fontFamily: 'Space Grotesk', fontSize: '1.4rem', fontWeight: 800, color: '#f1f5f9' }}>
                     {kd.server}
                   </span>
-                  <span
-                    style={{
-                      fontSize: '0.72rem',
-                      fontWeight: 700,
-                      color: '#f87171',
-                      background: 'rgba(239, 68, 68, 0.15)',
-                      border: '1px solid rgba(239, 68, 68, 0.3)',
-                      padding: '2px 7px',
-                      borderRadius: '12px'
-                    }}
-                  >
-                    🦁 {cfg.redSkills} Red (Main WOC)
-                  </span>
                 </div>
-                <span className={`badge-tier ${cfg.badgeClass}`} style={{ fontSize: '0.72rem', padding: '3px 9px', borderRadius: '12px' }}>
+                <span className={`badge-tier ${cfg.badgeClass}`} style={{ fontSize: '0.72rem', padding: '4px 10px', borderRadius: '12px' }}>
                   {cfg.tierBadge}
                 </span>
               </div>
@@ -135,43 +122,41 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
               {/* Clean Highlighted Final Power Hero Box */}
               <div
                 style={{
-                  background: 'rgba(15, 23, 42, 0.75)',
-                  border: '1px solid rgba(245, 158, 11, 0.3)',
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(245, 158, 11, 0.2)',
+                  borderLeft: '3px solid #f59e0b',
                   borderRadius: '10px',
-                  padding: '8px 12px',
+                  padding: '12px 14px',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center'
                 }}
               >
                 <div>
-                  <div style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
                     Final Kingdom Power
                   </div>
-                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#fbbf24', lineHeight: 1.1 }}>
+                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fbbf24', lineHeight: 1 }}>
                     {finalKdPwr.toLocaleString()}
                   </div>
                 </div>
               </div>
 
               {/* Clean Stat List */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', fontSize: '0.8rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#cbd5e1' }}>
-                  <span style={{ color: 'var(--text-muted)' }}>Avg Atk Power:</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.82rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748b', fontWeight: 600 }}>Avg Atk Power:</span>
                   <strong style={{ color: '#a5b4fc' }}>{kd.avg_total.toLocaleString()}</strong>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#cbd5e1' }}>
-                  <span style={{ color: 'var(--text-muted)' }}>WOC Guard:</span>
-                  <span style={{ textAlign: 'right' }}>
-                    <strong style={{ color: '#fff' }}>{wocLeader ? wocLeader.name : 'N/A'}</strong>{' '}
-                    <span style={{ color: '#10b981', fontWeight: 700 }}>+{guardPwr.toLocaleString()}</span>
-                  </span>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748b', fontWeight: 600 }}>WOC Guard ({wocLeader ? wocLeader.name : 'N/A'}):</span>
+                  <strong style={{ color: '#f8fafc' }}>{guardPwr.toLocaleString()}</strong>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#cbd5e1' }}>
-                  <span style={{ color: 'var(--text-muted)' }}>Active Players:</span>
-                  <strong style={{ color: '#fff' }}>{kd.count} Players</strong>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748b', fontWeight: 600 }}>Active Players:</span>
+                  <strong style={{ color: '#f8fafc' }}>{kd.count} Players</strong>
                 </div>
               </div>
 
@@ -180,10 +165,10 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
                 style={{
                   display: 'flex',
                   gap: '3px',
-                  background: 'rgba(15, 23, 42, 0.8)',
-                  padding: '3px',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(255,255,255,0.05)'
+                  background: 'rgba(255, 255, 255, 0.04)',
+                  padding: '4px',
+                  borderRadius: '10px',
+                  marginTop: '4px'
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -194,17 +179,17 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
                     style={{
                       flex: 1,
                       textAlign: 'center',
-                      padding: '4px 0',
-                      fontSize: '0.7rem',
-                      fontWeight: 600,
+                      padding: '6px 0',
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      color: activeUnit === unit ? '#fff' : '#94a3b8',
+                      color: activeUnit === unit ? '#fff' : '#64748b',
                       background: activeUnit === unit ? '#4f46e5' : 'transparent',
                       transition: 'all 0.15s ease'
                     }}
                   >
-                    {unit === 'total_pow' ? 'Total Atk' : unit === 'archer_pow' ? 'Archer' : unit === 'cav_pow' ? 'Cav' : 'Siege'}
+                    {unit === 'total_pow' ? 'Total' : unit === 'archer_pow' ? 'Archer' : unit === 'cav_pow' ? 'Cav' : 'Siege'}
                   </div>
                 ))}
               </div>
@@ -223,32 +208,32 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
                         }
                       }}
                       style={{
-                        background: 'rgba(15, 23, 42, 0.65)',
-                        padding: '4px 2px',
+                        background: 'rgba(255, 255, 255, 0.03)',
+                        padding: '6px 2px',
                         borderRadius: '6px',
-                        border: count > 0 ? `1px solid rgba(255, 255, 255, 0.1)` : '1px solid rgba(255,255,255,0.03)',
+                        border: count > 0 ? `1px solid ${tierColors[t]}40` : '1px solid transparent',
                         cursor: count > 0 ? 'pointer' : 'default',
                         transition: 'all 0.15s ease'
                       }}
                       onMouseEnter={(e) => {
                         if (count > 0) {
-                          e.currentTarget.style.background = 'rgba(99, 102, 241, 0.2)';
-                          e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.5)';
+                          e.currentTarget.style.background = `${tierColors[t]}20`;
+                          e.currentTarget.style.borderColor = tierColors[t];
                           e.currentTarget.style.transform = 'translateY(-1px)';
                         }
                       }}
                       onMouseLeave={(e) => {
                         if (count > 0) {
-                          e.currentTarget.style.background = 'rgba(15, 23, 42, 0.65)';
-                          e.currentTarget.style.borderColor = `1px solid rgba(255, 255, 255, 0.1)`;
+                          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                          e.currentTarget.style.borderColor = `${tierColors[t]}40`;
                           e.currentTarget.style.transform = 'translateY(0)';
                         }
                       }}
                     >
-                      <span style={{ fontSize: '0.65rem', fontWeight: 800, display: 'block', color: tierColors[t] }}>
+                      <span style={{ fontSize: '0.65rem', fontWeight: 800, display: 'block', color: count > 0 ? tierColors[t] : '#475569' }}>
                         {t}
                       </span>
-                      <span style={{ fontSize: '0.82rem', fontWeight: 700, color: count > 0 ? '#fff' : '#475569' }}>
+                      <span style={{ fontSize: '0.8rem', fontWeight: 700, color: count > 0 ? '#f1f5f9' : '#334155' }}>
                         {count}
                       </span>
                     </div>

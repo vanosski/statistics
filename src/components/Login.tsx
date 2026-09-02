@@ -55,18 +55,24 @@ export const Login: React.FC = () => {
       return;
     }
 
-    const { error } = await supabase
-      .from('access_requests')
-      .insert([
-        { email: session.user.email, username, reason }
-      ]);
+    try {
+      const { error } = await supabase
+        .from('access_requests')
+        .insert([
+          { email: session.user.email, username, reason }
+        ]);
 
-    if (error) {
-      setError('Failed to submit request: ' + error.message);
-    } else {
-      setSuccess('Request submitted successfully! The admin will review it shortly. Please refresh the page later to check your status.');
+      if (error) {
+        setError('Failed to submit request: ' + error.message);
+      } else {
+        setSuccess('Request submitted successfully! The admin will review it shortly. Please refresh the page later to check your status.');
+      }
+    } catch (err: any) {
+      console.error(err);
+      setError('An unexpected error occurred: ' + (err.message || String(err)));
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (

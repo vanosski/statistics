@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Shield, Search, ChevronDown } , Shield, Search } from 'lucide-react';
+import { ChevronDown, Search, Settings, Shield, ClipboardList, MoveHorizontal } from 'lucide-react';
 import type { Player } from '../types/stats';
-import { Shield, Search, Search, Settings } , Shield, Search } from 'lucide-react';
-
-
 interface MultiSelectDropdownProps {
   label: string;
   options: string[];
@@ -217,7 +214,10 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
   return (
     <div id="playerTableSection" style={{ width: '100%', maxWidth: '1400px', marginBottom: '40px' }}>
       <div className="section-title">
-        <span>📋 Complete All-Attribute Player Table ({sortedPlayers.length})</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <ClipboardList size={22} color="#fbbf24" style={{ filter: 'drop-shadow(0 0 6px rgba(251,191,36,0.6))' }} /> 
+          Complete All-Attribute Player Table ({sortedPlayers.length})
+        </span>
       </div>
 
       {/* Controls Bar */}
@@ -474,7 +474,9 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
 
       <div style={{ width: '100%', maxWidth: '1400px' }}>
         <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'right', marginBottom: '6px' }}>
-          👈 Swipe left/right to view all 35+ Troop & Unit attributes 👉
+          <MoveHorizontal size={14} style={{ display: 'inline', marginBottom: '-2px', marginRight: '6px', color: '#fbbf24' }} />
+          Swipe left/right to view all 35+ Troop & Unit attributes 
+          <MoveHorizontal size={14} style={{ display: 'inline', marginBottom: '-2px', marginLeft: '6px', color: '#fbbf24' }} />
         </div>
       </div>
 

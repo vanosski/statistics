@@ -273,7 +273,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* 2. Hall of Fame / MVP Feature Spotlight Cards */}
       <div style={{ marginBottom: '28px' }}>
         <div className="section-title">
-          <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <Award size={20} color="#fbbf24" /> Hall of Fame // Individual Standouts
           </span>
           <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>

@@ -284,7 +284,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
   return (
     <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '40px' }} className="animate-fade-in">
       <div className="section-title">
-        <span style={{display:'flex', alignItems:'center', gap:'8px'}}><Swords size={20} color="#818cf8" style={{filter:'drop-shadow(0 0 5px rgba(129,140,248,0.8))'}}/> Multi-Player Comparison Suite</span>
+        <span style={{display:'flex', alignItems:'center', gap:'8px', flexWrap:'wrap'}}><Swords size={20} color="#818cf8" style={{filter:'drop-shadow(0 0 5px rgba(129,140,248,0.8))'}}/> Multi-Player Comparison Suite</span>
         <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>
           Select multiple players to compare radar polygons, unit head-to-head, and full attribute breakdown
         </span>

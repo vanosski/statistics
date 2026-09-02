@@ -13,6 +13,7 @@ import { PlayerTable } from './components/PlayerTable';
 import { KingdomModal } from './components/KingdomModal';
 import { PlayerModal } from './components/PlayerModal';
 import { Footer } from './components/Footer';
+import { ArrowLeft } from 'lucide-react';
 
 export function App() {
   const rawPlayers = rawPlayersData as Player[];
@@ -34,9 +35,29 @@ export function App() {
 
   // Start on Command Center (Home)
   const [currentView, setCurrentView] = useState<ViewMode>('home');
+  const [history, setHistory] = useState<ViewMode[]>([]);
   const [selectedPlayerNames, setSelectedPlayerNames] = useState<Set<string>>(new Set());
   const [activeKdModalServer, setActiveKdModalServer] = useState<string | null>(null);
   const [activePlayerModalName, setActivePlayerModalName] = useState<string | null>(null);
+
+  const navigateTo = (view: ViewMode) => {
+    setHistory([]);
+    setCurrentView(view);
+  };
+
+  const drillDownTo = (view: ViewMode) => {
+    setHistory(prev => [...prev, currentView]);
+    setCurrentView(view);
+  };
+
+  const goBack = () => {
+    if (history.length > 0) {
+      const newHistory = [...history];
+      const prevView = newHistory.pop()!;
+      setHistory(newHistory);
+      setCurrentView(prevView);
+    }
+  };
 
   const initialTableFilters: TableFilters = {
     servers: [],
@@ -68,13 +89,13 @@ export function App() {
   const handleAddToCompareAndSwitch = (name: string) => {
     handleAddPlayerTag(name);
     setActivePlayerModalName(null);
-    setCurrentView('compare');
+    if (currentView !== 'compare') drillDownTo('compare');
   };
 
   const handleFilterTableToKd = (server: string) => {
     setActiveKdModalServer(null);
     setTableFilters({ ...initialTableFilters, servers: [server] });
-    setCurrentView('table');
+    drillDownTo('table');
     const tableEl = document.getElementById('playerTableSection');
     if (tableEl) {
       tableEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -89,7 +110,7 @@ export function App() {
       wocOnly: false,
       tierType: tierType
     });
-    setCurrentView('table');
+    drillDownTo('table');
     const tableEl = document.getElementById('playerTableSection');
     if (tableEl) {
       tableEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -102,14 +123,30 @@ export function App() {
   return (
     <>
       <Header />
-      <TopNav currentView={currentView} onSelectView={setCurrentView} />
+      <TopNav currentView={currentView} onSelectView={navigateTo} />
 
-      {/* 0. Dedicated Cyber Brutalism Command Center Home View */}
+      {history.length > 0 && (
+        <div style={{ width: '100%', maxWidth: '1400px', margin: '0 auto', padding: '0 16px', marginTop: '12px', display: 'flex', justifyContent: 'flex-start' }}>
+          <button
+            onClick={goBack}
+            className="btn-toggle active"
+            style={{ 
+              padding: '8px 16px', borderRadius: '8px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px',
+              background: 'rgba(51, 65, 85, 0.8)', color: '#f8fafc', border: '1px solid rgba(255,255,255,0.1)'
+            }}
+          >
+            <ArrowLeft size={16} />
+            Go Back
+          </button>
+        </div>
+      )}
+
+      <main style={{ padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '32px' }}>
       {currentView === 'home' && (
         <HomePage
           kingdoms={kingdoms}
           players={players}
-          onNavigate={setCurrentView}
+          onNavigate={drillDownTo}
           onOpenPlayer={setActivePlayerModalName}
           onOpenKingdom={setActiveKdModalServer}
         />

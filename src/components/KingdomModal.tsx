@@ -212,7 +212,7 @@ export const KingdomModal: React.FC<KingdomModalProps> = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {sortedByTot.map((p) => (
+                  {sortedByTot.slice(0, 25).map((p) => (
                     <tr key={p.name} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.03)' }}>
                       <td style={{ padding: '10px 16px', fontWeight: 600, color: '#f8fafc' }}>
                         {p.name} {p.is_woc_leader && <span title="WOC Leader"><Shield size={12} color="#10b981" style={{ marginLeft: '6px', marginBottom: '-2px', filter: 'drop-shadow(0 0 4px rgba(16,185,129,0.8))' }} /></span>}

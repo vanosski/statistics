@@ -187,6 +187,8 @@ export function App() {
         />
       )}
 
+      </main>
+
       {/* Layered Modals */}
       <KingdomModal
         server={activeKdModalServer}

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Shield, Send, ArrowRight, User, LogOut } from 'lucide-react';
+import { Shield, Send, User, LogOut } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 export const Login: React.FC = () => {
-  const { session, isApproved, signOut } = useAuth();
+  const { session, signOut } = useAuth();
   const [username, setUsername] = useState('');
   const [reason, setReason] = useState('');
   

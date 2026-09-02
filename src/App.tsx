@@ -57,6 +57,18 @@ export function App() {
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
+  // Auto-redirect out of login screen when approved
+  useEffect(() => {
+    if (isApproved && ['login', 'privacy', 'terms'].includes(currentView)) {
+      window.location.hash = '';
+      if (history.length > 0) {
+        goBack();
+      } else {
+        setCurrentView('home');
+      }
+    }
+  }, [isApproved, currentView, history]);
+
   const navigateTo = (view: ViewMode) => {
     if (!isApproved && ['compare', 'table'].includes(view)) {
       setHistory([]);

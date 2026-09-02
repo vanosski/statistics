@@ -39,16 +39,11 @@ export const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [nonce, setNonce] = useState('');
-
-  React.useEffect(() => {
-    const generateNonce = () => {
-      const array = new Uint8Array(32);
-      window.crypto.getRandomValues(array);
-      return btoa(String.fromCharCode.apply(null, array as any));
-    };
-    setNonce(generateNonce());
-  }, []);
+  const [nonce] = useState(() => {
+    const array = new Uint8Array(32);
+    window.crypto.getRandomValues(array);
+    return btoa(String.fromCharCode.apply(null, array as any));
+  });
 
   const handleGoogleSuccess = async (credential: string | undefined) => {
     if (!credential) return;

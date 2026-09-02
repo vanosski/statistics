@@ -165,6 +165,7 @@ export function App() {
 
       <PlayerModal
         player={activePlayer}
+        allPlayers={players}
         onClose={() => setActivePlayerModalName(null)}
         onAddToCompare={handleAddToCompareAndSwitch}
       />

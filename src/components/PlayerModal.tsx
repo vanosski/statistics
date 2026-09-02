@@ -15,6 +15,7 @@ ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
 
 interface PlayerModalProps {
   player: Player | null;
+  allPlayers: Player[];
   onClose: () => void;
   onAddToCompare: (playerName: string) => void;
 }
@@ -37,9 +38,10 @@ const pct = (val: number, maxKey: string) =>
   Math.min(100, Math.round((val / (DB_MAX[maxKey] || 1)) * 100));
 
 const StatBar = ({
-  label, value, maxKey, color
-}: { label: string; value: number; maxKey: string; color: string }) => {
+  label, value, maxKey, color, allPlayers
+}: { label: string; value: number; maxKey: string; color: string; allPlayers: Player[] }) => {
   const p = pct(value, maxKey);
+  const rank = allPlayers.filter(p => (p[maxKey as keyof Player] as number) > value).length + 1;
   return (
     <div style={{ marginBottom: '14px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', alignItems: 'baseline' }}>
@@ -48,7 +50,7 @@ const StatBar = ({
           <span style={{ fontSize: '0.96rem', fontWeight: 800, color, fontFamily: "'Space Grotesk', sans-serif" }}>
             {value.toLocaleString()}%
           </span>
-          <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 600 }}>{p}th</span>
+          <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 600 }}>#{rank}</span>
         </div>
       </div>
       <div style={{ height: '7px', background: 'rgba(255,255,255,0.06)', borderRadius: '99px', overflow: 'hidden' }}>
@@ -74,14 +76,14 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode; color: string }
   { key: 'overall',  label: 'Overall',  icon: <Swords size={14} style={{ filter: 'drop-shadow(0 0 4px rgba(245,158,11,0.8))' }} />, color: '#f59e0b' },
 ];
 
-export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAddToCompare }) => {
+export const PlayerModal: React.FC<PlayerModalProps> = ({ player, allPlayers, onClose, onAddToCompare }) => {
   const [activeTab, setActiveTab] = useState<TabKey>('infantry');
   if (!player) return null;
 
   const activeTabCfg = TABS.find(t => t.key === activeTab)!;
 
   const radarData = {
-    labels: ['Archer', 'Cavalry', 'Siege', 'Guard', 'Infantry'],
+    labels: ['Archer', 'Cavalry', 'Siege', 'Guard', 'Total Atk / 3'],
     datasets: [{
       data: [
         Math.round((player.archer_pow / 4000) * 100),
@@ -343,12 +345,10 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ player, onClose, onAdd
               <span style={{ fontSize: '1rem', fontWeight: 700, color: activeTabCfg.color, fontFamily: "'Space Grotesk', sans-serif" }}>
                 {activeTabCfg.label} Stats
               </span>
-              <span style={{ fontSize: '0.72rem', color: '#64748b', marginLeft: 'auto' }}>
-                Bar = percentile vs all tracked players
-              </span>
+              <div style={{ fontSize: '0.65rem', color: '#64748b', marginLeft: 'auto', letterSpacing: '0.5px' }}>Bar = % of Highest Tracked, # = Rank</div>
             </div>
-            {tabStats[activeTab].map(s => (
-              <StatBar key={s.label} label={s.label} value={s.value} maxKey={s.maxKey} color={s.color} />
+            {tabStats[activeTab].map(stat => (
+              <StatBar key={stat.label} {...stat} allPlayers={allPlayers} />
             ))}
           </div>
         </div>

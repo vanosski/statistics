@@ -14,11 +14,13 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
     'K54': { redSkills: 5, tierBadge: 'TIER S++', badgeClass: 's-plus' },
     'K197': { redSkills: 5, tierBadge: 'TIER S+', badgeClass: 's-plus' },
     'K116': { redSkills: 5, tierBadge: 'TIER S+', badgeClass: 's-plus' },
-    'K60': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 's-tier' },
-    'K176': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 's-tier' },
-    'K91': { redSkills: 3, tierBadge: 'TIER A', badgeClass: 'a-tier' },
-    'K170': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'a-tier' },
-    'K138': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'b-tier' }
+    'K60': { redSkills: 3, tierBadge: 'TIER S', badgeClass: 's-tier' },
+    'K176': { redSkills: 4, tierBadge: 'TIER S', badgeClass: 's-tier' },
+    'K91': { redSkills: 5, tierBadge: 'TIER A', badgeClass: 'a-tier' },
+    'K170': { redSkills: 5, tierBadge: 'TIER A', badgeClass: 'a-tier' },
+    'K138': { redSkills: 5, tierBadge: 'TIER B', badgeClass: 'b-tier' },
+    'K88': { redSkills: 5, tierBadge: 'TIER B', badgeClass: 'b-tier' },
+    'K48': { redSkills: 5, tierBadge: 'TIER B', badgeClass: 'b-tier' }
   };
 
   const tierColors: Record<string, string> = {

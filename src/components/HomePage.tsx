@@ -39,7 +39,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   const topArchers = [...players].sort((a, b) => b.archer_pow - a.archer_pow).slice(0, 5);
 
   const redSkillsMap: Record<string, number> = {
-    'K54': 5, 'K197': 5, 'K116': 5, 'K91': 3, 'K60': 1, 'K176': 1, 'K170': 1, 'K138': 1
+    'K197': 5, 'K91': 5, 'K48': 5, 'K54': 5, 'K88': 5, 'K116': 5, 'K170': 5, 'K138': 5, 'K176': 4, 'K60': 3
   };
 
   const getRedBonus = (skills: number) => {

@@ -31,11 +31,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsApproved(false);
       return;
     }
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('access_requests')
       .select('status')
       .eq('email', email)
-      .single();
+      .maybeSingle();
+      
+    if (error) {
+      console.error('Error checking approval status:', error);
+    }
+    
+    console.log('Approval check for', email, 'Result:', data);
     
     setIsApproved(data?.status === 'approved');
   };

@@ -89,7 +89,7 @@ export function App() {
       const hash = window.location.hash.replace('#', '');
       const validViews = ['home', 'graphs', 'kingdoms', 'compare', 'table', 'login', 'privacy', 'terms', 'simulator', 'civilwar'];
       if (validViews.includes(hash)) {
-        if (!isApproved && ['table'].includes(hash)) {
+        if (!isApproved && ['table', 'civilwar'].includes(hash)) {
           setCurrentView('login');
           window.location.hash = 'login';
           return;
@@ -116,7 +116,7 @@ export function App() {
 
   // If user is guest/unapproved and tries to go to table, redirect to login
   useEffect(() => {
-    if (!loading && !isApproved && ['table'].includes(currentView)) {
+    if (!loading && !isApproved && ['table', 'civilwar'].includes(currentView)) {
       setCurrentView('login');
       window.location.hash = 'login';
     }
@@ -130,7 +130,7 @@ export function App() {
   }, [isApproved, currentView]);
 
   const navigateTo = (view: ViewMode) => {
-    if (!isApproved && ['table'].includes(view)) {
+    if (!isApproved && ['table', 'civilwar'].includes(view)) {
       window.location.hash = 'login';
       return;
     }
@@ -286,7 +286,11 @@ export function App() {
       )} */}
 
       {currentView === 'civilwar' && (
-        <CivilWarSuite kingdoms={kingdoms} players={players} isApproved={isApproved} />
+        isApproved ? (
+          <CivilWarSuite kingdoms={kingdoms} players={players} isApproved={isApproved} />
+        ) : (
+          <Login />
+        )
       )}
 
       </main>

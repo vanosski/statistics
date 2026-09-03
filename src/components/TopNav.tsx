@@ -18,6 +18,7 @@ export const TopNav: React.FC<TopNavProps> = ({ currentView, onSelectView }) => 
     { id: 'graphs', label: 'KD Benchmarks', shortLabel: 'Benchmarks', icon: <BarChart2 size={15} /> },
     { id: 'kingdoms', label: 'Kingdom Cards', shortLabel: 'Kingdoms', icon: <Crown size={15} /> },
     { id: 'compare', label: 'Player Compare', shortLabel: 'Compare', icon: <Swords size={15} /> },
+    // { id: 'simulator', label: 'KD Simulator', shortLabel: 'Simulator', icon: <Calculator size={15} /> },
     { id: 'table', label: 'Player Table', shortLabel: 'Table', icon: <Table size={15} /> }
   ];
 
@@ -99,7 +100,7 @@ export const TopNav: React.FC<TopNavProps> = ({ currentView, onSelectView }) => 
                 </span>
                 <span className="nav-tab-label-full">{tab.label}</span>
                 <span className="nav-tab-label-short">{tab.shortLabel}</span>
-                {!isApproved && tab.id === 'table' && (
+                {!isApproved && (tab.id === 'table' || tab.id === 'simulator') && (
                   <Lock size={11} style={{ color: '#fbbf24', marginLeft: '3px', opacity: 0.85 }} />
                 )}
               </button>

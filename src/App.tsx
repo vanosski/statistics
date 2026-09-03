@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { Player, KingdomSummary, ViewMode, UnitPowType, TableFilters } from './types/stats';
+import publicPlayersData from './data/public_players.json';
 import kingdomsData from './data/kingdoms.json';
 import { supabase } from './lib/supabase';
 
@@ -10,6 +11,7 @@ import { KdChartsSection } from './components/KdChartsSection';
 import { KingdomGrid } from './components/KingdomGrid';
 import { ComparisonSuite } from './components/ComparisonSuite';
 import { PlayerTable } from './components/PlayerTable';
+// import { KingdomSimulator } from './components/KingdomSimulator';
 import { KingdomModal } from './components/KingdomModal';
 import { PlayerModal } from './components/PlayerModal';
 import { Footer } from './components/Footer';
@@ -19,31 +21,35 @@ import { Login } from './components/Login';
 export function App() {
   const { session, loading, isApproved } = useAuth();
   
-  const [players, setPlayers] = useState<Player[]>([]);
+  const publicPlayersInitial = publicPlayersData as Player[];
+  
+  const [players, setPlayers] = useState<Player[]>(() => {
+    const seenNames = new Set<string>();
+    const duplicateNames = new Set<string>();
+    publicPlayersInitial.forEach(p => {
+      if (seenNames.has(p.name)) duplicateNames.add(p.name);
+      seenNames.add(p.name);
+    });
+    return publicPlayersInitial.map(p => ({
+      ...p,
+      name: duplicateNames.has(p.name) ? `${p.name} (${p.server})` : p.name
+    }));
+  });
 
   useEffect(() => {
-    const fetchPlayers = async () => {
+    const fetchDetailedPlayers = async () => {
+      if (!isApproved) return;
+      
       try {
-        const { data: summaryData, error: summaryError } = await supabase
-          .from('players_summary')
+        const { data: detData, error: detError } = await supabase
+          .from('players_detailed')
           .select('*');
           
-        if (summaryError) throw summaryError;
-        if (!summaryData || summaryData.length === 0) return;
+        if (detError) throw detError;
+        if (!detData) return;
 
-        let detailedData: any[] = [];
-        if (isApproved) {
-          const { data: detData, error: detError } = await supabase
-            .from('players_detailed')
-            .select('*');
-            
-          if (!detError && detData) {
-            detailedData = detData;
-          }
-        }
-
-        const merged = summaryData.map(sum => {
-          const det = detailedData.find(d => d.name === sum.name && d.server === sum.server) || {};
+        const merged = publicPlayersInitial.map(sum => {
+          const det = detData.find(d => d.name === sum.name && d.server === sum.server) || {};
           return { ...sum, ...det };
         });
 
@@ -61,11 +67,11 @@ export function App() {
 
         setPlayers(finalPlayers as Player[]);
       } catch (err) {
-        console.error("Error fetching players from Supabase:", err);
+        console.error("Error fetching detailed players from Supabase:", err);
       }
     };
 
-    fetchPlayers();
+    fetchDetailedPlayers();
   }, [isApproved]);
 
   const kingdoms = kingdomsData as KingdomSummary[];
@@ -80,7 +86,7 @@ export function App() {
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.replace('#', '');
-      const validViews = ['home', 'graphs', 'kingdoms', 'compare', 'table', 'login', 'privacy', 'terms'];
+      const validViews = ['home', 'graphs', 'kingdoms', 'compare', 'table', 'login', 'privacy', 'terms', 'simulator'];
       if (validViews.includes(hash)) {
         if (!isApproved && ['table'].includes(hash)) {
           setCurrentView('login');
@@ -273,6 +279,10 @@ export function App() {
           <Login />
         )
       )}
+
+      {/* {currentView === 'simulator' && (
+        <KingdomSimulator kingdoms={kingdoms} players={players} isApproved={isApproved} />
+      )} */}
 
       </main>
 

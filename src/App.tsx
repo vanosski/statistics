@@ -48,7 +48,7 @@ export function App() {
       const hash = window.location.hash.replace('#', '');
       const validViews = ['home', 'graphs', 'kingdoms', 'compare', 'table', 'login', 'privacy', 'terms'];
       if (validViews.includes(hash)) {
-        if (!isApproved && ['compare', 'table'].includes(hash)) {
+        if (!isApproved && ['table'].includes(hash)) {
           setCurrentView('login');
           window.location.hash = 'login';
           return;
@@ -73,9 +73,9 @@ export function App() {
     }
   }, [loading, session, isApproved, currentView]);
 
-  // If user is guest/unapproved and on a protected view, redirect to login
+  // If user is guest/unapproved and tries to go to table, redirect to login
   useEffect(() => {
-    if (!loading && !isApproved && ['compare', 'table'].includes(currentView)) {
+    if (!loading && !isApproved && ['table'].includes(currentView)) {
       setCurrentView('login');
       window.location.hash = 'login';
     }
@@ -89,7 +89,7 @@ export function App() {
   }, [isApproved, currentView]);
 
   const navigateTo = (view: ViewMode) => {
-    if (!isApproved && ['compare', 'table'].includes(view)) {
+    if (!isApproved && ['table'].includes(view)) {
       window.location.hash = 'login';
       return;
     }
@@ -213,17 +213,13 @@ export function App() {
 
       {/* 3. Multi-Player Comparison View */}
       {currentView === 'compare' && (
-        isApproved ? (
-          <ComparisonSuite
-            allPlayers={players}
-            selectedPlayers={selectedPlayers}
-            onAddPlayer={handleAddPlayerTag}
-            onRemovePlayer={handleRemovePlayerTag}
-            onClearAll={handleClearAllTags}
-          />
-        ) : (
-          <Login />
-        )
+        <ComparisonSuite
+          allPlayers={players}
+          selectedPlayers={selectedPlayers}
+          onAddPlayer={handleAddPlayerTag}
+          onRemovePlayer={handleRemovePlayerTag}
+          onClearAll={handleClearAllTags}
+        />
       )}
 
       {/* 4. Complete Player Table View */}

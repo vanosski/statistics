@@ -115,7 +115,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 boxShadow: '0 0 20px rgba(99, 102, 241, 0.4)'
               }}
             >
-              <Swords size={16} /> Compare Players {!isApproved && <Lock size={12} style={{ color: '#fbbf24', marginLeft: '4px' }} />}
+              <Swords size={16} /> Compare Players
             </button>
             <button
               onClick={() => onNavigate('kingdoms')}

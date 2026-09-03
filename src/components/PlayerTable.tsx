@@ -115,7 +115,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
   onFiltersChange
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortCol, setSortCol] = useState<keyof Player>('dgp');
+  const [sortCol, setSortCol] = useState<keyof Player>('total_pow');
   const [sortAsc, setSortAsc] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
 

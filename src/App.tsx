@@ -190,7 +190,7 @@ export function App() {
 
       {/* 1. KD Benchmarks View (Untouched) */}
       {currentView === 'graphs' && (
-        <KdChartsSection kingdoms={kingdoms} />
+        <KdChartsSection kingdoms={kingdoms} players={players} />
       )}
 
       {/* 2. Kingdom Cards View */}

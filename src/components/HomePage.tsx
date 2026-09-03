@@ -14,6 +14,8 @@ import {
   Users
 } from 'lucide-react';
 
+import { getRankedKingdoms } from '../utils/kingdomRanking';
+
 interface HomePageProps {
   kingdoms: KingdomSummary[];
   players: Player[];
@@ -38,35 +40,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   // Top 5 Archer Specialists
   const topArchers = [...players].sort((a, b) => b.archer_pow - a.archer_pow).slice(0, 5);
 
-  const redSkillsMap: Record<string, { redSkills: number; customBuff?: number }> = {
-    'K54': { redSkills: 3 },
-    'K197': { redSkills: 5 },
-    'K116': { redSkills: 4 },
-    'K60': { redSkills: 1 },
-    'K176': { redSkills: 1 },
-    'K91': { redSkills: 3 },
-    'K170': { redSkills: 1, customBuff: 0.03 },
-    'K57': { redSkills: 2 },
-    'K138': { redSkills: 1 },
-    'K88': { redSkills: 1 },
-    'K48': { redSkills: 4 }
-  };
-
-  const getRedBonus = (skills: number, customBuff?: number) => {
-    if (customBuff !== undefined) return customBuff;
-    if (skills <= 0) return 0.0;
-    return 0.04 + (skills - 1) * 0.01;
-  };
-
-  const rankedKingdoms = [...kingdoms].sort((a, b) => {
-    const cfgA = redSkillsMap[a.server] || { redSkills: 0 };
-    const cfgB = redSkillsMap[b.server] || { redSkills: 0 };
-    const wocA = players.find((p) => p.server === a.server && p.is_woc_leader)?.dgp || 0;
-    const wocB = players.find((p) => p.server === b.server && p.is_woc_leader)?.dgp || 0;
-    const finalA = (a.avg_total + (wocA * 0.85)) * (1 + getRedBonus(cfgA.redSkills, cfgA.customBuff));
-    const finalB = (b.avg_total + (wocB * 0.85)) * (1 + getRedBonus(cfgB.redSkills, cfgB.customBuff));
-    return finalB - finalA;
-  });
+  const rankedKingdoms = getRankedKingdoms(kingdoms, players);
 
   const totalPlayers = players.length;
   const totalKingdoms = kingdoms.length;
@@ -624,12 +598,9 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
-          {rankedKingdoms.map((kd, rankIdx) => {
-            const cfg = redSkillsMap[kd.server] || { redSkills: 0 };
-            const wocLeader = players.find((p) => p.server === kd.server && p.is_woc_leader);
-            const guardPwr = wocLeader ? wocLeader.dgp : 0;
-            const redBonus = getRedBonus(cfg.redSkills, cfg.customBuff);
-            const finalKdPwr = Math.round((kd.avg_total + (guardPwr * 0.85)) * (1 + redBonus));
+          {rankedKingdoms.map((kd) => {
+            const cfg = kd.config;
+            const finalKdPwr = kd.finalKingdomPower;
 
             return (
               <div
@@ -660,7 +631,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span style={{ fontWeight: 800, fontSize: '0.85rem', color: '#818cf8', fontFamily: 'Space Grotesk, sans-serif' }}>
-                      #{rankIdx + 1}
+                      #{kd.rank}
                     </span>
                     <span style={{ fontWeight: 800, fontSize: '1.1rem', color: '#fff', fontFamily: 'Space Grotesk, sans-serif' }}>
                       {kd.server}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { KingdomSummary, Player, UnitPowType } from '../types/stats';
-import { Crown } from 'lucide-react';
+import { Crown, Flame } from 'lucide-react';
+import { getRankedKingdoms } from '../utils/kingdomRanking';
 
 interface KingdomGridProps {
   kingdoms: KingdomSummary[];
@@ -12,20 +13,6 @@ interface KingdomGridProps {
 export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onOpenKdModal, onDrillDownTier }) => {
   const [selectedUnits, setSelectedUnits] = useState<Record<string, UnitPowType>>({});
 
-  const redSkillsMap: Record<string, { redSkills: number; tierBadge: string; badgeClass: string; customBuff?: number }> = {
-    'K54': { redSkills: 3, tierBadge: 'TIER S++', badgeClass: 'bg-crimson' }, // Rank 1
-    'K197': { redSkills: 5, tierBadge: 'TIER S+', badgeClass: 'bg-gold' },   // Rank 2
-    'K60': { redSkills: 1, tierBadge: 'TIER S+', badgeClass: 'bg-gold' },    // Rank 3
-    'K176': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 'bg-emerald' }, // Rank 4
-    'K116': { redSkills: 4, tierBadge: 'TIER S', badgeClass: 'bg-emerald' }, // Rank 5
-    'K91': { redSkills: 3, tierBadge: 'TIER A', badgeClass: 'bg-blue' },     // Rank 6
-    'K170': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'bg-blue', customBuff: 0.03 }, // Rank 7
-    'K57': { redSkills: 2, tierBadge: 'TIER B', badgeClass: 'bg-purple' },   // Rank 8
-    'K138': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' },  // Rank 9
-    'K48': { redSkills: 4, tierBadge: 'TIER B', badgeClass: 'bg-purple' },   // Rank 10
-    'K88': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' }    // Rank 11
-  };
-
   const tierColors: Record<string, string> = {
     'S++': '#ef4444',
     'S+': '#f59e0b',
@@ -36,32 +23,14 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
     'D': '#475569'
   };
 
-  const getRedSkillMultiplier = (skills: number, customBuff?: number) => {
-    if (customBuff !== undefined) return customBuff;
-    if (skills <= 0) return 0.0;
-    return 0.04 + (skills - 1) * 0.01;
-  };
-
-  const sortedKingdoms = [...kingdoms].sort((a, b) => {
-    const cfgA = redSkillsMap[a.server] || { redSkills: 0, customBuff: undefined };
-    const cfgB = redSkillsMap[b.server] || { redSkills: 0, customBuff: undefined };
-
-    const wocA = players.find((p) => p.server === a.server && p.is_woc_leader)?.dgp || 0;
-    const wocB = players.find((p) => p.server === b.server && p.is_woc_leader)?.dgp || 0;
-
-    const finalA = (a.avg_total + (wocA * 0.85)) * (1 + getRedSkillMultiplier(cfgA.redSkills, cfgA.customBuff));
-    const finalB = (b.avg_total + (wocB * 0.85)) * (1 + getRedSkillMultiplier(cfgB.redSkills, cfgB.customBuff));
-
-    return finalB - finalA;
-  });
+  const sortedKingdoms = getRankedKingdoms(kingdoms, players);
 
   return (
     <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '32px' }} className="animate-fade-in">
       <div className="section-title">
-        <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Crown size={22} color="#fbbf24" style={{ filter: 'drop-shadow(0 0 6px rgba(251,191,36,0.6))' }} />
-          Kingdom Strength & Tier Breakdown
-        </span>
+        <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Crown size={22} color="#fbbf24" style={{ filter: 'drop-shadow(0 0 6px rgba(251,191,36,0.6))' }} /> Kingdom Strength & Tier Breakdown
+        </h2>
         <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>
           ✨ Click any card for comprehensive roster & key leader drilldown
         </span>
@@ -74,12 +43,11 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
           gap: '18px'
         }}
       >
-        {sortedKingdoms.map((kd, rankIdx) => {
-          const cfg = redSkillsMap[kd.server] || { redSkills: 0, tierBadge: 'TIER C', badgeClass: 'c-tier', customBuff: undefined };
-          const redBonus = getRedSkillMultiplier(cfg.redSkills, cfg.customBuff);
-          const wocLeader = players.find((p) => p.server === kd.server && p.is_woc_leader);
-          const guardPwr = wocLeader ? wocLeader.dgp : 0;
-          const finalKdPwr = Math.round((kd.avg_total + (guardPwr * 0.85)) * (1 + redBonus));
+        {sortedKingdoms.map((kd) => {
+          const cfg = kd.config;
+          const finalKdPwr = kd.finalKingdomPower;
+          const guardPwr = kd.guardPower;
+          const wocLeader = kd.wocLeader;
           const activeUnit = selectedUnits[kd.server] || 'total_pow';
 
           return (
@@ -114,10 +82,15 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
               {/* Header: Rank + Kingdom Name + Tier Badge */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#64748b' }}>#{rankIdx + 1}</span>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#64748b' }}>#{kd.rank}</span>
                   <span style={{ fontFamily: 'Space Grotesk', fontSize: '1.4rem', fontWeight: 800, color: '#f1f5f9' }}>
                     {kd.server}
                   </span>
+                  {cfg.redSkills > 0 && (
+                    <span style={{ display: 'flex', alignItems: 'center', fontSize: '0.7rem', color: '#ef4444', background: 'rgba(239, 68, 68, 0.15)', padding: '2px 8px', borderRadius: '4px' }}>
+                      <Flame size={14} color="#ef4444" style={{ marginRight: '4px', filter: 'drop-shadow(0 0 4px rgba(239,68,68,0.8))' }} /> {cfg.redSkills} Red
+                    </span>
+                  )}
                 </div>
                 <span className={`badge-tier ${cfg.badgeClass}`} style={{ fontSize: '0.72rem', padding: '4px 10px', borderRadius: '12px' }}>
                   {cfg.tierBadge}

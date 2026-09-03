@@ -167,10 +167,10 @@ export const CivilWarSuite: React.FC<CivilWarSuiteProps> = ({ kingdoms, players 
           </div>
 
           {/* Side-by-Side Tables */}
-          <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'flex-start' }}>
             
             {/* FACTION A TABLE */}
-            <div style={{ flex: 1, background: 'rgba(15, 23, 42, 0.4)', borderRadius: '8px', border: '1px solid rgba(0, 210, 255, 0.3)', padding: '20px' }}>
+            <div style={{ flex: '1 1 320px', minWidth: 0, background: 'rgba(15, 23, 42, 0.4)', borderRadius: '8px', border: '1px solid rgba(0, 210, 255, 0.3)', padding: '20px' }}>
               <h3 style={{ margin: '0 0 16px 0', color: '#00d2ff', textAlign: 'center', letterSpacing: '2px' }}>TEAM A ({statsA?.count || 0}/25)</h3>
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
@@ -200,7 +200,7 @@ export const CivilWarSuite: React.FC<CivilWarSuiteProps> = ({ kingdoms, players 
             </div>
 
             {/* FACTION B TABLE */}
-            <div style={{ flex: 1, background: 'rgba(15, 23, 42, 0.4)', borderRadius: '8px', border: '1px solid rgba(255, 0, 85, 0.3)', padding: '20px' }}>
+            <div style={{ flex: '1 1 320px', minWidth: 0, background: 'rgba(15, 23, 42, 0.4)', borderRadius: '8px', border: '1px solid rgba(255, 0, 85, 0.3)', padding: '20px' }}>
               <h3 style={{ margin: '0 0 16px 0', color: '#ff0055', textAlign: 'center', letterSpacing: '2px' }}>TEAM B ({statsB?.count || 0}/25)</h3>
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>

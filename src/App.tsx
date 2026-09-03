@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import type { Player, KingdomSummary, ViewMode, UnitPowType, TableFilters } from './types/stats';
-import rawPlayersData from './data/players.json';
 import kingdomsData from './data/kingdoms.json';
 import { supabase } from './lib/supabase';
 
@@ -20,20 +19,7 @@ import { Login } from './components/Login';
 export function App() {
   const { session, loading, isApproved } = useAuth();
   
-  const rawPlayersInitial = rawPlayersData as Player[];
-  
-  const [players, setPlayers] = useState<Player[]>(() => {
-    const seenNames = new Set<string>();
-    const duplicateNames = new Set<string>();
-    rawPlayersInitial.forEach(p => {
-      if (seenNames.has(p.name)) duplicateNames.add(p.name);
-      seenNames.add(p.name);
-    });
-    return rawPlayersInitial.map(p => ({
-      ...p,
-      name: duplicateNames.has(p.name) ? `${p.name} (${p.server})` : p.name
-    }));
-  });
+  const [players, setPlayers] = useState<Player[]>([]);
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -43,7 +29,7 @@ export function App() {
           .select('*');
           
         if (summaryError) throw summaryError;
-        if (!summaryData || summaryData.length === 0) return; // use fallback
+        if (!summaryData || summaryData.length === 0) return;
 
         let detailedData: any[] = [];
         if (isApproved) {
@@ -75,7 +61,7 @@ export function App() {
 
         setPlayers(finalPlayers as Player[]);
       } catch (err) {
-        console.error("Error fetching players from Supabase, falling back to local JSON", err);
+        console.error("Error fetching players from Supabase:", err);
       }
     };
 

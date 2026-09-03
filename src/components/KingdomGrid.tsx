@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { KingdomSummary, Player, UnitPowType } from '../types/stats';
-import { Crown, Flame } from 'lucide-react';
+import { Crown, Flame, Swords } from 'lucide-react';
 import { getRankedKingdoms } from '../utils/kingdomRanking';
 
 interface KingdomGridProps {
@@ -89,6 +89,11 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
                   {cfg.redSkills > 0 && (
                     <span style={{ display: 'flex', alignItems: 'center', fontSize: '0.7rem', color: '#ef4444', background: 'rgba(239, 68, 68, 0.15)', padding: '2px 8px', borderRadius: '4px' }}>
                       <Flame size={14} color="#ef4444" style={{ marginRight: '4px', filter: 'drop-shadow(0 0 4px rgba(239,68,68,0.8))' }} /> {cfg.redSkills} Red
+                    </span>
+                  )}
+                  {cfg.isCivilWar && (
+                    <span style={{ display: 'flex', alignItems: 'center', fontSize: '0.7rem', color: '#ef4444', background: 'rgba(239, 68, 68, 0.15)', padding: '2px 8px', borderRadius: '4px' }}>
+                      <Swords size={14} color="#ef4444" style={{ marginRight: '4px', filter: 'drop-shadow(0 0 4px rgba(239,68,68,0.8))' }} /> Civil War
                     </span>
                   )}
                 </div>

@@ -39,16 +39,17 @@ const pct = (val: number, maxKey: string) =>
 
 const StatBar = ({
   label, value, maxKey, color, allPlayers
-}: { label: string; value: number; maxKey: string; color: string; allPlayers: Player[] }) => {
-  const p = pct(value, maxKey);
-  const rank = allPlayers.filter(p => (p[maxKey as keyof Player] as number) > value).length + 1;
+}: { label: string; value?: number; maxKey: string; color: string; allPlayers: Player[] }) => {
+  const safeValue = value || 0;
+  const p = pct(safeValue, maxKey);
+  const rank = allPlayers.filter(p => ((p[maxKey as keyof Player] as number) || 0) > safeValue).length + 1;
   return (
     <div style={{ marginBottom: '14px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', alignItems: 'baseline' }}>
         <span style={{ fontSize: '0.82rem', color: '#94a3b8', fontWeight: 600 }}>{label}</span>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '7px' }}>
           <span style={{ fontSize: '0.96rem', fontWeight: 800, color, fontFamily: "'Space Grotesk', sans-serif" }}>
-            {value.toLocaleString()}%
+            {safeValue.toLocaleString()}%
           </span>
           <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 600 }}>#{rank}</span>
         </div>

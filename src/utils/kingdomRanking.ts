@@ -14,7 +14,7 @@ export const KINGDOM_CONFIGS: Record<string, KingdomRankingConfig> = {
   'K60': { redSkills: 1, tierBadge: 'TIER S+', badgeClass: 'bg-gold' },
   'K176': { redSkills: 1, tierBadge: 'TIER S', badgeClass: 'bg-emerald' },
   'K116': { redSkills: 4, tierBadge: 'TIER S', badgeClass: 'bg-emerald' },
-  'K91': { redSkills: 3, tierBadge: 'TIER A', badgeClass: 'bg-blue' },
+  'K91': { redSkills: 3, tierBadge: 'TIER A', badgeClass: 'bg-blue', isCivilWar: true },
   'K170': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'bg-blue', customBuff: 0.03 },
   'K57': { redSkills: 2, tierBadge: 'TIER A', badgeClass: 'bg-blue' },
   'K138': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'bg-blue' },

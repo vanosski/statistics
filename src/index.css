@@ -474,3 +474,225 @@ h1, h2, h3, h4 {
   100.0% { clip-path: inset(17% 0 72% 0); }
 }
 
+/* ==========================================================
+   Civil War Suite Mobile & Responsive Layout
+   ========================================================== */
+
+.civil-war-container {
+  padding: 30px 20px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.civil-war-target-selector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 35px;
+  width: 100%;
+}
+
+.civil-war-target-box {
+  display: inline-flex;
+  align-items: center;
+  background: #09090b;
+  border: 1px solid #27272a;
+  padding: 8px 16px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.1);
+  max-width: 100%;
+}
+
+.civil-war-target-label {
+  color: #94a3b8;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  margin: 0 12px 0 10px;
+  white-space: nowrap;
+}
+
+.civil-war-select {
+  background: transparent;
+  color: #00d2ff;
+  border: none;
+  outline: none;
+  font-size: 1.3rem;
+  font-weight: 900;
+  font-family: 'Space Grotesk', sans-serif;
+  cursor: pointer;
+  text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+}
+
+.civil-war-versus-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 35px;
+  width: 100%;
+  gap: 10px;
+}
+
+.faction-power-col {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.faction-title-a {
+  font-size: 1.1rem;
+  color: #00d2ff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(0, 210, 255, 0.8);
+}
+
+.faction-title-b {
+  font-size: 1.1rem;
+  color: #ff0055;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(255, 0, 85, 0.8);
+}
+
+.faction-power-val {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.faction-val-a {
+  text-shadow: 0 0 20px rgba(0, 210, 255, 0.8);
+}
+
+.faction-val-b {
+  text-shadow: 0 0 20px rgba(255, 0, 85, 0.8);
+}
+
+.faction-woc {
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  margin-top: 6px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.glitch-vs-box {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.glitch-vs-box .glitch {
+  font-size: 3rem;
+}
+
+.civil-war-tables-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.faction-table-card {
+  flex: 1 1 340px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.faction-table-a {
+  border: 1px solid rgba(0, 210, 255, 0.35);
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.05);
+}
+
+.faction-table-b {
+  border: 1px solid rgba(255, 0, 85, 0.35);
+  box-shadow: 0 0 20px rgba(255, 0, 85, 0.05);
+}
+
+/* Mobile Adjustments (<= 768px) */
+@media (max-width: 768px) {
+  .civil-war-container {
+    padding: 15px 4px !important;
+  }
+
+  .civil-war-target-selector {
+    margin-bottom: 24px;
+  }
+
+  .civil-war-target-box {
+    padding: 6px 12px;
+  }
+
+  .civil-war-target-label {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    margin: 0 8px 0 6px;
+  }
+
+  .civil-war-select {
+    font-size: 1.1rem;
+  }
+
+  .civil-war-versus-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    margin-bottom: 24px;
+    background: rgba(10, 15, 28, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 18px 12px;
+  }
+
+  .faction-title-a,
+  .faction-title-b {
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+  }
+
+  .faction-power-val {
+    font-size: 2.5rem;
+    margin: 4px 0;
+  }
+
+  .faction-woc {
+    font-size: 0.8rem;
+  }
+
+  .glitch-vs-box {
+    width: 100%;
+    height: 40px;
+    margin: -4px 0;
+  }
+
+  .glitch-vs-box .glitch {
+    font-size: 2rem;
+  }
+
+  .civil-war-tables-grid {
+    gap: 16px;
+  }
+
+  .faction-table-card {
+    padding: 12px 8px;
+    border-radius: 10px;
+  }
+}
+
+

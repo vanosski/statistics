@@ -113,123 +113,117 @@ export const CivilWarSuite: React.FC<CivilWarSuiteProps> = ({ kingdoms, players 
       
       {/* Massive Cyberpunk Header (Removed) */}
 
-      <div style={{ padding: '40px' }}>
+      <div className="civil-war-container">
         {civilWarKds.length === 0 ? (
           <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>No kingdoms currently flagged for Civil War.</div>
         ) : (
           <>
             {/* Target KD Selector */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '50px' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', background: '#09090b', border: '1px solid #27272a', padding: '10px 20px', borderRadius: '4px', boxShadow: '0 0 20px rgba(0,210,255,0.1)' }}>
-                <Crosshair size={20} color="#00d2ff" style={{ marginRight: '15px' }} />
-                <span style={{ color: '#94a3b8', textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px', marginRight: '20px' }}>Select Target:</span>
+            <div className="civil-war-target-selector">
+              <div className="civil-war-target-box">
+                <Crosshair size={20} color="#00d2ff" style={{ flexShrink: 0 }} />
+                <span className="civil-war-target-label">Select Target:</span>
                 <select 
                   value={selectedServer}
                   onChange={(e) => setSelectedServer(e.target.value)}
-                  style={{ background: 'transparent', color: '#00d2ff', border: 'none', outline: 'none', fontSize: '1.5rem', fontWeight: 900, fontFamily: 'Space Grotesk', cursor: 'pointer', textShadow: '0 0 10px rgba(0,210,255,0.5)' }}
+                  className="civil-war-select"
                 >
                   {civilWarKds.map(k => <option key={k.server} value={k.server}>{k.server}</option>)}
                 </select>
               </div>
             </div>
 
-          {/* Cyberpunk Versus Header */}
-          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '180px', marginBottom: '40px' }}>
-            
-            {/* Faction A Power */}
-            <div style={{ flex: 1, textAlign: 'center' }}>
-              <div style={{ fontSize: '1.2rem', color: '#00d2ff', textTransform: 'uppercase', letterSpacing: '4px', fontWeight: 800, textShadow: '0 0 10px rgba(0,210,255,0.8)' }}>Faction A Power</div>
-              <div style={{ fontSize: '4.5rem', fontWeight: 900, color: '#fff', fontFamily: 'Space Grotesk', lineHeight: 1, textShadow: '0 0 20px rgba(0,210,255,0.8)' }}>{statsA?.finalPower.toLocaleString() || 0}</div>
-              <div style={{ fontSize: '1rem', color: '#cbd5e1', marginTop: '10px' }}>WOC: <strong style={{ color: '#00d2ff' }}>{statsA?.woc?.name || '-'}</strong></div>
-            </div>
+            {/* Cyberpunk Versus Header */}
+            <div className="civil-war-versus-header">
+              {/* Faction A Power */}
+              <div className="faction-power-col faction-a">
+                <div className="faction-title-a">Faction A Power</div>
+                <div className="faction-power-val faction-val-a">{statsA?.finalPower.toLocaleString() || 0}</div>
+                <div className="faction-woc">WOC: <strong style={{ color: '#00d2ff', wordBreak: 'break-word' }}>{statsA?.woc?.name || '-'}</strong></div>
+              </div>
 
-            {/* Glitch VS Animation */}
-            <div style={{
-              width: '100px', height: '100px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              zIndex: 10
-            }}>
-              <div 
-                className="glitch"
-                data-text="VS"
-                style={{ fontSize: '4rem', zIndex: 11 }}
-              >
-                VS
+              {/* Glitch VS Animation */}
+              <div className="glitch-vs-box">
+                <div 
+                  className="glitch"
+                  data-text="VS"
+                >
+                  VS
+                </div>
+              </div>
+
+              {/* Faction B Power */}
+              <div className="faction-power-col faction-b">
+                <div className="faction-title-b">Faction B Power</div>
+                <div className="faction-power-val faction-val-b">{statsB?.finalPower.toLocaleString() || 0}</div>
+                <div className="faction-woc">WOC: <strong style={{ color: '#ff0055', wordBreak: 'break-word' }}>{statsB?.woc?.name || '-'}</strong></div>
               </div>
             </div>
 
-            {/* Faction B Power */}
-            <div style={{ flex: 1, textAlign: 'center' }}>
-              <div style={{ fontSize: '1.2rem', color: '#ff0055', textTransform: 'uppercase', letterSpacing: '4px', fontWeight: 800, textShadow: '0 0 10px rgba(255,0,85,0.8)' }}>Faction B Power</div>
-              <div style={{ fontSize: '4.5rem', fontWeight: 900, color: '#fff', fontFamily: 'Space Grotesk', lineHeight: 1, textShadow: '0 0 20px rgba(255,0,85,0.8)' }}>{statsB?.finalPower.toLocaleString() || 0}</div>
-              <div style={{ fontSize: '1rem', color: '#cbd5e1', marginTop: '10px' }}>WOC: <strong style={{ color: '#ff0055' }}>{statsB?.woc?.name || '-'}</strong></div>
-            </div>
-          </div>
-
-          {/* Side-by-Side Tables */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'flex-start' }}>
-            
-            {/* FACTION A TABLE */}
-            <div style={{ flex: '1 1 320px', minWidth: 0, background: 'rgba(15, 23, 42, 0.4)', borderRadius: '8px', border: '1px solid rgba(0, 210, 255, 0.3)', padding: '20px' }}>
-              <h3 style={{ margin: '0 0 16px 0', color: '#00d2ff', textAlign: 'center', letterSpacing: '2px' }}>TEAM A ({statsA?.count || 0}/25)</h3>
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                  <thead>
-                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                      <th style={{ padding: '10px', color: '#94a3b8' }}>Include</th>
-                      <th style={{ padding: '10px', color: '#94a3b8' }}>Player</th>
-                      <th style={{ padding: '10px', color: '#94a3b8' }}>Total Power</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {kdPlayers.map(p => {
-                      const isSelected = factionA.has(p.name);
-                      return (
-                        <tr key={p.name} onClick={() => toggleA(p.name)} style={{ cursor: 'pointer', background: isSelected ? 'rgba(0, 210, 255, 0.1)' : 'transparent', borderBottom: '1px solid rgba(255,255,255,0.05)', transition: 'background 0.2s' }}>
-                          <td style={{ padding: '10px' }}>
-                            <input type="checkbox" checked={isSelected} readOnly style={{ cursor: 'pointer', accentColor: '#00d2ff' }} />
-                          </td>
-                          <td style={{ padding: '10px', color: isSelected ? '#fff' : '#64748b' }}>{p.name}</td>
-                          <td style={{ padding: '10px', color: isSelected ? '#cbd5e1' : '#475569', fontFamily: 'monospace' }}>{p.total_pow.toLocaleString()}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+            {/* Side-by-Side Tables */}
+            <div className="civil-war-tables-grid">
+              
+              {/* FACTION A TABLE */}
+              <div className="faction-table-card faction-table-a">
+                <h3 style={{ margin: '0 0 16px 0', color: '#00d2ff', textAlign: 'center', letterSpacing: '2px', fontSize: '1.1rem' }}>TEAM A ({statsA?.count || 0}/25)</h3>
+                <div style={{ overflowX: 'auto', width: '100%' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '280px' }}>
+                    <thead>
+                      <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                        <th style={{ padding: '8px', color: '#94a3b8', fontSize: '0.8rem', width: '40px' }}>Inc</th>
+                        <th style={{ padding: '8px', color: '#94a3b8', fontSize: '0.8rem' }}>Player</th>
+                        <th style={{ padding: '8px', color: '#94a3b8', fontSize: '0.8rem', textAlign: 'right' }}>Total Power</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {kdPlayers.map(p => {
+                        const isSelected = factionA.has(p.name);
+                        return (
+                          <tr key={p.name} onClick={() => toggleA(p.name)} style={{ cursor: 'pointer', background: isSelected ? 'rgba(0, 210, 255, 0.1)' : 'transparent', borderBottom: '1px solid rgba(255,255,255,0.05)', transition: 'background 0.2s' }}>
+                            <td style={{ padding: '8px' }}>
+                              <input type="checkbox" checked={isSelected} readOnly style={{ cursor: 'pointer', accentColor: '#00d2ff' }} />
+                            </td>
+                            <td style={{ padding: '8px', color: isSelected ? '#fff' : '#64748b', fontSize: '0.88rem', fontWeight: 600, wordBreak: 'break-word' }}>{p.name}</td>
+                            <td style={{ padding: '8px', color: isSelected ? '#cbd5e1' : '#475569', fontFamily: 'monospace', fontSize: '0.88rem', textAlign: 'right' }}>{p.total_pow.toLocaleString()}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
 
-            {/* FACTION B TABLE */}
-            <div style={{ flex: '1 1 320px', minWidth: 0, background: 'rgba(15, 23, 42, 0.4)', borderRadius: '8px', border: '1px solid rgba(255, 0, 85, 0.3)', padding: '20px' }}>
-              <h3 style={{ margin: '0 0 16px 0', color: '#ff0055', textAlign: 'center', letterSpacing: '2px' }}>TEAM B ({statsB?.count || 0}/25)</h3>
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                  <thead>
-                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                      <th style={{ padding: '10px', color: '#94a3b8' }}>Include</th>
-                      <th style={{ padding: '10px', color: '#94a3b8' }}>Player</th>
-                      <th style={{ padding: '10px', color: '#94a3b8' }}>Total Power</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {kdPlayers.map(p => {
-                      const isSelected = factionB.has(p.name);
-                      return (
-                        <tr key={p.name} onClick={() => toggleB(p.name)} style={{ cursor: 'pointer', background: isSelected ? 'rgba(255, 0, 85, 0.1)' : 'transparent', borderBottom: '1px solid rgba(255,255,255,0.05)', transition: 'background 0.2s' }}>
-                          <td style={{ padding: '10px' }}>
-                            <input type="checkbox" checked={isSelected} readOnly style={{ cursor: 'pointer', accentColor: '#ff0055' }} />
-                          </td>
-                          <td style={{ padding: '10px', color: isSelected ? '#fff' : '#64748b' }}>{p.name}</td>
-                          <td style={{ padding: '10px', color: isSelected ? '#cbd5e1' : '#475569', fontFamily: 'monospace' }}>{p.total_pow.toLocaleString()}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+              {/* FACTION B TABLE */}
+              <div className="faction-table-card faction-table-b">
+                <h3 style={{ margin: '0 0 16px 0', color: '#ff0055', textAlign: 'center', letterSpacing: '2px', fontSize: '1.1rem' }}>TEAM B ({statsB?.count || 0}/25)</h3>
+                <div style={{ overflowX: 'auto', width: '100%' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '280px' }}>
+                    <thead>
+                      <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                        <th style={{ padding: '8px', color: '#94a3b8', fontSize: '0.8rem', width: '40px' }}>Inc</th>
+                        <th style={{ padding: '8px', color: '#94a3b8', fontSize: '0.8rem' }}>Player</th>
+                        <th style={{ padding: '8px', color: '#94a3b8', fontSize: '0.8rem', textAlign: 'right' }}>Total Power</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {kdPlayers.map(p => {
+                        const isSelected = factionB.has(p.name);
+                        return (
+                          <tr key={p.name} onClick={() => toggleB(p.name)} style={{ cursor: 'pointer', background: isSelected ? 'rgba(255, 0, 85, 0.1)' : 'transparent', borderBottom: '1px solid rgba(255,255,255,0.05)', transition: 'background 0.2s' }}>
+                            <td style={{ padding: '8px' }}>
+                              <input type="checkbox" checked={isSelected} readOnly style={{ cursor: 'pointer', accentColor: '#ff0055' }} />
+                            </td>
+                            <td style={{ padding: '8px', color: isSelected ? '#fff' : '#64748b', fontSize: '0.88rem', fontWeight: 600, wordBreak: 'break-word' }}>{p.name}</td>
+                            <td style={{ padding: '8px', color: isSelected ? '#cbd5e1' : '#475569', fontFamily: 'monospace', fontSize: '0.88rem', textAlign: 'right' }}>{p.total_pow.toLocaleString()}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
 
-          </div>
+            </div>
           </>
         )}
       </div>

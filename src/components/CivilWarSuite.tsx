@@ -1,15 +1,14 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import type { Player, KingdomSummary } from '../types/stats';
 import { KINGDOM_CONFIGS } from '../utils/kingdomRanking';
-import { Lock, Crosshair } from 'lucide-react';
+import { Crosshair } from 'lucide-react';
 
 interface CivilWarSuiteProps {
   kingdoms: KingdomSummary[];
   players: Player[];
-  isApproved: boolean;
 }
 
-export const CivilWarSuite: React.FC<CivilWarSuiteProps> = ({ kingdoms, players, isApproved }) => {
+export const CivilWarSuite: React.FC<CivilWarSuiteProps> = ({ kingdoms, players }) => {
 
 
   const civilWarKds = kingdoms.filter(k => KINGDOM_CONFIGS[k.server]?.isCivilWar);

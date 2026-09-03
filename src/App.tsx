@@ -286,7 +286,7 @@ export function App() {
       )} */}
 
       {currentView === 'civilwar' && (
-        <CivilWarSuite kingdoms={kingdoms} players={players} isApproved={isApproved} />
+        <CivilWarSuite kingdoms={kingdoms} players={players} />
       )}
 
       </main>

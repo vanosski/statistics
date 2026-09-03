@@ -21,8 +21,9 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
     'K91': { redSkills: 3, tierBadge: 'TIER A', badgeClass: 'bg-blue' },     // Rank 6
     'K170': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'bg-blue', customBuff: 0.03 }, // Rank 7
     'K138': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' },  // Rank 8
-    'K48': { redSkills: 4, tierBadge: 'TIER B', badgeClass: 'bg-purple' },   // Rank 9
-    'K88': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' }    // Rank 10
+    'K57': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' },   // Rank 9
+    'K48': { redSkills: 4, tierBadge: 'TIER B', badgeClass: 'bg-purple' },   // Rank 10
+    'K88': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' }    // Rank 11
   };
 
   const tierColors: Record<string, string> = {

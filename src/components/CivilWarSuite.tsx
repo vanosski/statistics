@@ -20,6 +20,7 @@ export const CivilWarSuite: React.FC<CivilWarSuiteProps> = ({ kingdoms, players 
 
   const [factionA, setFactionA] = useState<Set<string>>(new Set());
   const [factionB, setFactionB] = useState<Set<string>>(new Set());
+  const [mobileActiveTeam, setMobileActiveTeam] = useState<'A' | 'B'>('A');
 
   useEffect(() => {
     if (kdPlayers.length === 0) return;
@@ -160,12 +161,28 @@ export const CivilWarSuite: React.FC<CivilWarSuiteProps> = ({ kingdoms, players 
               </div>
             </div>
 
-            {/* Side-by-Side Tables */}
+            {/* Mobile Tab Switcher Slider */}
+            <div className="civil-war-mobile-switcher">
+              <button 
+                className={`cw-mobile-tab-btn ${mobileActiveTeam === 'A' ? 'active-a' : ''}`}
+                onClick={() => setMobileActiveTeam('A')}
+              >
+                TEAM A ({statsA?.count || 0}/25)
+              </button>
+              <button 
+                className={`cw-mobile-tab-btn ${mobileActiveTeam === 'B' ? 'active-b' : ''}`}
+                onClick={() => setMobileActiveTeam('B')}
+              >
+                TEAM B ({statsB?.count || 0}/25)
+              </button>
+            </div>
+
+            {/* Side-by-Side Tables (Sliding/Switchable on Mobile) */}
             <div className="civil-war-tables-grid">
               
               {/* FACTION A TABLE */}
-              <div className="faction-table-card faction-table-a">
-                <h3 style={{ margin: '0 0 16px 0', color: '#00d2ff', textAlign: 'center', letterSpacing: '2px', fontSize: '1.1rem' }}>TEAM A ({statsA?.count || 0}/25)</h3>
+              <div className={`faction-table-card faction-table-a ${mobileActiveTeam === 'A' ? 'mobile-visible' : 'mobile-hidden'}`}>
+                <h3 className="cw-table-heading cw-heading-a">TEAM A ({statsA?.count || 0}/25)</h3>
                 <div style={{ overflowX: 'auto', width: '100%' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '280px' }}>
                     <thead>
@@ -194,8 +211,8 @@ export const CivilWarSuite: React.FC<CivilWarSuiteProps> = ({ kingdoms, players 
               </div>
 
               {/* FACTION B TABLE */}
-              <div className="faction-table-card faction-table-b">
-                <h3 style={{ margin: '0 0 16px 0', color: '#ff0055', textAlign: 'center', letterSpacing: '2px', fontSize: '1.1rem' }}>TEAM B ({statsB?.count || 0}/25)</h3>
+              <div className={`faction-table-card faction-table-b ${mobileActiveTeam === 'B' ? 'mobile-visible' : 'mobile-hidden'}`}>
+                <h3 className="cw-table-heading cw-heading-b">TEAM B ({statsB?.count || 0}/25)</h3>
                 <div style={{ overflowX: 'auto', width: '100%' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '280px' }}>
                     <thead>

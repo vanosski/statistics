@@ -30,7 +30,7 @@ def calc_guard_power(row):
     troop_dmgr = abs(row.get('Troop DMG Recv', 0) or 0) * 100
     total_def_pool = (inf_def + troop_def) + (inf_hp + troop_hp) + 1.5 * (inf_prot_bless + troop_prot_bless)
     total_dmgr_pool = (inf_dmgr + troop_dmgr)
-    return math.ceil((total_def_pool * total_dmgr_pool) / 1000.0)
+    return math.ceil((total_def_pool * total_dmgr_pool) / 800.0)
 
 def calc_unit_power(row, unit_prefix):
     u_atk = (row.get(f'{unit_prefix} ATK', 0) or 0) * 100

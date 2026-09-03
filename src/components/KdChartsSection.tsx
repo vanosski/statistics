@@ -48,13 +48,26 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms, play
   const tierLabels = ['S++', 'S+', 'S', 'A', 'B', 'C', 'D'];
   const servers = kingdoms.map((k) => k.server);
 
-  // Stacked bar chart data for tiers
-  const tierDatasets = tierLabels.map((tier) => ({
-    label: tier,
-    data: kingdoms.map((k) => k.tiers[activeUnit]?.[tier as keyof typeof k.tiers[typeof activeUnit]] || 0),
-    backgroundColor: tierColors[tier],
-    borderRadius: 3
-  }));
+  // Stacked bar chart data for tiers (Percentage of Total Power)
+  const tierDatasets = tierLabels.map((tier) => {
+    return {
+      label: tier,
+      data: servers.map((server) => {
+        const kdPlayers = players.filter((p) => p.server === server);
+        // Safely access the power value dynamically
+        const totalUnitPower = kdPlayers.reduce((sum, p) => sum + ((p[activeUnit] as number) || 0), 0);
+        
+        if (totalUnitPower === 0) return 0;
+
+        const tierField = `${activeUnit}_tier` as keyof Player;
+        const tierPlayers = kdPlayers.filter((p) => p[tierField] === tier);
+        const tierPower = tierPlayers.reduce((sum, p) => sum + ((p[activeUnit] as number) || 0), 0);
+
+        return (tierPower / totalUnitPower) * 100;
+      }),
+      backgroundColor: tierColors[tier]
+    };
+  });
 
   const tierChartData = {
     labels: servers,
@@ -154,9 +167,18 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms, play
 
   const chartOptionsStacked = {
     ...baseOptions,
+    plugins: {
+      ...baseOptions.plugins,
+      tooltip: {
+        ...baseOptions.plugins.tooltip,
+        callbacks: {
+          label: (context: any) => `${context.dataset.label}: ${context.raw.toFixed(1)}%`
+        }
+      }
+    },
     scales: {
       x: { stacked: true, grid: { display: false }, ticks: { color: '#e2e8f0', font: { weight: 'bold' as const, family: 'Space Grotesk' } } },
-      y: { stacked: true, grid: { color: 'rgba(255, 255, 255, 0.04)' }, ticks: { color: '#64748b', font: { family: 'Space Grotesk' } } }
+      y: { stacked: true, max: 100, grid: { color: 'rgba(255, 255, 255, 0.04)' }, ticks: { color: '#64748b', font: { family: 'Space Grotesk' }, callback: (value: any) => `${value}%` } }
     }
   };
 
@@ -209,9 +231,14 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms, play
           {/* Chart 1 */}
           <div className="cyber-panel" style={{ padding: '20px', boxShadow: '0 16px 40px -12px rgba(0, 0, 0, 0.8), 0 0 20px rgba(99, 102, 241, 0.15)' }}>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: '#ec4899' }}>◈</span> Tier Composition
-              </h3>
+              <div>
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ color: '#ec4899' }}>◈</span> Tier Composition
+                </h3>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8', fontFamily: 'Space Grotesk' }}>
+                  Power Contribution (%)
+                </span>
+              </div>
               <div className="btn-group">
                 {(['total_pow', 'archer_pow', 'cav_pow', 'siege_pow'] as UnitPowType[]).map((unit) => (
                   <button key={unit} className={`btn-toggle ${activeUnit === unit ? 'active' : ''}`} onClick={() => setActiveUnit(unit)}>

@@ -10,15 +10,7 @@ interface CivilWarSuiteProps {
 }
 
 export const CivilWarSuite: React.FC<CivilWarSuiteProps> = ({ kingdoms, players, isApproved }) => {
-  if (!isApproved) {
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '60px 20px', color: '#f1f5f9' }}>
-        <Lock size={64} color="#ef4444" style={{ marginBottom: '20px' }} />
-        <h2 style={{ fontSize: '2rem', marginBottom: '10px' }}>Access Denied</h2>
-        <p style={{ color: '#94a3b8' }}>You must be logged in and approved to access Civil War analytics.</p>
-      </div>
-    );
-  }
+
 
   const civilWarKds = kingdoms.filter(k => KINGDOM_CONFIGS[k.server]?.isCivilWar);
   const [selectedServer, setSelectedServer] = useState<string>(civilWarKds[0]?.server || '');

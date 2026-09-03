@@ -151,14 +151,16 @@ for idx, r in df_master.iterrows():
 
 kd_chart_data = []
 for kd, grp in df_master.groupby('Server'):
-    avg_tot = int(grp['tot_pow'].mean())
-    avg_arc = int(grp['arc_pow'].mean())
-    avg_cav = int(grp['cav_pow'].mean())
-    avg_sg = int(grp['sg_pow'].mean())
+    grp_top25 = grp.sort_values('tot_pow', ascending=False).head(25)
+    
+    avg_tot = int(grp_top25['tot_pow'].mean())
+    avg_arc = int(grp_top25['arc_pow'].mean())
+    avg_cav = int(grp_top25['cav_pow'].mean())
+    avg_sg = int(grp_top25['sg_pow'].mean())
     
     def count_tiers(metric):
         counts = {'S++': 0, 'S+': 0, 'S': 0, 'A': 0, 'B': 0, 'C': 0, 'D': 0}
-        for _, pr in grp.iterrows():
+        for _, pr in grp_top25.iterrows():
             if metric == 'total_pow':
                 t, _ = get_tier_and_color(pr['tot_pow'], p_tot[3], p_tot[2], p_tot[1], p_tot[0], p_tot[4], p_tot[5])
             elif metric == 'archer_pow':
@@ -172,7 +174,7 @@ for kd, grp in df_master.groupby('Server'):
 
     kd_chart_data.append({
         'server': kd,
-        'count': len(grp),
+        'count': len(grp_top25),
         'avg_total': avg_tot,
         'avg_archer': avg_arc,
         'avg_cav': avg_cav,
@@ -185,8 +187,19 @@ for kd, grp in df_master.groupby('Server'):
         }
     })
 
+summary_cols = [
+    'name', 'server', 'total_pow', 'archer_pow', 'cav_pow', 'siege_pow',
+    'total_pow_tier', 'total_pow_color', 'archer_pow_tier', 'archer_pow_color',
+    'cav_pow_tier', 'cav_pow_color', 'siege_pow_tier', 'siege_pow_color',
+    'dgp', 'is_woc_leader', 'lethal'
+]
+public_players_list = [{k: p[k] for k in summary_cols if k in p} for p in players_list]
+
 with open('src/data/players.json', 'w') as f:
     json.dump(players_list, f, indent=2)
+
+with open('src/data/public_players.json', 'w') as f:
+    json.dump(public_players_list, f, indent=2)
 
 with open('src/data/kingdoms.json', 'w') as f:
     json.dump(kd_chart_data, f, indent=2)

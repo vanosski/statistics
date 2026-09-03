@@ -18,7 +18,8 @@ export const KINGDOM_CONFIGS: Record<string, KingdomRankingConfig> = {
   'K57': { redSkills: 2, tierBadge: 'TIER B', badgeClass: 'bg-purple' },
   'K138': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' },
   'K48': { redSkills: 4, tierBadge: 'TIER B', badgeClass: 'bg-purple' },
-  'K88': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' }
+  'K88': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' },
+  'K43': { redSkills: 2, tierBadge: 'TIER B', badgeClass: 'bg-purple' }
 };
 
 export function getRedSkillMultiplier(skills: number, customBuff?: number): number {

@@ -11,10 +11,12 @@ import {
   ChevronRight,
   Crosshair,
   Sparkles,
-  Users
+  Users,
+  Lock
 } from 'lucide-react';
 
 import { getRankedKingdoms } from '../utils/kingdomRanking';
+import { useAuth } from '../contexts/AuthContext';
 
 interface HomePageProps {
   kingdoms: KingdomSummary[];
@@ -31,6 +33,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   onOpenPlayer,
   onOpenKingdom
 }) => {
+  const { isApproved } = useAuth();
   // Top 5 Attackers
   const topAttackers = [...players].sort((a, b) => b.total_pow - a.total_pow).slice(0, 5);
   // Top 5 Guards
@@ -112,7 +115,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 boxShadow: '0 0 20px rgba(99, 102, 241, 0.4)'
               }}
             >
-              <Swords size={16} /> Compare Players
+              <Swords size={16} /> Compare Players {!isApproved && <Lock size={12} style={{ color: '#fbbf24', marginLeft: '4px' }} />}
             </button>
             <button
               onClick={() => onNavigate('kingdoms')}
@@ -148,7 +151,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 color: '#fff'
               }}
             >
-              <Table size={16} /> Player Table
+              <Table size={16} /> Player Table {!isApproved && <Lock size={12} style={{ color: '#fbbf24', marginLeft: '4px' }} />}
             </button>
           </div>
         </div>

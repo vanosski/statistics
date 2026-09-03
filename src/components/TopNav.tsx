@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import type { ViewMode } from '../types/stats';
-import { LayoutDashboard, BarChart2, Crown, Swords, Table } from 'lucide-react';
+import { LayoutDashboard, BarChart2, Crown, Swords, Table, Lock } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 interface TopNavProps {
   currentView: ViewMode;
@@ -8,6 +9,7 @@ interface TopNavProps {
 }
 
 export const TopNav: React.FC<TopNavProps> = ({ currentView, onSelectView }) => {
+  const { isApproved } = useAuth();
   const navRef = useRef<HTMLElement>(null);
   const activeBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -97,6 +99,9 @@ export const TopNav: React.FC<TopNavProps> = ({ currentView, onSelectView }) => 
                 </span>
                 <span className="nav-tab-label-full">{tab.label}</span>
                 <span className="nav-tab-label-short">{tab.shortLabel}</span>
+                {!isApproved && (tab.id === 'compare' || tab.id === 'table') && (
+                  <Lock size={11} style={{ color: '#fbbf24', marginLeft: '3px', opacity: 0.85 }} />
+                )}
               </button>
             );
           })}

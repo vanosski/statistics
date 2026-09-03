@@ -48,6 +48,11 @@ export function App() {
       const hash = window.location.hash.replace('#', '');
       const validViews = ['home', 'graphs', 'kingdoms', 'compare', 'table', 'login', 'privacy', 'terms'];
       if (validViews.includes(hash)) {
+        if (!isApproved && ['compare', 'table'].includes(hash)) {
+          setCurrentView('login');
+          window.location.hash = 'login';
+          return;
+        }
         setCurrentView(hash as ViewMode);
       } else if (hash === '') {
         setCurrentView('home');
@@ -56,7 +61,7 @@ export function App() {
     handleHash();
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
-  }, []);
+  }, [isApproved]);
 
   // If user is logged in with Google but NOT approved yet, send them to the approval request screen
   useEffect(() => {
@@ -68,6 +73,14 @@ export function App() {
     }
   }, [loading, session, isApproved, currentView]);
 
+  // If user is guest/unapproved and on a protected view, redirect to login
+  useEffect(() => {
+    if (!loading && !isApproved && ['compare', 'table'].includes(currentView)) {
+      setCurrentView('login');
+      window.location.hash = 'login';
+    }
+  }, [loading, isApproved, currentView]);
+
   // Auto-redirect out of login screen when approved
   useEffect(() => {
     if (isApproved && ['login', 'privacy', 'terms'].includes(currentView)) {
@@ -76,7 +89,7 @@ export function App() {
   }, [isApproved, currentView]);
 
   const navigateTo = (view: ViewMode) => {
-    if (!isApproved && ['table'].includes(view)) {
+    if (!isApproved && ['compare', 'table'].includes(view)) {
       window.location.hash = 'login';
       return;
     }
@@ -200,27 +213,35 @@ export function App() {
 
       {/* 3. Multi-Player Comparison View */}
       {currentView === 'compare' && (
-        <ComparisonSuite
-          allPlayers={players}
-          selectedPlayers={selectedPlayers}
-          onAddPlayer={handleAddPlayerTag}
-          onRemovePlayer={handleRemovePlayerTag}
-          onClearAll={handleClearAllTags}
-        />
+        isApproved ? (
+          <ComparisonSuite
+            allPlayers={players}
+            selectedPlayers={selectedPlayers}
+            onAddPlayer={handleAddPlayerTag}
+            onRemovePlayer={handleRemovePlayerTag}
+            onClearAll={handleClearAllTags}
+          />
+        ) : (
+          <Login />
+        )
       )}
 
       {/* 4. Complete Player Table View */}
       {currentView === 'table' && (
-        <PlayerTable
-          players={players}
-          selectedPlayerNames={selectedPlayerNames}
-          onAddPlayerTag={handleAddPlayerTag}
-          onRemovePlayerTag={handleRemovePlayerTag}
-          onClearAllTags={handleClearAllTags}
-          onOpenPlayerModal={handleOpenPlayerModal}
-          filters={tableFilters}
-          onFiltersChange={setTableFilters}
-        />
+        isApproved ? (
+          <PlayerTable
+            players={players}
+            selectedPlayerNames={selectedPlayerNames}
+            onAddPlayerTag={handleAddPlayerTag}
+            onRemovePlayerTag={handleRemovePlayerTag}
+            onClearAllTags={handleClearAllTags}
+            onOpenPlayerModal={handleOpenPlayerModal}
+            filters={tableFilters}
+            onFiltersChange={setTableFilters}
+          />
+        ) : (
+          <Login />
+        )
       )}
 
       </main>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Player, KingdomSummary, ViewMode, UnitPowType, TableFilters } from './types/stats';
 import rawPlayersData from './data/players.json';
 import kingdomsData from './data/kingdoms.json';
+import { supabase } from './lib/supabase';
 
 import { Header } from './components/Header';
 import { TopNav } from './components/TopNav';
@@ -19,20 +20,67 @@ import { Login } from './components/Login';
 export function App() {
   const { session, loading, isApproved } = useAuth();
   
-  const rawPlayers = rawPlayersData as Player[];
+  const rawPlayersInitial = rawPlayersData as Player[];
   
-  // Disambiguate duplicate names
-  const seenNames = new Set<string>();
-  const duplicateNames = new Set<string>();
-  rawPlayers.forEach(p => {
-    if (seenNames.has(p.name)) duplicateNames.add(p.name);
-    seenNames.add(p.name);
+  const [players, setPlayers] = useState<Player[]>(() => {
+    const seenNames = new Set<string>();
+    const duplicateNames = new Set<string>();
+    rawPlayersInitial.forEach(p => {
+      if (seenNames.has(p.name)) duplicateNames.add(p.name);
+      seenNames.add(p.name);
+    });
+    return rawPlayersInitial.map(p => ({
+      ...p,
+      name: duplicateNames.has(p.name) ? `${p.name} (${p.server})` : p.name
+    }));
   });
-  
-  const players = rawPlayers.map(p => ({
-    ...p,
-    name: duplicateNames.has(p.name) ? `${p.name} (${p.server})` : p.name
-  }));
+
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const { data: summaryData, error: summaryError } = await supabase
+          .from('players_summary')
+          .select('*');
+          
+        if (summaryError) throw summaryError;
+        if (!summaryData || summaryData.length === 0) return; // use fallback
+
+        let detailedData: any[] = [];
+        if (isApproved) {
+          const { data: detData, error: detError } = await supabase
+            .from('players_detailed')
+            .select('*');
+            
+          if (!detError && detData) {
+            detailedData = detData;
+          }
+        }
+
+        const merged = summaryData.map(sum => {
+          const det = detailedData.find(d => d.name === sum.name && d.server === sum.server) || {};
+          return { ...sum, ...det };
+        });
+
+        const seenNames = new Set<string>();
+        const duplicateNames = new Set<string>();
+        merged.forEach(p => {
+          if (seenNames.has(p.name)) duplicateNames.add(p.name);
+          seenNames.add(p.name);
+        });
+        
+        const finalPlayers = merged.map(p => ({
+          ...p,
+          name: duplicateNames.has(p.name) ? `${p.name} (${p.server})` : p.name
+        }));
+
+        setPlayers(finalPlayers as Player[]);
+      } catch (err) {
+        console.error("Error fetching players from Supabase, falling back to local JSON", err);
+      }
+    };
+
+    fetchPlayers();
+  }, [isApproved]);
 
   const kingdoms = kingdomsData as KingdomSummary[];
 

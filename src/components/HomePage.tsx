@@ -46,6 +46,7 @@ export const HomePage: React.FC<HomePageProps> = ({
     'K176': { redSkills: 1 },
     'K91': { redSkills: 3 },
     'K170': { redSkills: 1, customBuff: 0.03 },
+    'K57': { redSkills: 2 },
     'K138': { redSkills: 1 },
     'K88': { redSkills: 1 },
     'K48': { redSkills: 4 }

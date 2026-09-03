@@ -101,7 +101,7 @@ export const TopNav: React.FC<TopNavProps> = ({ currentView, onSelectView }) => 
                 </span>
                 <span className="nav-tab-label-full">{tab.label}</span>
                 <span className="nav-tab-label-short">{tab.shortLabel}</span>
-                {!isApproved && (tab.id === 'table' || tab.id === 'civilwar') && (
+                {!isApproved && tab.id === 'table' && (
                   <Lock size={11} style={{ color: '#fbbf24', marginLeft: '3px', opacity: 0.85 }} />
                 )}
               </button>

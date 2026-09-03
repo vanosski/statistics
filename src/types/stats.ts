@@ -96,7 +96,7 @@ export interface KingdomSummary {
   };
 }
 
-export type ViewMode = 'home' | 'graphs' | 'kingdoms' | 'compare' | 'table' | 'login' | 'privacy' | 'terms';
+export type ViewMode = 'home' | 'graphs' | 'kingdoms' | 'compare' | 'table' | 'login' | 'privacy' | 'terms' | 'simulator' | 'civilwar';
 export type UnitPowType = 'total_pow' | 'archer_pow' | 'cav_pow' | 'siege_pow';
 export type CompMetricType = 'powers' | 'guard_pool' | 'attack_dmg';
 

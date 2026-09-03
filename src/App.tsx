@@ -11,6 +11,7 @@ import { KdChartsSection } from './components/KdChartsSection';
 import { KingdomGrid } from './components/KingdomGrid';
 import { ComparisonSuite } from './components/ComparisonSuite';
 import { PlayerTable } from './components/PlayerTable';
+import { CivilWarSuite } from './components/CivilWarSuite';
 // import { KingdomSimulator } from './components/KingdomSimulator';
 import { KingdomModal } from './components/KingdomModal';
 import { PlayerModal } from './components/PlayerModal';
@@ -86,7 +87,7 @@ export function App() {
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.replace('#', '');
-      const validViews = ['home', 'graphs', 'kingdoms', 'compare', 'table', 'login', 'privacy', 'terms', 'simulator'];
+      const validViews = ['home', 'graphs', 'kingdoms', 'compare', 'table', 'login', 'privacy', 'terms', 'simulator', 'civilwar'];
       if (validViews.includes(hash)) {
         if (!isApproved && ['table'].includes(hash)) {
           setCurrentView('login');
@@ -283,6 +284,10 @@ export function App() {
       {/* {currentView === 'simulator' && (
         <KingdomSimulator kingdoms={kingdoms} players={players} isApproved={isApproved} />
       )} */}
+
+      {currentView === 'civilwar' && (
+        <CivilWarSuite kingdoms={kingdoms} players={players} isApproved={isApproved} />
+      )}
 
       </main>
 

@@ -767,5 +767,21 @@ h1, h2, h3, h4 {
   }
 }
 
+/* Custom Scrollbar for horizontal scrolling containers */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
 
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(13, 19, 36, 0.4);
+  border-radius: 4px;
+}
 
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.5);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.8);
+}

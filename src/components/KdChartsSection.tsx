@@ -247,8 +247,10 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms, play
                 ))}
               </div>
             </div>
-            <div style={{ height: '300px', position: 'relative' }}>
-              <Bar data={tierChartData} options={chartOptionsStacked} />
+            <div className="custom-scrollbar" style={{ overflowX: 'auto', overflowY: 'hidden', paddingBottom: '8px' }}>
+              <div style={{ height: '300px', minWidth: `${Math.max(kingdoms.length * 45, 400)}px`, position: 'relative' }}>
+                <Bar data={tierChartData} options={chartOptionsStacked} />
+              </div>
             </div>
           </div>
 
@@ -262,8 +264,10 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms, play
                 Top 3 vs Rest (%)
               </span>
             </div>
-            <div style={{ height: '300px', position: 'relative' }}>
-              <Bar data={whaleChartData} options={whaleOptions} />
+            <div className="custom-scrollbar" style={{ overflowX: 'auto', overflowY: 'hidden', paddingBottom: '8px' }}>
+              <div style={{ height: '300px', minWidth: `${Math.max(kingdoms.length * 45, 400)}px`, position: 'relative' }}>
+                <Bar data={whaleChartData} options={whaleOptions} />
+              </div>
             </div>
           </div>
 
@@ -288,8 +292,10 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms, play
               ))}
             </div>
           </div>
-          <div style={{ height: '320px', position: 'relative' }}>
-            <Bar data={strengthChartData} options={strengthOptions} />
+          <div className="custom-scrollbar" style={{ overflowX: 'auto', overflowY: 'hidden', paddingBottom: '8px' }}>
+            <div style={{ height: '320px', minWidth: `${Math.max(kingdoms.length * (activeStrengthView === 'All' ? 80 : 45), 500)}px`, position: 'relative' }}>
+              <Bar data={strengthChartData} options={strengthOptions} />
+            </div>
           </div>
         </div>
 

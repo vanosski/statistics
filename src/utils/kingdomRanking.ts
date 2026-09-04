@@ -36,6 +36,7 @@ export function getRedSkillMultiplier(skills: number, customBuff?: number): numb
 export interface RankedKingdom extends KingdomSummary {
   rank: number;
   config: KingdomRankingConfig;
+  activeRedSkills: number;
   wocLeader: Player | null;
   guardPower: number;
   redBonus: number;
@@ -68,7 +69,11 @@ export function getRankedKingdoms(kingdoms: KingdomSummary[], players: Player[])
     return {
       ...kd,
       rank: 0,
-      config,
+      config: {
+        ...config,
+        redSkills: activeRedSkills
+      },
+      activeRedSkills,
       wocLeader,
       guardPower,
       redBonus,

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BarChart2 } from 'lucide-react';
 import type { KingdomSummary, UnitPowType, Player } from '../types/stats';
 import {
   Chart as ChartJS,
@@ -215,7 +216,9 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms, play
   return (
     <div style={{ width: '100%', maxWidth: '1400px', marginBottom: '32px' }} className="animate-fade-in">
       <div className="section-title">
-        <span>📊 KD Benchmarks & Graphs</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <BarChart2 size={24} color="#818cf8" /> KD Benchmarks & Graphs
+        </span>
       </div>
 
       <div

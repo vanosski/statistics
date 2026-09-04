@@ -94,8 +94,18 @@ export const CivilWarSuite: React.FC<CivilWarSuiteProps> = ({ kingdoms, players 
     const count = roster.length;
     const avgTotal = Math.round(sumTotal / count);
     
-    const conf = KINGDOM_CONFIGS[selectedServer] || { redSkills: 0 };
-    const redBonus = conf.customBuff !== undefined ? conf.customBuff : (conf.redSkills > 0 ? 0.04 + (conf.redSkills - 1) * 0.01 : 0);
+    const conf = KINGDOM_CONFIGS[selectedServer] || ({ redSkills: 1 } as typeof KINGDOM_CONFIGS[string]);
+    
+    let activeRedSkills = conf.redSkills;
+    if (selectedServer === 'K27' && woc) {
+      if (woc.name.includes('X-')) {
+        activeRedSkills = 4;
+      } else if (woc.name.toLowerCase().includes('avenok')) {
+        activeRedSkills = 1;
+      }
+    }
+    
+    const redBonus = conf.customBuff !== undefined ? conf.customBuff : (activeRedSkills > 0 ? 0.04 + (activeRedSkills - 1) * 0.01 : 0);
     const finalPower = Math.round((avgTotal + (maxDgp * 0.85)) * (1 + redBonus));
 
     return {

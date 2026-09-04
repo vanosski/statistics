@@ -45,7 +45,7 @@ export interface RankedKingdom extends KingdomSummary {
 export function getRankedKingdoms(kingdoms: KingdomSummary[], players: Player[]): RankedKingdom[] {
   const calculated = kingdoms.map((kd) => {
     const config = KINGDOM_CONFIGS[kd.server] || {
-      redSkills: 0,
+      redSkills: 1,
       tierBadge: 'TIER C',
       badgeClass: 'bg-purple',
       customBuff: undefined

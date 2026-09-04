@@ -22,7 +22,9 @@ export const KINGDOM_CONFIGS: Record<string, KingdomRankingConfig> = {
   'K138': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'bg-blue' },
   'K43': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'bg-blue', isCivilWar: true },
   'K48': { redSkills: 4, tierBadge: 'TIER B', badgeClass: 'bg-purple' },
-  'K88': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' }
+  'K88': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' },
+  'K27': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'bg-blue', isCivilWar: true },
+  'K162': { redSkills: 5, tierBadge: 'TIER S', badgeClass: 'bg-emerald', isCivilWar: false }
 };
 
 export function getRedSkillMultiplier(skills: number, customBuff?: number): number {
@@ -50,7 +52,17 @@ export function getRankedKingdoms(kingdoms: KingdomSummary[], players: Player[])
     };
     const wocLeader = players.find((p) => p.server === kd.server && p.is_woc_leader) || null;
     const guardPower = wocLeader ? wocLeader.dgp : 0;
-    const redBonus = getRedSkillMultiplier(config.redSkills, config.customBuff);
+
+    let activeRedSkills = config.redSkills;
+    if (kd.server === 'K27' && wocLeader) {
+      if (wocLeader.name.includes('X-')) {
+        activeRedSkills = 4;
+      } else if (wocLeader.name.toLowerCase().includes('avenok')) {
+        activeRedSkills = 1;
+      }
+    }
+
+    const redBonus = getRedSkillMultiplier(activeRedSkills, config.customBuff);
     const finalKingdomPower = Math.round((kd.avg_total + (guardPower * 0.85)) * (1 + redBonus));
 
     return {

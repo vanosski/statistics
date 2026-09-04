@@ -38,27 +38,31 @@ export const CivilWarSuite: React.FC<CivilWarSuiteProps> = ({ kingdoms, players 
     const tagA = sortedTags[0] || 'A';
     const tagB = sortedTags[1] || 'B';
 
-    const wocLeader = kdPlayers.reduce((prev, curr) => (curr.dgp > prev.dgp ? curr : prev), kdPlayers[0]);
-
     const nextA = new Set<string>();
     const nextB = new Set<string>();
 
-    kdPlayers.forEach(p => {
-      const match = p.name.match(/^\((.*?)\)/);
-      const tag = match ? match[1] : null;
-
-      if (p.name === wocLeader.name) {
-        nextA.add(p.name);
-        nextB.add(p.name);
-      } else if (tag === tagA) {
-        nextA.add(p.name);
-      } else if (tag === tagB) {
-        nextB.add(p.name);
-      } else {
-        if (nextA.size <= nextB.size) nextA.add(p.name);
+    if (Object.keys(tagCounts).length === 0) {
+      // Kingdoms with no tags (like K91): alternate draft sorted by power
+      kdPlayers.forEach((p, idx) => {
+        if (idx % 2 === 0) nextA.add(p.name);
         else nextB.add(p.name);
-      }
-    });
+      });
+    } else {
+      // Kingdoms with tags: place into their respective alliance team, unaligned split evenly
+      kdPlayers.forEach(p => {
+        const match = p.name.match(/^\((.*?)\)/);
+        const tag = match ? match[1] : null;
+
+        if (tag === tagA) {
+          nextA.add(p.name);
+        } else if (tag === tagB) {
+          nextB.add(p.name);
+        } else {
+          if (nextA.size <= nextB.size) nextA.add(p.name);
+          else nextB.add(p.name);
+        }
+      });
+    }
 
     setFactionA(nextA);
     setFactionB(nextB);

@@ -119,6 +119,17 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
   const [sortAsc, setSortAsc] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
+  // Dynamically extract all servers/kingdoms present in the roster and sort them naturally (e.g. K27, K43, K48...)
+  const availableServers = React.useMemo(() => {
+    const set = new Set(players.map((p) => p.server).filter(Boolean));
+    return Array.from(set).sort((a, b) => {
+      const numA = parseInt(a.replace(/\D/g, ''), 10);
+      const numB = parseInt(b.replace(/\D/g, ''), 10);
+      if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+      return a.localeCompare(b);
+    });
+  }, [players]);
+
   // Suggestions for autocomplete
   const currentToken = searchTerm.split(',').pop()?.trim().toLowerCase() || '';
   const suggestions =
@@ -417,7 +428,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
             <MultiSelectDropdown
               label="Kingdoms"
-              options={['K54', 'K197', 'K116', 'K60', 'K176', 'K91', 'K170', 'K138', 'K88', 'K48']}
+              options={availableServers}
               selected={filters.servers}
               onToggle={(s) => toggleFilter('servers', s)}
             />

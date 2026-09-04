@@ -31,7 +31,7 @@ def chunked(lst, n):
         yield lst[i:i + n]
 
 def upsert_to_supabase(table, data):
-    url = f"{SUPABASE_URL}/rest/v1/{table}"
+    url = f"{SUPABASE_URL}/rest/v1/{table}?on_conflict=name,server"
     headers = {
         'apikey': SUPABASE_KEY,
         'Authorization': f'Bearer {SUPABASE_KEY}',
@@ -68,17 +68,13 @@ detailed_data = []
 for p in players:
     s_row = {k: p.get(k) for k in summary_cols}
     
-    # Extract detailed fields
+# Extract detailed fields
     d_row = {k: v for k, v in p.items() if k not in summary_cols}
     # name and server must be present in detailed_data to link them and satisfy constraints
     d_row['name'] = p['name']
     d_row['server'] = p['server']
     
-    summary_data.append(s_row)
     detailed_data.append(d_row)
-
-print("Upserting summary data...")
-upsert_to_supabase('players_summary', summary_data)
 
 print("Upserting detailed data...")
 upsert_to_supabase('players_detailed', detailed_data)

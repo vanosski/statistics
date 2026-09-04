@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { Player, CompMetricType } from '../types/stats';
 import { Radar, Bar } from 'react-chartjs-2';
-import { Search, ChevronDown, X, Trash2, CheckSquare, Square, Eye, EyeOff, Shield, Crosshair, Zap, Mountain, Swords, Crown, Target, Hexagon, Lock } from 'lucide-react';
+import { Search, ChevronDown, X, Trash2, CheckSquare, Square, Eye, EyeOff, Shield, Crosshair, Zap, Mountain, Swords, Crown, Target, Hexagon, Lock, BarChart2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 interface ComparisonSuiteProps {
@@ -691,7 +691,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                   alignItems: 'center'
                 }}
               >
-                <h3 style={{ fontSize: '1.05rem', color: '#fff', fontWeight: 800 }}>📊 Head-to-Head Comparison</h3>
+                <h3 style={{ fontSize: '1.05rem', color: '#fff', fontWeight: 800 }}><BarChart2 size={18} style={{ display: 'inline', marginBottom: '-2px', color: '#38bdf8' }} /> Head-to-Head Comparison</h3>
                 <div className="btn-group" style={{ maxWidth: '100%' }}>
                   {(['powers', 'guard_pool', 'attack_dmg'] as CompMetricType[]).map((m) => (
                     <button

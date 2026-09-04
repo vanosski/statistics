@@ -413,18 +413,28 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms, play
               </span>
             </div>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
               <button
                 className={`btn-toggle ${sortStrongestToWeakest ? 'active' : ''}`}
                 onClick={() => setSortStrongestToWeakest(!sortStrongestToWeakest)}
                 title="Toggle sorting from strongest to weakest"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  flex: 'none',
+                  padding: '6px 12px',
+                  border: '1px solid rgba(99, 102, 241, 0.3)',
+                  background: sortStrongestToWeakest ? 'linear-gradient(135deg, #6366f1, #4f46e5)' : 'rgba(10, 15, 28, 0.85)',
+                  color: sortStrongestToWeakest ? '#fff' : 'var(--text-muted)',
+                  boxShadow: sortStrongestToWeakest ? '0 0 12px rgba(99, 102, 241, 0.4)' : 'none'
+                }}
               >
                 <ArrowDownUp size={13} />
                 {sortStrongestToWeakest ? 'Sorted: Strongest' : 'Sort: Default'}
               </button>
 
-              <div className="btn-group">
+              <div className="btn-group" style={{ width: 'auto', flex: 'none', margin: 0 }}>
                 {(['All', 'Total', 'Archer', 'Cav', 'Siege'] as const).map((view) => (
                   <button
                     key={view}
@@ -456,18 +466,28 @@ export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms, play
               </span>
             </div>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
               <button
                 className={`btn-toggle ${sortTop10Strongest ? 'active' : ''}`}
                 onClick={() => setSortTop10Strongest(!sortTop10Strongest)}
                 title="Toggle sorting from strongest to weakest"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  flex: 'none',
+                  padding: '6px 12px',
+                  border: '1px solid rgba(168, 85, 247, 0.4)',
+                  background: sortTop10Strongest ? 'linear-gradient(135deg, #a855f7, #7c3aed)' : 'rgba(10, 15, 28, 0.85)',
+                  color: sortTop10Strongest ? '#fff' : 'var(--text-muted)',
+                  boxShadow: sortTop10Strongest ? '0 0 12px rgba(168, 85, 247, 0.4)' : 'none'
+                }}
               >
                 <ArrowDownUp size={13} />
                 {sortTop10Strongest ? 'Sorted: Strongest' : 'Sort: Default'}
               </button>
 
-              <div className="btn-group">
+              <div className="btn-group" style={{ width: 'auto', flex: 'none', margin: 0 }}>
                 {(['All', 'Total', 'Archer', 'Cav', 'Siege'] as const).map((view) => (
                   <button
                     key={view}

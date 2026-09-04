@@ -1178,25 +1178,6 @@
     "lethal": 21.0
   },
   {
-    "name": "\u4e0d\u53ef\u76fe\u53f7",
-    "server": "K116",
-    "total_pow": 945,
-    "archer_pow": 637,
-    "cav_pow": 178,
-    "siege_pow": 130,
-    "total_pow_tier": "D",
-    "total_pow_color": "#475569",
-    "archer_pow_tier": "D",
-    "archer_pow_color": "#475569",
-    "cav_pow_tier": "D",
-    "cav_pow_color": "#475569",
-    "siege_pow_tier": "D",
-    "siege_pow_color": "#475569",
-    "dgp": 617,
-    "is_woc_leader": false,
-    "lethal": 12.0
-  },
-  {
     "name": "\u5149\u4e4b\u4f7f\u8005",
     "server": "K116",
     "total_pow": 6247,

@@ -785,3 +785,31 @@ h1, h2, h3, h4 {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(99, 102, 241, 0.8);
 }
+
+/* Comparison Table Responsive Styling */
+.comp-table {
+  font-size: 0.86rem;
+}
+.comp-th, .comp-td {
+  padding: 12px 16px;
+}
+.comp-th.attr-col {
+  width: 35%;
+}
+
+@media (max-width: 600px) {
+  .comp-table {
+    font-size: 0.72rem;
+  }
+  .comp-th, .comp-td {
+    padding: 8px 6px;
+  }
+  .comp-th.attr-col {
+    width: 30%;
+  }
+  .comp-td.comp-cat-header {
+    font-size: 0.7rem;
+    padding: 8px 6px;
+  }
+}
+

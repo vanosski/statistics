@@ -758,18 +758,17 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                   border: '1px solid rgba(255, 255, 255, 0.08)'
                 }}
               >
-              <table style={{ width: '100%', minWidth: '600px', borderCollapse: 'collapse', fontSize: '0.86rem' }}>
+              <table className="comp-table" style={{ width: '100%', minWidth: selectedPlayers.length > 2 ? '600px' : '100%', borderCollapse: 'collapse' }}>
                 <thead>
                   <tr>
                     <th
+                      className="comp-th attr-col"
                       style={{
                         background: 'rgba(20, 29, 53, 0.95)',
-                        padding: '14px 16px',
                         textAlign: 'left',
                         color: '#94a3b8',
                         fontWeight: 700,
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                        width: '35%'
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
                       }}
                     >
                       Attribute / Metric
@@ -779,9 +778,9 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                       return (
                         <th
                           key={p.name}
+                          className="comp-th player-col"
                           style={{
                             background: 'rgba(20, 29, 53, 0.95)',
-                            padding: '14px 16px',
                             borderTop: `3px solid ${col.solid}`,
                             borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
                             borderLeft: '1px solid rgba(255, 255, 255, 0.06)',
@@ -821,16 +820,14 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                       <tr>
                         <td
                           colSpan={selectedPlayers.length + 1}
+                          className="comp-td comp-cat-header"
                           style={{
-                            background: 'linear-gradient(90deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.8) 100%)',
-                            color: '#c7d2fe',
+                            background: 'rgba(30, 41, 59, 0.5)',
+                            borderTop: idx !== 0 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                            borderBottom: '1px solid rgba(255,255,255,0.06)',
+                            color: '#e2e8f0',
                             fontWeight: 800,
-                            fontSize: '0.82rem',
-                            padding: '10px 16px',
-                            borderLeft: '4px solid #6366f1',
-                            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-                            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                            letterSpacing: '0.02em',
+                            letterSpacing: '1px',
                             textTransform: 'uppercase'
                           }}
                         >
@@ -858,11 +855,11 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                             }}
                           >
                             <td
+                              className="comp-td attr-col"
                               style={{
                                 color: '#cbd5e1',
-                                padding: '9px 16px',
-                                fontWeight: 500,
-                                fontSize: '0.85rem'
+                                fontWeight: 700,
+                                borderBottom: '1px solid rgba(255, 255, 255, 0.03)'
                               }}
                             >
                               {row.label}
@@ -882,10 +879,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                               return (
                                 <td
                                   key={p.name}
-                                  style={{
-                                    padding: '9px 16px',
-                                    borderLeft: '1px solid rgba(255, 255, 255, 0.04)'
-                                  }}
+                                  className="comp-td"
                                 >
                                   {isWinner ? (
                                     <span

@@ -790,7 +790,7 @@ export const ComparisonSuite: React.FC<ComparisonSuiteProps> = ({
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
                               <div style={{ color: '#fff', fontWeight: 800, fontSize: '0.95rem' }}>{p.name}</div>
-                              <span style={{ fontSize: '0.72rem', color: col.solid, fontWeight: 700 }}>Kingdom {p.server}</span>
+                              <span style={{ fontSize: '0.72rem', color: col.solid, fontWeight: 700 }}>{p.server}</span>
                             </div>
                             <button
                               onClick={() => onRemovePlayer(p.name)}

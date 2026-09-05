@@ -324,10 +324,10 @@
   {
     "server": "K27",
     "count": 25,
-    "avg_total": 4024,
-    "avg_archer": 1649,
-    "avg_cav": 1479,
-    "avg_siege": 895,
+    "avg_total": 4019,
+    "avg_archer": 1652,
+    "avg_cav": 1474,
+    "avg_siege": 893,
     "tiers": {
       "total_pow": {
         "S++": 0,

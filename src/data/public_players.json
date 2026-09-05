@@ -6785,10 +6785,10 @@
   {
     "name": "(LoK)Avenok",
     "server": "K27",
-    "total_pow": 5742,
-    "archer_pow": 1731,
-    "cav_pow": 2377,
-    "siege_pow": 1634,
+    "total_pow": 5622,
+    "archer_pow": 1806,
+    "cav_pow": 2254,
+    "siege_pow": 1562,
     "total_pow_tier": "S",
     "total_pow_color": "#10b981",
     "archer_pow_tier": "A",
@@ -6797,7 +6797,7 @@
     "cav_pow_color": "#10b981",
     "siege_pow_tier": "S",
     "siege_pow_color": "#10b981",
-    "dgp": 1988,
+    "dgp": 1987,
     "is_woc_leader": false,
     "lethal": 25.0
   },

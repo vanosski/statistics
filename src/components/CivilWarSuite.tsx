@@ -11,7 +11,7 @@ interface CivilWarSuiteProps {
 export const CivilWarSuite: React.FC<CivilWarSuiteProps> = ({ kingdoms, players }) => {
 
 
-  const civilWarKds = kingdoms.filter(k => KINGDOM_CONFIGS[k.server]?.isCivilWar && k.server !== 'K91' && k.server !== 'K191');
+  const civilWarKds = kingdoms;
   const [selectedServer, setSelectedServer] = useState<string>(civilWarKds[0]?.server || '');
 
   const kdPlayers = useMemo(() => {

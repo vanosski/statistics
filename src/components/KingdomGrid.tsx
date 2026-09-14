@@ -79,25 +79,25 @@ export const KingdomGrid: React.FC<KingdomGridProps> = ({ kingdoms, players, onO
                 e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              {/* Header: Rank + Kingdom Name + Tier Badge */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {/* Header: Rank + Kingdom Name + Badges */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                   <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#64748b' }}>#{kd.rank}</span>
-                  <span style={{ fontFamily: 'Space Grotesk', fontSize: '1.4rem', fontWeight: 800, color: '#f1f5f9' }}>
+                  <span style={{ fontFamily: 'Space Grotesk', fontSize: '1.35rem', fontWeight: 800, color: '#f1f5f9' }}>
                     {kd.server}
                   </span>
                   {cfg.redSkills > 0 && (
-                    <span style={{ display: 'flex', alignItems: 'center', fontSize: '0.7rem', color: '#ef4444', background: 'rgba(239, 68, 68, 0.15)', padding: '2px 8px', borderRadius: '4px' }}>
-                      <Flame size={14} color="#ef4444" style={{ marginRight: '4px', filter: 'drop-shadow(0 0 4px rgba(239,68,68,0.8))' }} /> {cfg.redSkills} Red
+                    <span style={{ display: 'inline-flex', alignItems: 'center', fontSize: '0.7rem', color: '#ef4444', background: 'rgba(239, 68, 68, 0.15)', padding: '2px 7px', borderRadius: '4px', whiteSpace: 'nowrap' }}>
+                      <Flame size={13} color="#ef4444" style={{ marginRight: '3px', filter: 'drop-shadow(0 0 4px rgba(239,68,68,0.8))' }} /> {cfg.redSkills} Red
                     </span>
                   )}
                   {cfg.isCivilWar && (
-                    <span style={{ display: 'flex', alignItems: 'center', fontSize: '0.7rem', color: '#ef4444', background: 'rgba(239, 68, 68, 0.15)', padding: '2px 8px', borderRadius: '4px' }}>
-                      <Swords size={14} color="#ef4444" style={{ marginRight: '4px', filter: 'drop-shadow(0 0 4px rgba(239,68,68,0.8))' }} /> Civil War
+                    <span style={{ display: 'inline-flex', alignItems: 'center', fontSize: '0.7rem', color: '#ef4444', background: 'rgba(239, 68, 68, 0.15)', padding: '2px 7px', borderRadius: '4px', whiteSpace: 'nowrap' }}>
+                      <Swords size={13} color="#ef4444" style={{ marginRight: '3px', filter: 'drop-shadow(0 0 4px rgba(239,68,68,0.8))' }} /> Civil War
                     </span>
                   )}
                 </div>
-                <span className={`badge-tier ${cfg.badgeClass}`} style={{ fontSize: '0.72rem', padding: '4px 10px', borderRadius: '12px' }}>
+                <span className={`badge-tier ${cfg.badgeClass}`} style={{ fontSize: '0.72rem', padding: '4px 10px', borderRadius: '12px', whiteSpace: 'nowrap', flexShrink: 0, marginLeft: 'auto' }}>
                   {cfg.tierBadge}
                 </span>
               </div>

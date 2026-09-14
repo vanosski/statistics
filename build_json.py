@@ -50,7 +50,21 @@ def calc_unit_power(row, unit_prefix):
     base_pool = (u_atk + t_atk) + 1.5 * (u_atk_b + t_atk_b)
     support_pool = 0.5 * ((u_def + t_def) + (u_hp + t_hp) + 1.5 * (u_prot_b + t_prot_b))
     mult_pool = (u_dmg + t_dmg) + 0.5 * (u_dmgr + t_dmgr)
-    return math.ceil(((base_pool + support_pool) * mult_pool) / 1000.0)
+    raw_power = ((base_pool + support_pool) * mult_pool) / 1000.0
+    
+    # Lethal scaling test:
+    # Scale Archer power by 1% to 8% based on lethal % (1% at 4% lethal, 8% at 28% lethal)
+    # Scale Cav & Siege power by 1% to 5% based on lethal % (1% at 4% lethal, 5% at 28% lethal)
+    lethal_val = (row.get('Lethal %', 0) or 0) * 100.0
+    clamped_lethal = max(4.0, min(28.0, lethal_val))
+    fraction = (clamped_lethal - 4.0) / (28.0 - 4.0)
+    
+    if unit_prefix == 'Archer':
+        bonus_pct = 1.0 + fraction * (8.0 - 1.0)
+    else:
+        bonus_pct = 1.0 + fraction * (5.0 - 1.0)
+        
+    return math.ceil(raw_power * (1.0 + bonus_pct / 100.0))
 
 df_master['guard_pow'] = df_master.apply(calc_guard_power, axis=1)
 df_master['arc_pow'] = df_master.apply(lambda r: calc_unit_power(r, 'Archer'), axis=1)

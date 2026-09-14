@@ -2,10 +2,10 @@
   {
     "server": "K116",
     "count": 19,
-    "avg_total": 4273,
-    "avg_archer": 1540,
-    "avg_cav": 1646,
-    "avg_siege": 1085,
+    "avg_total": 4476,
+    "avg_archer": 1635,
+    "avg_cav": 1711,
+    "avg_siege": 1129,
     "tiers": {
       "total_pow": {
         "S++": 1,
@@ -40,25 +40,25 @@
         "S": 3,
         "A": 7,
         "B": 3,
-        "C": 2,
-        "D": 2
+        "C": 1,
+        "D": 3
       }
     }
   },
   {
     "server": "K132",
     "count": 22,
-    "avg_total": 4377,
-    "avg_archer": 1783,
-    "avg_cav": 1665,
-    "avg_siege": 928,
+    "avg_total": 4594,
+    "avg_archer": 1895,
+    "avg_cav": 1732,
+    "avg_siege": 966,
     "tiers": {
       "total_pow": {
         "S++": 1,
         "S+": 2,
         "S": 3,
-        "A": 6,
-        "B": 4,
+        "A": 5,
+        "B": 5,
         "C": 5,
         "D": 1
       },
@@ -94,10 +94,10 @@
   {
     "server": "K138",
     "count": 25,
-    "avg_total": 4198,
-    "avg_archer": 1667,
-    "avg_cav": 1557,
-    "avg_siege": 974,
+    "avg_total": 4413,
+    "avg_archer": 1775,
+    "avg_cav": 1622,
+    "avg_siege": 1015,
     "tiers": {
       "total_pow": {
         "S++": 0,
@@ -112,9 +112,9 @@
         "S++": 0,
         "S+": 0,
         "S": 1,
-        "A": 13,
+        "A": 12,
         "B": 7,
-        "C": 3,
+        "C": 4,
         "D": 1
       },
       "cav_pow": {
@@ -140,10 +140,10 @@
   {
     "server": "K159",
     "count": 25,
-    "avg_total": 3550,
-    "avg_archer": 1835,
-    "avg_cav": 1151,
-    "avg_siege": 563,
+    "avg_total": 3739,
+    "avg_archer": 1953,
+    "avg_cav": 1199,
+    "avg_siege": 586,
     "tiers": {
       "total_pow": {
         "S++": 0,
@@ -151,13 +151,13 @@
         "S": 2,
         "A": 3,
         "B": 8,
-        "C": 11,
-        "D": 1
+        "C": 12,
+        "D": 0
       },
       "archer_pow": {
         "S++": 0,
-        "S+": 1,
-        "S": 8,
+        "S+": 2,
+        "S": 7,
         "A": 7,
         "B": 7,
         "C": 1,
@@ -186,10 +186,10 @@
   {
     "server": "K162",
     "count": 20,
-    "avg_total": 3903,
-    "avg_archer": 1367,
-    "avg_cav": 1664,
-    "avg_siege": 870,
+    "avg_total": 4095,
+    "avg_archer": 1455,
+    "avg_cav": 1732,
+    "avg_siege": 906,
     "tiers": {
       "total_pow": {
         "S++": 0,
@@ -232,10 +232,10 @@
   {
     "server": "K166",
     "count": 22,
-    "avg_total": 4638,
-    "avg_archer": 1858,
-    "avg_cav": 1670,
-    "avg_siege": 1108,
+    "avg_total": 4862,
+    "avg_archer": 1971,
+    "avg_cav": 1737,
+    "avg_siege": 1153,
     "tiers": {
       "total_pow": {
         "S++": 2,
@@ -278,10 +278,10 @@
   {
     "server": "K170",
     "count": 24,
-    "avg_total": 4378,
-    "avg_archer": 1725,
-    "avg_cav": 1631,
-    "avg_siege": 1021,
+    "avg_total": 4606,
+    "avg_archer": 1841,
+    "avg_cav": 1700,
+    "avg_siege": 1065,
     "tiers": {
       "total_pow": {
         "S++": 0,
@@ -324,10 +324,10 @@
   {
     "server": "K176",
     "count": 22,
-    "avg_total": 4413,
-    "avg_archer": 1365,
-    "avg_cav": 1829,
-    "avg_siege": 1218,
+    "avg_total": 4631,
+    "avg_archer": 1456,
+    "avg_cav": 1905,
+    "avg_siege": 1270,
     "tiers": {
       "total_pow": {
         "S++": 0,
@@ -352,8 +352,8 @@
         "S+": 0,
         "S": 8,
         "A": 9,
-        "B": 5,
-        "C": 0,
+        "B": 4,
+        "C": 1,
         "D": 0
       },
       "siege_pow": {
@@ -370,10 +370,10 @@
   {
     "server": "K191",
     "count": 18,
-    "avg_total": 3819,
-    "avg_archer": 1424,
-    "avg_cav": 1608,
-    "avg_siege": 787,
+    "avg_total": 4002,
+    "avg_archer": 1513,
+    "avg_cav": 1671,
+    "avg_siege": 818,
     "tiers": {
       "total_pow": {
         "S++": 0,
@@ -416,10 +416,10 @@
   {
     "server": "K197",
     "count": 19,
-    "avg_total": 3896,
-    "avg_archer": 1764,
-    "avg_cav": 1392,
-    "avg_siege": 740,
+    "avg_total": 4098,
+    "avg_archer": 1877,
+    "avg_cav": 1450,
+    "avg_siege": 771,
     "tiers": {
       "total_pow": {
         "S++": 1,
@@ -445,8 +445,8 @@
         "S": 1,
         "A": 2,
         "B": 4,
-        "C": 6,
-        "D": 4
+        "C": 7,
+        "D": 3
       },
       "siege_pow": {
         "S++": 1,
@@ -462,10 +462,10 @@
   {
     "server": "K212",
     "count": 23,
-    "avg_total": 4544,
-    "avg_archer": 1699,
-    "avg_cav": 1759,
-    "avg_siege": 1085,
+    "avg_total": 4761,
+    "avg_archer": 1803,
+    "avg_cav": 1828,
+    "avg_siege": 1129,
     "tiers": {
       "total_pow": {
         "S++": 1,
@@ -482,8 +482,8 @@
         "S": 3,
         "A": 5,
         "B": 3,
-        "C": 4,
-        "D": 5
+        "C": 5,
+        "D": 4
       },
       "cav_pow": {
         "S++": 1,
@@ -508,10 +508,10 @@
   {
     "server": "K27",
     "count": 25,
-    "avg_total": 3873,
-    "avg_archer": 1614,
-    "avg_cav": 1393,
-    "avg_siege": 864,
+    "avg_total": 4070,
+    "avg_archer": 1718,
+    "avg_cav": 1451,
+    "avg_siege": 900,
     "tiers": {
       "total_pow": {
         "S++": 0,
@@ -523,12 +523,12 @@
         "D": 0
       },
       "archer_pow": {
-        "S++": 0,
-        "S+": 1,
+        "S++": 1,
+        "S+": 0,
         "S": 1,
         "A": 6,
-        "B": 9,
-        "C": 5,
+        "B": 10,
+        "C": 4,
         "D": 3
       },
       "cav_pow": {
@@ -554,10 +554,10 @@
   {
     "server": "K282",
     "count": 17,
-    "avg_total": 3769,
-    "avg_archer": 1587,
-    "avg_cav": 1452,
-    "avg_siege": 729,
+    "avg_total": 3950,
+    "avg_archer": 1683,
+    "avg_cav": 1508,
+    "avg_siege": 758,
     "tiers": {
       "total_pow": {
         "S++": 0,
@@ -600,10 +600,10 @@
   {
     "server": "K292",
     "count": 20,
-    "avg_total": 4026,
-    "avg_archer": 1705,
-    "avg_cav": 1410,
-    "avg_siege": 910,
+    "avg_total": 4210,
+    "avg_archer": 1803,
+    "avg_cav": 1462,
+    "avg_siege": 944,
     "tiers": {
       "total_pow": {
         "S++": 0,
@@ -616,8 +616,8 @@
       },
       "archer_pow": {
         "S++": 1,
-        "S+": 3,
-        "S": 1,
+        "S+": 2,
+        "S": 2,
         "A": 4,
         "B": 3,
         "C": 6,
@@ -646,10 +646,10 @@
   {
     "server": "K294",
     "count": 25,
-    "avg_total": 2677,
-    "avg_archer": 1090,
-    "avg_cav": 1013,
-    "avg_siege": 573,
+    "avg_total": 2790,
+    "avg_archer": 1148,
+    "avg_cav": 1047,
+    "avg_siege": 593,
     "tiers": {
       "total_pow": {
         "S++": 0,
@@ -666,8 +666,8 @@
         "S": 2,
         "A": 1,
         "B": 0,
-        "C": 8,
-        "D": 13
+        "C": 7,
+        "D": 14
       },
       "cav_pow": {
         "S++": 0,
@@ -692,10 +692,10 @@
   {
     "server": "K336",
     "count": 1,
-    "avg_total": 9402,
-    "avg_archer": 2949,
-    "avg_cav": 3793,
-    "avg_siege": 2660,
+    "avg_total": 9806,
+    "avg_archer": 3116,
+    "avg_cav": 3932,
+    "avg_siege": 2758,
     "tiers": {
       "total_pow": {
         "S++": 1,
@@ -707,8 +707,8 @@
         "D": 0
       },
       "archer_pow": {
-        "S++": 1,
-        "S+": 0,
+        "S++": 0,
+        "S+": 1,
         "S": 0,
         "A": 0,
         "B": 0,
@@ -738,17 +738,17 @@
   {
     "server": "K43",
     "count": 25,
-    "avg_total": 3778,
-    "avg_archer": 1565,
-    "avg_cav": 1284,
-    "avg_siege": 927,
+    "avg_total": 3965,
+    "avg_archer": 1663,
+    "avg_cav": 1336,
+    "avg_siege": 965,
     "tiers": {
       "total_pow": {
         "S++": 0,
         "S+": 1,
         "S": 1,
-        "A": 7,
-        "B": 7,
+        "A": 8,
+        "B": 6,
         "C": 5,
         "D": 4
       },
@@ -756,8 +756,8 @@
         "S++": 1,
         "S+": 0,
         "S": 3,
-        "A": 6,
-        "B": 5,
+        "A": 5,
+        "B": 6,
         "C": 6,
         "D": 4
       },
@@ -784,10 +784,10 @@
   {
     "server": "K48",
     "count": 25,
-    "avg_total": 3515,
-    "avg_archer": 1371,
-    "avg_cav": 1372,
-    "avg_siege": 771,
+    "avg_total": 3689,
+    "avg_archer": 1458,
+    "avg_cav": 1428,
+    "avg_siege": 802,
     "tiers": {
       "total_pow": {
         "S++": 1,
@@ -830,10 +830,10 @@
   {
     "server": "K54",
     "count": 11,
-    "avg_total": 5709,
-    "avg_archer": 1825,
-    "avg_cav": 2221,
-    "avg_siege": 1663,
+    "avg_total": 5993,
+    "avg_archer": 1946,
+    "avg_cav": 2314,
+    "avg_siege": 1733,
     "tiers": {
       "total_pow": {
         "S++": 2,
@@ -848,8 +848,8 @@
         "S++": 1,
         "S+": 3,
         "S": 0,
-        "A": 2,
-        "B": 2,
+        "A": 3,
+        "B": 1,
         "C": 1,
         "D": 2
       },
@@ -876,10 +876,10 @@
   {
     "server": "K57",
     "count": 25,
-    "avg_total": 3758,
-    "avg_archer": 1623,
-    "avg_cav": 1370,
-    "avg_siege": 764,
+    "avg_total": 3940,
+    "avg_archer": 1720,
+    "avg_cav": 1424,
+    "avg_siege": 795,
     "tiers": {
       "total_pow": {
         "S++": 0,
@@ -887,8 +887,8 @@
         "S": 5,
         "A": 2,
         "B": 4,
-        "C": 9,
-        "D": 4
+        "C": 8,
+        "D": 5
       },
       "archer_pow": {
         "S++": 0,
@@ -922,10 +922,10 @@
   {
     "server": "K60",
     "count": 25,
-    "avg_total": 4637,
-    "avg_archer": 1880,
-    "avg_cav": 1854,
-    "avg_siege": 902,
+    "avg_total": 4886,
+    "avg_archer": 2009,
+    "avg_cav": 1935,
+    "avg_siege": 941,
     "tiers": {
       "total_pow": {
         "S++": 0,
@@ -949,8 +949,8 @@
         "S++": 0,
         "S+": 2,
         "S": 4,
-        "A": 16,
-        "B": 3,
+        "A": 15,
+        "B": 4,
         "C": 0,
         "D": 0
       },
@@ -968,10 +968,10 @@
   {
     "server": "K88",
     "count": 22,
-    "avg_total": 3585,
-    "avg_archer": 1307,
-    "avg_cav": 1461,
-    "avg_siege": 815,
+    "avg_total": 3759,
+    "avg_archer": 1389,
+    "avg_cav": 1520,
+    "avg_siege": 849,
     "tiers": {
       "total_pow": {
         "S++": 0,
@@ -1014,10 +1014,10 @@
   {
     "server": "K91",
     "count": 20,
-    "avg_total": 3700,
-    "avg_archer": 1728,
-    "avg_cav": 1327,
-    "avg_siege": 644,
+    "avg_total": 3897,
+    "avg_archer": 1842,
+    "avg_cav": 1383,
+    "avg_siege": 672,
     "tiers": {
       "total_pow": {
         "S++": 1,
@@ -1043,8 +1043,8 @@
         "S": 2,
         "A": 1,
         "B": 3,
-        "C": 8,
-        "D": 5
+        "C": 9,
+        "D": 4
       },
       "siege_pow": {
         "S++": 1,

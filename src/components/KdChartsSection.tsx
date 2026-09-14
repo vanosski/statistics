@@ -32,7 +32,8 @@ interface KdChartsSectionProps {
   players: Player[];
 }
 
-export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms, players }) => {
+export const KdChartsSection: React.FC<KdChartsSectionProps> = ({ kingdoms: rawKingdoms, players }) => {
+  const kingdoms = useMemo(() => rawKingdoms.filter(k => k.server !== 'K336'), [rawKingdoms]);
   const [activeUnit, setActiveUnit] = useState<UnitPowType>('total_pow');
   const [activeStrengthView, setActiveStrengthView] = useState<'All' | 'Total' | 'Archer' | 'Cav' | 'Siege'>('All');
   const [sortStrongestToWeakest, setSortStrongestToWeakest] = useState<boolean>(true);

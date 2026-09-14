@@ -46,7 +46,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   const rankedKingdoms = getRankedKingdoms(kingdoms, players);
 
   const totalPlayers = players.length;
-  const totalKingdoms = kingdoms.length;
+  const totalKingdoms = rankedKingdoms.length;
   const sPlusPlusCount = players.filter((p) => p.total_pow_tier === 'S++').length;
   const sPlusCount = players.filter((p) => p.total_pow_tier === 'S+').length;
 

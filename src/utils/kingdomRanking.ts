@@ -26,7 +26,8 @@ export const KINGDOM_CONFIGS: Record<string, KingdomRankingConfig> = {
   'K27': { redSkills: 1, tierBadge: 'TIER A', badgeClass: 'bg-blue', isCivilWar: true },
   'K162': { redSkills: 5, tierBadge: 'TIER S', badgeClass: 'bg-emerald', isCivilWar: false },
   'K191': { redSkills: 0, tierBadge: 'TIER B', badgeClass: 'bg-purple', isCivilWar: true },
-  'K292': { redSkills: 3, tierBadge: 'TIER B', badgeClass: 'bg-purple' }
+  'K292': { redSkills: 3, tierBadge: 'TIER B', badgeClass: 'bg-purple' },
+  'K294': { redSkills: 1, tierBadge: 'TIER B', badgeClass: 'bg-purple' }
 };
 
 export function getRedSkillMultiplier(skills: number, customBuff?: number): number {
@@ -46,7 +47,7 @@ export interface RankedKingdom extends KingdomSummary {
 }
 
 export function getRankedKingdoms(kingdoms: KingdomSummary[], players: Player[]): RankedKingdom[] {
-  const calculated = kingdoms.map((kd) => {
+  const calculated = kingdoms.filter(kd => kd.server !== 'K336').map((kd) => {
     const config = KINGDOM_CONFIGS[kd.server] || {
       redSkills: 1,
       tierBadge: 'TIER C',

@@ -36,6 +36,7 @@ export interface RallyOptimizationParams {
   baselineLeanMarch?: number; // default 150,000 (100% eff)
   diminishingGamma?: number; // default 0.55
   maxPlayers?: number; // default 25
+  excludedPlayerNames?: Set<string>;
 }
 
 export function solveKingdomRally(
@@ -49,7 +50,8 @@ export function solveKingdomRally(
     maxMarchPerPlayer = 380000,
     baselineLeanMarch = 150000,
     diminishingGamma = 0.55,
-    maxPlayers = 25
+    maxPlayers = 25,
+    excludedPlayerNames
   } = params;
 
   // Informational Display: identify each player's primary viable units (for UI display only)
@@ -64,8 +66,12 @@ export function solveKingdomRally(
     return units.filter(u => u.val >= cutoff).map(u => u.type);
   };
 
-  // Filter & sort descending by total_pow (Old intact calculation)
-  const sortedPlayers = [...playersInKd]
+  // Filter out manually excluded players & sort descending by total_pow
+  const availablePlayers = excludedPlayerNames && excludedPlayerNames.size > 0
+    ? playersInKd.filter(p => !excludedPlayerNames.has(p.name))
+    : playersInKd;
+
+  const sortedPlayers = [...availablePlayers]
     .sort((a, b) => b.total_pow - a.total_pow)
     .slice(0, maxPlayers);
 
@@ -158,7 +164,7 @@ export function solveKingdomRally(
 
   // Helper for unit rally punches
   const solveUnitPunch = (uMetric: 'archer_pow' | 'cav_pow' | 'siege_pow') => {
-    const uSorted = [...playersInKd].sort((a, b) => b[uMetric] - a[uMetric]).slice(0, maxPlayers);
+    const uSorted = [...availablePlayers].sort((a, b) => b[uMetric] - a[uMetric]).slice(0, maxPlayers);
     const uPowers = uSorted.map(p => Math.max(1, p[uMetric]));
     const uExponent = Math.max(0.6, (baselineLeanMarch / 140000.0) * (1.8 - 0.9 * diminishingGamma));
     const uWeights = uPowers.map(p => Math.pow(p, uExponent));

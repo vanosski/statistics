@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { Player, KingdomSummary } from '../types/stats';
 import { getAllKingdomRallyResults } from '../utils/rallyOptimization';
-import { Swords, ShieldAlert, Sparkles, ChevronDown, ChevronUp, Users, Info } from 'lucide-react';
+import { Swords, ShieldAlert, Sparkles, ChevronDown, ChevronUp, Users, Info, X, RefreshCw } from 'lucide-react';
 
 interface RallySimulatorProps {
   kingdoms: KingdomSummary[];
@@ -11,11 +11,31 @@ interface RallySimulatorProps {
 export const RallySimulator: React.FC<RallySimulatorProps> = ({ kingdoms, players }) => {
   const [gamma, setGamma] = useState<number>(0.55);
   const [baselineMarch, setBaselineMarch] = useState<number>(150000);
-  const [expandedKd, setExpandedKd] = useState<string | null>('K212');
+  const [expandedKd, setExpandedKd] = useState<string | null>('K197');
+  const [excludedPlayers, setExcludedPlayers] = useState<Set<string>>(new Set());
+
+  const toggleExcludePlayer = (name: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setExcludedPlayers(prev => {
+      const next = new Set(prev);
+      if (next.has(name)) {
+        next.delete(name);
+      } else {
+        next.add(name);
+      }
+      return next;
+    });
+  };
+
+  const clearExclusions = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setExcludedPlayers(new Set());
+  };
 
   const rallyResults = getAllKingdomRallyResults(kingdoms, players, {
     baselineLeanMarch: baselineMarch,
-    diminishingGamma: gamma
+    diminishingGamma: gamma,
+    excludedPlayerNames: excludedPlayers
   });
 
   return (
@@ -255,9 +275,32 @@ export const RallySimulator: React.FC<RallySimulatorProps> = ({ kingdoms, player
                                 <Swords size={16} color="#c084fc" />
                                 {kd.server} Optimal 25-Player March Allocation (Filling 2M Cap)
                               </h4>
-                              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                                Total Troops: <strong style={{ color: '#38bdf8' }}>{(kd.totalTroopsSent / 1000000).toFixed(2)}M / 2.00M</strong>
-                              </span>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                                {excludedPlayers.size > 0 && (
+                                  <button
+                                    onClick={clearExclusions}
+                                    style={{
+                                      background: 'rgba(239, 68, 68, 0.15)',
+                                      border: '1px solid rgba(239, 68, 68, 0.3)',
+                                      color: '#f87171',
+                                      padding: '3px 10px',
+                                      borderRadius: '6px',
+                                      fontSize: '0.75rem',
+                                      fontWeight: 600,
+                                      cursor: 'pointer',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      gap: '4px'
+                                    }}
+                                  >
+                                    <RefreshCw size={12} />
+                                    Reset Excluded ({excludedPlayers.size})
+                                  </button>
+                                )}
+                                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                                  Total Troops: <strong style={{ color: '#38bdf8' }}>{(kd.totalTroopsSent / 1000000).toFixed(2)}M / 2.00M</strong>
+                                </span>
+                              </div>
                             </div>
 
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '10px' }}>
@@ -271,26 +314,46 @@ export const RallySimulator: React.FC<RallySimulatorProps> = ({ kingdoms, player
                                     padding: '10px 14px',
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    gap: '6px'
+                                    gap: '6px',
+                                    position: 'relative'
                                   }}
                                 >
                                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <span style={{ fontWeight: 700, color: '#f8fafc', fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '170px' }}>
+                                    <span style={{ fontWeight: 700, color: '#f8fafc', fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '145px' }}>
                                       #{aIdx + 1} {alloc.player.name}
                                     </span>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                      {alloc.activeUnits?.map(u => (
-                                        <span key={u} style={{
-                                          fontSize: '0.65rem',
-                                          padding: '1px 5px',
-                                          borderRadius: '4px',
-                                          background: u === 'Archer' ? 'rgba(56, 189, 248, 0.2)' : u === 'Cav' ? 'rgba(251, 146, 60, 0.2)' : 'rgba(168, 85, 247, 0.2)',
-                                          color: u === 'Archer' ? '#38bdf8' : u === 'Cav' ? '#fb923c' : '#c084fc',
-                                          fontWeight: 700
-                                        }}>
-                                          {u}
-                                        </span>
-                                      ))}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                        {alloc.activeUnits?.map(u => (
+                                          <span key={u} style={{
+                                            fontSize: '0.65rem',
+                                            padding: '1px 5px',
+                                            borderRadius: '4px',
+                                            background: u === 'Archer' ? 'rgba(56, 189, 248, 0.2)' : u === 'Cav' ? 'rgba(251, 146, 60, 0.2)' : 'rgba(168, 85, 247, 0.2)',
+                                            color: u === 'Archer' ? '#38bdf8' : u === 'Cav' ? '#fb923c' : '#c084fc',
+                                            fontWeight: 700
+                                          }}>
+                                            {u}
+                                          </span>
+                                        ))}
+                                      </div>
+                                      <button
+                                        onClick={(e) => toggleExcludePlayer(alloc.player.name, e)}
+                                        title={`Exclude ${alloc.player.name} from rally`}
+                                        style={{
+                                          background: 'rgba(239, 68, 68, 0.12)',
+                                          border: '1px solid rgba(239, 68, 68, 0.25)',
+                                          color: '#f87171',
+                                          borderRadius: '6px',
+                                          padding: '2px 4px',
+                                          cursor: 'pointer',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'center'
+                                        }}
+                                      >
+                                        <X size={13} />
+                                      </button>
                                     </div>
                                   </div>
 

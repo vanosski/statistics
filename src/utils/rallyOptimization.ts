@@ -110,17 +110,21 @@ export function solveKingdomRally(
   const redBonusPct = getRedSkillMultiplier(activeRedSkills, config.customBuff);
   const currentFinalPower = Math.round((currentAvgTotal + (guardPower * 0.85)) * (1 + redBonusPct));
 
-  // Solve troop allocation with power weighting and 380k cap
+  // Dynamically responsive troop allocation:
+  // - Increasing baselineLeanMarch allows high-power players to expand their marches up to maxMarchPerPlayer without hitting penalties.
+  // - Increasing diminishingGamma penalizes bloated marches more severely, redistributing troops more equally.
+  const powerExponent = Math.max(0.6, (baselineLeanMarch / 140000.0) * (1.8 - 0.9 * diminishingGamma));
   const powers = sortedPlayers.map(p => Math.max(1, p.total_pow));
-  const weights = powers.map(p => Math.pow(p, 1.5));
+  const weights = powers.map(p => Math.pow(p, powerExponent));
   const sumW = weights.reduce((a, b) => a + b, 0);
 
   const targetTroops = Math.min(totalCapacity, N * maxMarchPerPlayer);
   let troops = weights.map(w => Math.min(maxMarchPerPlayer, targetTroops * (w / sumW)));
 
-  // Normalize to targetTroops
-  const curTroopsSum = troops.reduce((a, b) => a + b, 0);
-  if (curTroopsSum > 0) {
+  // Iterative normalization to respect maxMarchPerPlayer while hitting targetTroops
+  for (let iter = 0; iter < 4; iter++) {
+    const curTroopsSum = troops.reduce((a, b) => a + b, 0);
+    if (curTroopsSum === 0) break;
     troops = troops.map(t => Math.min(maxMarchPerPlayer, t * (targetTroops / curTroopsSum)));
   }
 
@@ -156,12 +160,16 @@ export function solveKingdomRally(
   const solveUnitPunch = (uMetric: 'archer_pow' | 'cav_pow' | 'siege_pow') => {
     const uSorted = [...playersInKd].sort((a, b) => b[uMetric] - a[uMetric]).slice(0, maxPlayers);
     const uPowers = uSorted.map(p => Math.max(1, p[uMetric]));
-    const uWeights = uPowers.map(p => Math.pow(p, 1.5));
+    const uExponent = Math.max(0.6, (baselineLeanMarch / 140000.0) * (1.8 - 0.9 * diminishingGamma));
+    const uWeights = uPowers.map(p => Math.pow(p, uExponent));
     const uSumW = uWeights.reduce((a, b) => a + b, 0);
     const uTarget = Math.min(totalCapacity, uSorted.length * maxMarchPerPlayer);
     let uTroops = uWeights.map(w => Math.min(maxMarchPerPlayer, uTarget * (w / uSumW)));
-    const uTot = uTroops.reduce((a, b) => a + b, 0);
-    if (uTot > 0) uTroops = uTroops.map(t => Math.min(maxMarchPerPlayer, t * (uTarget / uTot)));
+    for (let iter = 0; iter < 4; iter++) {
+      const uTot = uTroops.reduce((a, b) => a + b, 0);
+      if (uTot === 0) break;
+      uTroops = uTroops.map(t => Math.min(maxMarchPerPlayer, t * (uTarget / uTot)));
+    }
 
     let effCombat = 0;
     for (let i = 0; i < uSorted.length; i++) {

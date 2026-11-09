@@ -12,6 +12,7 @@ import { KingdomGrid } from './components/KingdomGrid';
 import { ComparisonSuite } from './components/ComparisonSuite';
 import { PlayerTable } from './components/PlayerTable';
 import { CivilWarSuite } from './components/CivilWarSuite';
+import { RallySimulator } from './components/RallySimulator';
 // import { KingdomSimulator } from './components/KingdomSimulator';
 import { KingdomModal } from './components/KingdomModal';
 import { PlayerModal } from './components/PlayerModal';
@@ -87,9 +88,9 @@ export function App() {
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.replace('#', '');
-      const validViews = ['home', 'graphs', 'kingdoms', 'compare', 'table', 'login', 'privacy', 'terms', 'simulator', 'civilwar'];
+      const validViews = ['home', 'graphs', 'kingdoms', 'compare', 'table', 'login', 'privacy', 'terms', 'simulator', 'civilwar', 'rally5678'];
       if (validViews.includes(hash)) {
-        if (!isApproved && ['table'].includes(hash)) {
+        if (!isApproved && ['table', 'rally5678'].includes(hash)) {
           setCurrentView('login');
           window.location.hash = 'login';
           return;
@@ -114,9 +115,9 @@ export function App() {
     }
   }, [loading, session, isApproved, currentView]);
 
-  // If user is guest/unapproved and tries to go to table, redirect to login
+  // If user is guest/unapproved and tries to go to table or secret routes, redirect to login
   useEffect(() => {
-    if (!loading && !isApproved && ['table'].includes(currentView)) {
+    if (!loading && !isApproved && ['table', 'rally5678'].includes(currentView)) {
       setCurrentView('login');
       window.location.hash = 'login';
     }
@@ -130,7 +131,7 @@ export function App() {
   }, [isApproved, currentView]);
 
   const navigateTo = (view: ViewMode) => {
-    if (!isApproved && ['table'].includes(view)) {
+    if (!isApproved && ['table', 'rally5678'].includes(view)) {
       window.location.hash = 'login';
       return;
     }
@@ -287,6 +288,10 @@ export function App() {
 
       {currentView === 'civilwar' && (
         <CivilWarSuite kingdoms={kingdoms} players={players} />
+      )}
+
+      {currentView === 'rally5678' && (
+        <RallySimulator kingdoms={kingdoms} players={players} />
       )}
 
       </main>

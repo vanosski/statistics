@@ -67,13 +67,16 @@ export function solveKingdomRally(
   };
 
   // Filter out manually excluded players & sort descending by total_pow
-  const availablePlayers = excludedPlayerNames && excludedPlayerNames.size > 0
-    ? playersInKd.filter(p => !excludedPlayerNames.has(p.name))
-    : playersInKd;
-
-  const sortedPlayers = [...availablePlayers]
+  // Take the natural top 25 roster for this kingdom
+  const baseTopPlayers = [...playersInKd]
     .sort((a, b) => b.total_pow - a.total_pow)
     .slice(0, maxPlayers);
+
+  // If players are clicked off/inactive, do NOT replace them from bench (#26+).
+  // Only the active/present players from the top roster participate.
+  const sortedPlayers = excludedPlayerNames && excludedPlayerNames.size > 0
+    ? baseTopPlayers.filter(p => !excludedPlayerNames.has(p.name))
+    : baseTopPlayers;
 
   const N = sortedPlayers.length;
   if (N === 0) {
@@ -164,7 +167,10 @@ export function solveKingdomRally(
 
   // Helper for unit rally punches
   const solveUnitPunch = (uMetric: 'archer_pow' | 'cav_pow' | 'siege_pow') => {
-    const uSorted = [...availablePlayers].sort((a, b) => b[uMetric] - a[uMetric]).slice(0, maxPlayers);
+    const baseUSorted = [...playersInKd].sort((a, b) => b[uMetric] - a[uMetric]).slice(0, maxPlayers);
+    const uSorted = excludedPlayerNames && excludedPlayerNames.size > 0
+      ? baseUSorted.filter(p => !excludedPlayerNames.has(p.name))
+      : baseUSorted;
     const uPowers = uSorted.map(p => Math.max(1, p[uMetric]));
     const uExponent = Math.max(0.6, (baselineLeanMarch / 140000.0) * (1.8 - 0.9 * diminishingGamma));
     const uWeights = uPowers.map(p => Math.pow(p, uExponent));

@@ -273,7 +273,7 @@ export const RallySimulator: React.FC<RallySimulatorProps> = ({ kingdoms, player
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
                               <h4 style={{ margin: 0, fontSize: '0.95rem', color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <Swords size={16} color="#c084fc" />
-                                {kd.server} Optimal 25-Player March Allocation (Filling 2M Cap)
+                                {kd.server} Active March Allocation ({kd.topAllocations.length} Players)
                               </h4>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                                 {excludedPlayers.size > 0 && (
@@ -294,9 +294,12 @@ export const RallySimulator: React.FC<RallySimulatorProps> = ({ kingdoms, player
                                     }}
                                   >
                                     <RefreshCw size={12} />
-                                    Reset Excluded ({excludedPlayers.size})
+                                    Reset Attendance ({excludedPlayers.size} absent)
                                   </button>
                                 )}
+                                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                                  Active: <strong style={{ color: '#c084fc' }}>{kd.topAllocations.length} / 25</strong>
+                                </span>
                                 <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
                                   Total Troops: <strong style={{ color: '#38bdf8' }}>{(kd.totalTroopsSent / 1000000).toFixed(2)}M / 2.00M</strong>
                                 </span>

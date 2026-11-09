@@ -2383,8 +2383,8 @@
     "siege_pow": 1134,
     "total_pow_tier": "A",
     "total_pow_color": "#3b82f6",
-    "archer_pow_tier": "B",
-    "archer_pow_color": "#8b5cf6",
+    "archer_pow_tier": "A",
+    "archer_pow_color": "#3b82f6",
     "cav_pow_tier": "A",
     "cav_pow_color": "#3b82f6",
     "siege_pow_tier": "A",
@@ -4228,8 +4228,8 @@
     "total_pow_color": "#64748b",
     "archer_pow_tier": "B",
     "archer_pow_color": "#8b5cf6",
-    "cav_pow_tier": "D",
-    "cav_pow_color": "#475569",
+    "cav_pow_tier": "C",
+    "cav_pow_color": "#64748b",
     "siege_pow_tier": "C",
     "siege_pow_color": "#64748b",
     "dgp": 273,
@@ -4775,8 +4775,8 @@
     "archer_pow": 1870,
     "cav_pow": 972,
     "siege_pow": 526,
-    "total_pow_tier": "C",
-    "total_pow_color": "#64748b",
+    "total_pow_tier": "B",
+    "total_pow_color": "#8b5cf6",
     "archer_pow_tier": "A",
     "archer_pow_color": "#3b82f6",
     "cav_pow_tier": "C",
@@ -5385,8 +5385,8 @@
     "siege_pow": 493,
     "total_pow_tier": "C",
     "total_pow_color": "#64748b",
-    "archer_pow_tier": "C",
-    "archer_pow_color": "#64748b",
+    "archer_pow_tier": "B",
+    "archer_pow_color": "#8b5cf6",
     "cav_pow_tier": "D",
     "cav_pow_color": "#475569",
     "siege_pow_tier": "C",
@@ -5446,8 +5446,8 @@
     "archer_pow_color": "#475569",
     "cav_pow_tier": "B",
     "cav_pow_color": "#8b5cf6",
-    "siege_pow_tier": "D",
-    "siege_pow_color": "#475569",
+    "siege_pow_tier": "C",
+    "siege_pow_color": "#64748b",
     "dgp": 850,
     "is_woc_leader": false,
     "lethal": 22.0
@@ -5560,8 +5560,8 @@
     "archer_pow_color": "#8b5cf6",
     "cav_pow_tier": "A",
     "cav_pow_color": "#3b82f6",
-    "siege_pow_tier": "C",
-    "siege_pow_color": "#64748b",
+    "siege_pow_tier": "B",
+    "siege_pow_color": "#8b5cf6",
     "dgp": 486,
     "is_woc_leader": false,
     "lethal": 22.0
@@ -6090,8 +6090,8 @@
     "total_pow_color": "#64748b",
     "archer_pow_tier": "B",
     "archer_pow_color": "#8b5cf6",
-    "cav_pow_tier": "D",
-    "cav_pow_color": "#475569",
+    "cav_pow_tier": "C",
+    "cav_pow_color": "#64748b",
     "siege_pow_tier": "D",
     "siege_pow_color": "#475569",
     "dgp": 967,
@@ -6618,8 +6618,8 @@
     "archer_pow": 1740,
     "cav_pow": 486,
     "siege_pow": 376,
-    "total_pow_tier": "D",
-    "total_pow_color": "#475569",
+    "total_pow_tier": "C",
+    "total_pow_color": "#64748b",
     "archer_pow_tier": "B",
     "archer_pow_color": "#8b5cf6",
     "cav_pow_tier": "D",
@@ -9557,7 +9557,7 @@
     "lethal": 24.5
   },
   {
-    "name": "-GAMERMAN-",
+    "name": "GAMERMAN",
     "server": "K197",
     "total_pow": 8225,
     "archer_pow": 2711,
@@ -9633,7 +9633,7 @@
     "lethal": 23.0
   },
   {
-    "name": "\u2e38ARTUR\u2e38",
+    "name": "ARTUR",
     "server": "K197",
     "total_pow": 2739,
     "archer_pow": 1674,
@@ -9671,7 +9671,7 @@
     "lethal": 24.5
   },
   {
-    "name": "hunter \u3005",
+    "name": "Hunter",
     "server": "K197",
     "total_pow": 4172,
     "archer_pow": 1906,
@@ -9690,7 +9690,7 @@
     "lethal": 24.5
   },
   {
-    "name": "RID\u039eY\u039e",
+    "name": "RIDEYE",
     "server": "K197",
     "total_pow": 4404,
     "archer_pow": 2120,
@@ -9785,7 +9785,7 @@
     "lethal": 20.0
   },
   {
-    "name": "BocchiT_T",
+    "name": "Bocchi",
     "server": "K197",
     "total_pow": 5196,
     "archer_pow": 2208,
@@ -9804,7 +9804,7 @@
     "lethal": 22.5
   },
   {
-    "name": "white4ger",
+    "name": "White4ger",
     "server": "K197",
     "total_pow": 1250,
     "archer_pow": 889,
@@ -9823,23 +9823,23 @@
     "lethal": 12.0
   },
   {
-    "name": "\u00b0\u00b0Milari\u00b0\u00b0",
+    "name": "Milan",
     "server": "K197",
-    "total_pow": 3784,
-    "archer_pow": 1878,
-    "cav_pow": 1106,
-    "siege_pow": 800,
-    "total_pow_tier": "B",
-    "total_pow_color": "#8b5cf6",
-    "archer_pow_tier": "A",
-    "archer_pow_color": "#3b82f6",
-    "cav_pow_tier": "C",
-    "cav_pow_color": "#64748b",
-    "siege_pow_tier": "B",
-    "siege_pow_color": "#8b5cf6",
-    "dgp": 330,
+    "total_pow": 1865,
+    "archer_pow": 1289,
+    "cav_pow": 335,
+    "siege_pow": 241,
+    "total_pow_tier": "D",
+    "total_pow_color": "#475569",
+    "archer_pow_tier": "C",
+    "archer_pow_color": "#64748b",
+    "cav_pow_tier": "D",
+    "cav_pow_color": "#475569",
+    "siege_pow_tier": "D",
+    "siege_pow_color": "#475569",
+    "dgp": 766,
     "is_woc_leader": false,
-    "lethal": 24.0
+    "lethal": 16.0
   },
   {
     "name": "BLUTO",
@@ -9880,7 +9880,7 @@
     "lethal": 20.5
   },
   {
-    "name": "_Nik_",
+    "name": "Nik",
     "server": "K197",
     "total_pow": 2217,
     "archer_pow": 1594,
@@ -9918,7 +9918,7 @@
     "lethal": 23.5
   },
   {
-    "name": "\u2620\u1b44VOLK",
+    "name": "VOLK",
     "server": "K197",
     "total_pow": 3684,
     "archer_pow": 1373,
@@ -9937,7 +9937,7 @@
     "lethal": 20.0
   },
   {
-    "name": "\ua9c1\u0f3aLUIGI\u0f3b\ua9c2",
+    "name": "LUIGI",
     "server": "K197",
     "total_pow": 1341,
     "archer_pow": 1005,
@@ -9956,7 +9956,7 @@
     "lethal": 12.0
   },
   {
-    "name": "ebaby\u4e70\u4e70\u4e70\u10e6",
+    "name": "Baby",
     "server": "K197",
     "total_pow": 4190,
     "archer_pow": 2373,
@@ -9975,7 +9975,7 @@
     "lethal": 24.5
   },
   {
-    "name": "\u2671LEV\u2671",
+    "name": "LEV",
     "server": "K197",
     "total_pow": 2442,
     "archer_pow": 1578,
@@ -10089,7 +10089,7 @@
     "lethal": 23.5
   },
   {
-    "name": "\u2020\u0141\u00d8RD\u2020",
+    "name": "LORD",
     "server": "K197",
     "total_pow": 2174,
     "archer_pow": 1150,

@@ -32,11 +32,12 @@ export interface KingdomRallyResult {
 
 export interface RallyOptimizationParams {
   totalCapacity?: number; // default 2,000,000
-  maxMarchPerPlayer?: number; // default 380,000
+  maxMarchPerPlayer?: number; // default 300,000
   baselineLeanMarch?: number; // default 150,000 (100% eff)
   diminishingGamma?: number; // default 0.55
   maxPlayers?: number; // default 25
   excludedPlayerNames?: Set<string>;
+  cleanRoundingStep?: number; // default 5,000 troops for clean in-game orders
 }
 
 export function solveKingdomRally(
@@ -47,11 +48,12 @@ export function solveKingdomRally(
 ): KingdomRallyResult {
   const {
     totalCapacity = 2000000,
-    maxMarchPerPlayer = 380000,
+    maxMarchPerPlayer = 300000,
     baselineLeanMarch = 150000,
     diminishingGamma = 0.55,
     maxPlayers = 25,
-    excludedPlayerNames
+    excludedPlayerNames,
+    cleanRoundingStep = 5000
   } = params;
 
   // Informational Display: identify each player's primary viable units (for UI display only)
@@ -154,6 +156,35 @@ export function solveKingdomRally(
     troops = troops.map(t => Math.min(maxMarchPerPlayer, t * (targetTroops / curTroopsSum)));
   }
 
+  // Clean rounding algorithm: round marches to clean 5,000 troop increments
+  // while ensuring the sum matches targetTroops exactly (so in-game march commands are clean)
+  if (cleanRoundingStep > 0 && N > 0) {
+    const step = cleanRoundingStep;
+    let rounded = troops.map(t => Math.min(maxMarchPerPlayer, Math.max(step, Math.round(t / step) * step)));
+    let diff = targetTroops - rounded.reduce((a, b) => a + b, 0);
+    let guard = 0;
+    while (diff !== 0 && guard < 100) {
+      guard++;
+      const stepDir = diff > 0 ? step : -step;
+      let bestIdx = -1;
+      let bestErr = -Infinity;
+      for (let i = 0; i < N; i++) {
+        const nextVal = rounded[i] + stepDir;
+        if (nextVal >= step && nextVal <= maxMarchPerPlayer) {
+          const err = diff > 0 ? (troops[i] - rounded[i]) : (rounded[i] - troops[i]);
+          if (err > bestErr) {
+            bestErr = err;
+            bestIdx = i;
+          }
+        }
+      }
+      if (bestIdx === -1) break;
+      rounded[bestIdx] += stepDir;
+      diff -= stepDir;
+    }
+    troops = rounded;
+  }
+
   // Calculate diminishing efficiency per player
   const allocations: PlayerRallyAllocation[] = sortedPlayers.map((player, idx) => {
     const marchSize = Math.round(troops[idx]);
@@ -209,6 +240,33 @@ export function solveKingdomRally(
       const uTot = uTroops.reduce((a, b) => a + b, 0);
       if (uTot === 0) break;
       uTroops = uTroops.map(t => Math.min(maxMarchPerPlayer, t * (uTarget / uTot)));
+    }
+
+    if (cleanRoundingStep > 0 && uSorted.length > 0) {
+      const step = cleanRoundingStep;
+      let uRounded = uTroops.map(t => Math.min(maxMarchPerPlayer, Math.max(step, Math.round(t / step) * step)));
+      let uDiff = uTarget - uRounded.reduce((a, b) => a + b, 0);
+      let uGuard = 0;
+      while (uDiff !== 0 && uGuard < 100) {
+        uGuard++;
+        const sDir = uDiff > 0 ? step : -step;
+        let bIdx = -1;
+        let bErr = -Infinity;
+        for (let i = 0; i < uSorted.length; i++) {
+          const nv = uRounded[i] + sDir;
+          if (nv >= step && nv <= maxMarchPerPlayer) {
+            const err = uDiff > 0 ? (uTroops[i] - uRounded[i]) : (uRounded[i] - uTroops[i]);
+            if (err > bErr) {
+              bErr = err;
+              bIdx = i;
+            }
+          }
+        }
+        if (bIdx === -1) break;
+        uRounded[bIdx] += sDir;
+        uDiff -= sDir;
+      }
+      uTroops = uRounded;
     }
 
     let effCombat = 0;

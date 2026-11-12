@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { Player, KingdomSummary } from '../types/stats';
 import { getAllKingdomRallyResults } from '../utils/rallyOptimization';
-import { Swords, ShieldAlert, Sparkles, ChevronDown, ChevronUp, Users, Info, X, RefreshCw } from 'lucide-react';
+import { Swords, ShieldAlert, Sparkles, ChevronDown, ChevronUp, Users, Info, X, RefreshCw, Copy, Check } from 'lucide-react';
 
 interface RallySimulatorProps {
   kingdoms: KingdomSummary[];
@@ -11,8 +11,10 @@ interface RallySimulatorProps {
 export const RallySimulator: React.FC<RallySimulatorProps> = ({ kingdoms, players }) => {
   const [gamma, setGamma] = useState<number>(0.55);
   const [baselineMarch, setBaselineMarch] = useState<number>(150000);
+  const [maxMarchCap, setMaxMarchCap] = useState<number>(300000);
   const [expandedKd, setExpandedKd] = useState<string | null>('K197');
   const [excludedPlayers, setExcludedPlayers] = useState<Set<string>>(new Set());
+  const [copiedKd, setCopiedKd] = useState<string | null>(null);
 
   const toggleExcludePlayer = (name: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -35,8 +37,30 @@ export const RallySimulator: React.FC<RallySimulatorProps> = ({ kingdoms, player
   const rallyResults = getAllKingdomRallyResults(kingdoms, players, {
     baselineLeanMarch: baselineMarch,
     diminishingGamma: gamma,
+    maxMarchPerPlayer: maxMarchCap,
     excludedPlayerNames: excludedPlayers
   });
+
+  const copyRallyOrders = (kdServer: string, allocations: typeof rallyResults[0]['topAllocations'], e: React.MouseEvent) => {
+    e.stopPropagation();
+    // Group players by march size
+    const groups: Record<number, string[]> = {};
+    allocations.forEach(a => {
+      const sizeK = Math.round(a.marchSize / 1000);
+      if (!groups[sizeK]) groups[sizeK] = [];
+      groups[sizeK].push(a.player.name);
+    });
+
+    const sortedSizes = Object.keys(groups).map(Number).sort((a, b) => b - a);
+    let text = `[${kdServer} Rally Allocation - 2.00M Cap]\n`;
+    sortedSizes.forEach(s => {
+      text += `${s}k: ${groups[s].join(', ')}\n`;
+    });
+
+    navigator.clipboard.writeText(text);
+    setCopiedKd(kdServer);
+    setTimeout(() => setCopiedKd(null), 2500);
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
@@ -83,7 +107,23 @@ export const RallySimulator: React.FC<RallySimulatorProps> = ({ kingdoms, player
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap', background: 'rgba(0, 0, 0, 0.35)', padding: '10px 18px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>Lean March Sweetspot</span>
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>Player Max Cap</span>
+                <span style={{ fontSize: '0.85rem', color: '#a855f7', fontWeight: 700 }}>{Math.round(maxMarchCap / 1000)}k</span>
+              </div>
+              <input
+                type="range"
+                min="250000"
+                max="400000"
+                step="10000"
+                value={maxMarchCap}
+                onChange={(e) => setMaxMarchCap(Number(e.target.value))}
+                style={{ width: '120px', accentColor: '#a855f7', cursor: 'pointer' }}
+              />
+            </div>
+            <div style={{ width: '1px', height: '28px', background: 'rgba(255, 255, 255, 0.1)' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>Lean Sweetspot</span>
                 <span style={{ fontSize: '0.85rem', color: '#38bdf8', fontWeight: 700 }}>{Math.round(baselineMarch / 1000)}k</span>
               </div>
               <input
@@ -93,13 +133,13 @@ export const RallySimulator: React.FC<RallySimulatorProps> = ({ kingdoms, player
                 step="10000"
                 value={baselineMarch}
                 onChange={(e) => setBaselineMarch(Number(e.target.value))}
-                style={{ width: '130px', accentColor: '#38bdf8', cursor: 'pointer' }}
+                style={{ width: '120px', accentColor: '#38bdf8', cursor: 'pointer' }}
               />
             </div>
             <div style={{ width: '1px', height: '28px', background: 'rgba(255, 255, 255, 0.1)' }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>Diminishing Curve (γ)</span>
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>Diminishing (γ)</span>
                 <span style={{ fontSize: '0.85rem', color: '#f43f5e', fontWeight: 700 }}>{gamma.toFixed(2)}</span>
               </div>
               <input
@@ -109,7 +149,7 @@ export const RallySimulator: React.FC<RallySimulatorProps> = ({ kingdoms, player
                 step="0.05"
                 value={gamma}
                 onChange={(e) => setGamma(Number(e.target.value))}
-                style={{ width: '130px', accentColor: '#f43f5e', cursor: 'pointer' }}
+                style={{ width: '120px', accentColor: '#f43f5e', cursor: 'pointer' }}
               />
             </div>
           </div>
@@ -275,7 +315,27 @@ export const RallySimulator: React.FC<RallySimulatorProps> = ({ kingdoms, player
                                 <Swords size={16} color="#c084fc" />
                                 {kd.server} Active March Allocation ({kd.topAllocations.length} Players)
                               </h4>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <button
+                                  onClick={(e) => copyRallyOrders(kd.server, kd.topAllocations, e)}
+                                  title="Copy clean group orders for in-game chat"
+                                  style={{
+                                    background: copiedKd === kd.server ? 'rgba(52, 211, 153, 0.15)' : 'rgba(168, 85, 247, 0.15)',
+                                    border: copiedKd === kd.server ? '1px solid rgba(52, 211, 153, 0.35)' : '1px solid rgba(168, 85, 247, 0.35)',
+                                    color: copiedKd === kd.server ? '#34d399' : '#c084fc',
+                                    padding: '3px 10px',
+                                    borderRadius: '6px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '5px'
+                                  }}
+                                >
+                                  {copiedKd === kd.server ? <Check size={12} /> : <Copy size={12} />}
+                                  {copiedKd === kd.server ? 'Copied Orders' : 'Copy Rally Orders'}
+                                </button>
                                 {excludedPlayers.size > 0 && (
                                   <button
                                     onClick={clearExclusions}

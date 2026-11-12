@@ -120,11 +120,28 @@ export function solveKingdomRally(
   const currentFinalPower = Math.round((currentAvgTotal + (guardPower * 0.85)) * (1 + redBonusPct));
 
   // Dynamically responsive troop allocation:
-  // - Increasing baselineLeanMarch allows high-power players to expand their marches up to maxMarchPerPlayer without hitting penalties.
-  // - Increasing diminishingGamma penalizes bloated marches more severely, redistributing troops more equally.
+  // - Increasing baselineLeanMarch allows high-power players to expand their marches up to maxMarchPerPlayer.
+  // - Increasing diminishingGamma penalizes bloated marches more severely.
+  // - Combat Tier Threshold: Players below the core tier cutoff have a steeper marginal drop-off,
+  //   reflecting in-game combat mechanics where support/filler marches should not cannibalize
+  //   troops from core hitters (e.g. BLUTO ~88k vs VOLK/tail ~60k).
   const powerExponent = Math.max(0.6, (baselineLeanMarch / 140000.0) * (1.8 - 0.9 * diminishingGamma));
   const powers = sortedPlayers.map(p => Math.max(1, p.total_pow));
-  const weights = powers.map(p => Math.pow(p, powerExponent));
+  
+  // Calculate kingdom-relative core tier cutoff (players below this are support tier)
+  const sortedDescPowers = [...powers].sort((a, b) => b - a);
+  const topPower = sortedDescPowers[0] || 1;
+  const medianPower = sortedDescPowers[Math.floor(sortedDescPowers.length / 2)] || topPower;
+  const coreCutoff = Math.max(medianPower * 0.92, topPower * 0.36);
+
+  const weights = powers.map(p => {
+    const baseW = Math.pow(p / topPower, powerExponent);
+    if (p < coreCutoff) {
+      // Steeper drop-off for support/filler tier
+      return baseW * Math.pow(p / coreCutoff, 3.2);
+    }
+    return baseW;
+  });
   const sumW = weights.reduce((a, b) => a + b, 0);
 
   const targetTroops = Math.min(totalCapacity, N * maxMarchPerPlayer);
@@ -173,7 +190,18 @@ export function solveKingdomRally(
       : baseUSorted;
     const uPowers = uSorted.map(p => Math.max(1, p[uMetric]));
     const uExponent = Math.max(0.6, (baselineLeanMarch / 140000.0) * (1.8 - 0.9 * diminishingGamma));
-    const uWeights = uPowers.map(p => Math.pow(p, uExponent));
+    const sortedDescUPowers = [...uPowers].sort((a, b) => b - a);
+    const uTopPower = sortedDescUPowers[0] || 1;
+    const uMedianPower = sortedDescUPowers[Math.floor(sortedDescUPowers.length / 2)] || uTopPower;
+    const uCoreCutoff = Math.max(uMedianPower * 0.92, uTopPower * 0.36);
+
+    const uWeights = uPowers.map(p => {
+      const baseW = Math.pow(p / uTopPower, uExponent);
+      if (p < uCoreCutoff) {
+        return baseW * Math.pow(p / uCoreCutoff, 3.2);
+      }
+      return baseW;
+    });
     const uSumW = uWeights.reduce((a, b) => a + b, 0);
     const uTarget = Math.min(totalCapacity, uSorted.length * maxMarchPerPlayer);
     let uTroops = uWeights.map(w => Math.min(maxMarchPerPlayer, uTarget * (w / uSumW)));

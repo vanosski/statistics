@@ -26,3 +26,23 @@ dist-ssr
 # Project specific
 *.xlsx
 scratch_*.py
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Temporary export CSVs (keep master_database.csv and tracked K*.csv)
+K197_All_Stats.csv
+
+# GSD extension bundled assets & helper scripts
+scripts/
+adapters/
+VERSION
+model_capabilities.yaml
+GSD-STYLE.md
+PROJECT_RULES.md
+.gsd/templates/
+.gsd/examples/
+

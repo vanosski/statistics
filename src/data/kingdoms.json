@@ -416,8 +416,8 @@
   {
     "server": "K197",
     "count": 25,
-    "avg_total": 4345,
-    "avg_archer": 1804,
+    "avg_total": 4343,
+    "avg_archer": 1803,
     "avg_cav": 1602,
     "avg_siege": 937,
     "tiers": {

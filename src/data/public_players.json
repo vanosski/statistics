@@ -10053,10 +10053,10 @@
   {
     "name": "Viking",
     "server": "K197",
-    "total_pow": 3931,
-    "archer_pow": 1926,
-    "cav_pow": 1060,
-    "siege_pow": 945,
+    "total_pow": 3885,
+    "archer_pow": 1897,
+    "cav_pow": 1051,
+    "siege_pow": 937,
     "total_pow_tier": "B",
     "total_pow_color": "#8b5cf6",
     "archer_pow_tier": "A",
@@ -10067,7 +10067,7 @@
     "siege_pow_color": "#3b82f6",
     "dgp": 492,
     "is_woc_leader": false,
-    "lethal": 27.5
+    "lethal": 22.0
   },
   {
     "name": "baby2",
